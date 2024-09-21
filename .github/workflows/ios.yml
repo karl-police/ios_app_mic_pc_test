@@ -62,7 +62,7 @@ jobs:
             -exportOptionsPlist Support/ExportOptions.plist
 
       - name: Upload Artifact
-              uses: actions/upload-artifact@v3
-              with:
-                name: MyApp.ipa
-                path: build/*.ipa
+        uses: actions/upload-artifact@v3
+        with:
+          name: MyApp.ipa
+          path: build/*.ipa
