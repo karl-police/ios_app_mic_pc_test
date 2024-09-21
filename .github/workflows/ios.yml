@@ -20,6 +20,7 @@ jobs:
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
+      
       - name: Build
         env:
           scheme: ${{ 'default' }}
@@ -30,7 +31,17 @@ jobs:
           if [ $scheme = default ]; then scheme=$(cat default); fi
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+          #xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+          
+          # Output Path
+          export ARCHIVE_PATH="$PWD/build/MyApp.xcarchive"
+          export EXPORT_PATH="$PWD/build"
+          
+          xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
+            -archivePath "$ARCHIVE_PATH" \
+            -destination "generic/platform=iOS" \
+            clean archive
+      
       #- name: Test
       #  env:
       #    scheme: ${{ 'default' }}
@@ -42,3 +53,16 @@ jobs:
       #    if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
       #    file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
       #    xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
+
+      - name: Export .ipa file
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist Support/ExportOptions.plist
+
+      - name: Upload Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: MyApp.ipa
+                path: build/*.ipa
