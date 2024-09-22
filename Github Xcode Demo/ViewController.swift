@@ -2,13 +2,14 @@ import UIKit
 import AVFoundation
 
 
-protocol AudioManagerDelegate: AnyObject {
+protocol UI_Comms_Delegate: AnyObject {
     func showAlert(message: String)
 }
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var selectedDevice: AVCaptureDevice?
+    weak var delegate: UI_Comms_Delegate?
 
     // List available microphones
     func listAvailableMicrophones() -> [AVCaptureDevice] {
@@ -17,13 +18,18 @@ class AudioManager {
             mediaType: .audio,
             position: .unspecified
         ).devices
+
+        for device in devices {
+            delegate?.showAlert("Microphone: \(device.localizedName), ID: \(device.uniqueID)")
+        }
+
         return devices
     }
 
     // Select a microphone by its unique ID
     func selectMicrophone(withID id: String) {
         guard let device = AVCaptureDevice.devices(for: .audio).first(where: { $0.uniqueID == id }) else {
-            print("Microphone not found")
+            delegate?.showAlert("Microphone not found")
             return
         }
         
@@ -38,9 +44,9 @@ class AudioManager {
             captureSession.addInput(input)
             captureSession.startRunning()
             
-            print("Using microphone: \(device.localizedName)")
+            delegate?.showAlert("Using microphone: \(device.localizedName)")
         } catch {
-            print("Error setting up microphone: \(error.localizedDescription)")
+            delegate?.showAlert("Error setting up microphone: \(error.localizedDescription)")
         }
     }
 
@@ -57,9 +63,9 @@ class AudioManager {
         
         do {
             try audioEngine.start()
-            print("Audio streaming started.")
+            delegate?.showAlert("Audio streaming started.")
         } catch {
-            print("Error starting audio stream: \(error.localizedDescription)")
+            delegate?.showAlert("Error starting audio stream: \(error.localizedDescription)")
         }
     }
 
@@ -67,7 +73,7 @@ class AudioManager {
     func stopAudioStream() {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
-        print("Audio streaming stopped.")
+        delegate?.showAlert("Audio streaming stopped.")
     }
 }
 
@@ -105,29 +111,6 @@ class ViewController: UIViewController {
                 self.showAlert("Microphone access denied!")
             }
         }
-    }
-
-
-
-    // List Microphones
-    func listAvailableMicrophones() {
-        let devices = AVCaptureDevice.DiscoverySession(
-            deviceTypes: [.builtInMicrophone],
-            mediaType: .audio,
-            position: .unspecified
-        ).devices
-        
-        for device in devices {
-            print("Microphone: \(device.localizedName), ID: \(device.uniqueID)")
-        }
-    }
-
-
-
-    func stopAudioStream() {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-        print("Audio streaming stopped.")
     }
 }
 
