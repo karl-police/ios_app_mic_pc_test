@@ -6,8 +6,6 @@
     <string>debugging</string>
     <key>signingStyle</key>
     <string>manual</string>
-    <key>teamID</key>
-    <string></string>
     <key>thinning</key>
     <string>&lt;none&gt;</string>
     </dict>
