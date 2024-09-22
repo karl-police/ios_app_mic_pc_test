@@ -11,6 +11,12 @@ jobs:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
 
+    envs:
+      IOS_PROJECT_NAME: Github Xcode Demo.xcodeproj
+
+      # schema name could be selected from 'xcodebuild -list'
+      #IOS_SCHEME_NAME: default
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,7 +44,7 @@ jobs:
           export EXPORT_PATH="$PWD/build/ProjectName"
           
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -archivePath "$ARCHIVE_PATH" \
+            -archivePath $ARCHIVE_PATH \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       
@@ -57,8 +63,8 @@ jobs:
       - name: Export .ipa file
         run: |
           xcodebuild -exportArchive \
-            -archivePath "$ARCHIVE_PATH" \
-            -exportPath "$EXPORT_PATH" \
+            -archivePath $ARCHIVE_PATH \
+            -exportPath $EXPORT_PATH \
             -exportOptionsPlist Support/ExportOptions.plist
 
       - name: Upload Artifact
