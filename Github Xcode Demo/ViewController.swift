@@ -54,7 +54,7 @@ class AudioManager {
     func startAudioStream() {
         audioEngine = AVAudioEngine()
         
-        guard let inputNode = audioEngine.inputNode else { return }
+        let inputNode = audioEngine.inputNode
         let inputFormat = inputNode.inputFormat(forBus: 0)
 
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { (buffer, time) in
