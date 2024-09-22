@@ -59,8 +59,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportPath "$EXPORT_PATH" \
-            -exportOptionsPlist Support/ExportOptions.plist \
-            -exportProvisioningProfile "ProvisioningProfileName"
+            -exportOptionsPlist Support/ExportOptions.plist
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
