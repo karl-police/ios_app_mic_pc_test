@@ -4,6 +4,8 @@
 <dict>
     <key>method</key>
     <string>debugging</string>
+    <key>signingStyle</key>
+    <string>manual</string>
     <key>thinning</key>
     <string>&lt;none&gt;</string>
     </dict>
