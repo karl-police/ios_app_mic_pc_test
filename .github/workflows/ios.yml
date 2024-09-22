@@ -84,7 +84,7 @@ jobs:
 
       - name: Extract Unsigned App from Archive
         run: | 
-          cd "$PWD/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/" \
+          cd "$PWD/build/" \
             && zip -r "$PWD/${IOS_PROJECT_NAME}.zip" "${IOS_PROJECT_NAME}.app"
           ls -ale "$PWD/${IOS_PROJECT_NAME}.app.zip"
 
