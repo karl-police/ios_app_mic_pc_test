@@ -70,6 +70,11 @@ jobs:
       #    file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
       #    xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
 
+      - name: Test
+        run: |
+          pwd
+          ls -d */
+
       - name: Export .ipa file
         shell: bash
         run: |
@@ -77,6 +82,7 @@ jobs:
             -exportOptionsPlist Support/ExportOptions.plist \
             -exportPath "${EXPORT_PATH}" \
             -allowProvisioningUpdates \
+            -verbose \
             -exportArchive
 
       - name: Upload Artifact
