@@ -81,11 +81,11 @@ jobs:
       #      -exportArchive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
 
 
-      - name: Extract Unsigned App from Archive
-        run: | 
-          cd "${{ github.workspace }}/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/"
-          zip -r "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip" "${IOS_PROJECT_NAME}.app"
-          ls -ale "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip"
+      #- name: Extract Unsigned App from Archive
+      #  run: | 
+      #    cd "${{ github.workspace }}/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/"
+      #    zip -r "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip" "${IOS_PROJECT_NAME}.app"
+      #    ls -ale "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip"
 
 
       #- name: Extract Build Folder
@@ -99,6 +99,6 @@ jobs:
         with:
           #name: ${{env.IOS_PROJECT_NAME}}.ipa
           name: "${{env.IOS_PROJECT_NAME}}.app.zip"
-          path: ${{ github.workspace }}/${{env.IOS_PROJECT_NAME}}.app.zip
+          path: "${{ github.workspace }}/build/${{env.IOS_PROJECT_NAME}}.xcarchive/Products/Applications/"
           #name: build_output_${{env.IOS_PROJECT_NAME}}.zip
           #path: $PWD/build.zip
