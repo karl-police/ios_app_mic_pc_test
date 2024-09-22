@@ -50,7 +50,7 @@ jobs:
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
             -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
             -destination "generic/platform=iOS" \
-            clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+            clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
       
       #- name: Test
       #  env:
@@ -64,11 +64,11 @@ jobs:
       #    file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
       #    xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
 
-      - name: Test
-        run: |
-          pwd
-          ls -d */
-          ls
+      #- name: Test Path
+      #  run: |
+      #    pwd
+      #    ls -d */
+      #    ls
 
       - name: Export .ipa file
         shell: bash
