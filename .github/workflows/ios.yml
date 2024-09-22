@@ -72,11 +72,17 @@ jobs:
       #    ls -d */
       #    ls
 
+      - name: Extract Unsigned App from Archive
+        run: | 
+          cd "$PWD/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/" \
+            && zip -r "$PWD/${IOS_PROJECT_NAME}.zip" "${IOS_PROJECT_NAME}.app"
+          ls -ale "$PWD${IOS_PROJECT_NAME}.app.zip"
+
       - name: Export .ipa file
         shell: bash
         run: |
           xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
-            #-exportOptionsPlist Support/ExportOptions.plist \
+            -exportOptionsPlist Support/ExportOptions.plist \
             -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
             -exportArchive
 
