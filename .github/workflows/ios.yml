@@ -56,10 +56,10 @@ jobs:
 
       - name: Export .ipa file
         run: |
-          xcodebuild -exportArchive
-            -archivePath "$ARCHIVE_PATH"
-            -exportPath "$EXPORT_PATH"
-            -exportOptionsPlist Support/ExportOptions.plist
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE_PATH" \
+            -exportPath "$EXPORT_PATH" \
+            -exportOptionsPlist Support/ExportOptions.plist \
             -exportProvisioningProfile "ProvisioningProfileName"
 
       - name: Upload Artifact
