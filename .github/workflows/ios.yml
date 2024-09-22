@@ -60,6 +60,7 @@ jobs:
             -archivePath "$ARCHIVE_PATH"
             -exportPath "$EXPORT_PATH"
             -exportOptionsPlist Support/ExportOptions.plist
+            -exportProvisioningProfile "ProvisioningProfileName"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
