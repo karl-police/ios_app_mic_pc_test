@@ -14,8 +14,8 @@ env:
   #IOS_SCHEME_NAME: default
 
   # Output Path
-  ARCHIVE_PATH: "$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
-  EXPORT_PATH: "$PWD/build/${IOS_PROJECT_NAME}"
+  ARCHIVE_PATH: $PWD/build/${IOS_PROJECT_NAME}.xcarchive
+  EXPORT_PATH: $PWD/build/${IOS_PROJECT_NAME}
 
 
 
@@ -53,7 +53,6 @@ jobs:
 
 
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -sdk iphoneos \
             -archivePath "${ARCHIVE_PATH}" \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -74,6 +73,7 @@ jobs:
         run: |
           pwd
           ls -d */
+          ls
 
       - name: Export .ipa file
         shell: bash
