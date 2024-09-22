@@ -51,7 +51,7 @@ jobs:
           export EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}"
           
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -archivePath "$ARCHIVE_PATH" \
+            -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       
@@ -70,9 +70,9 @@ jobs:
       - name: Export .ipa file
         shell: bash
         run: |
-          xcodebuild -archivePath "$ARCHIVE_PATH" \
+          xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
             -exportOptionsPlist Support/ExportOptions.plist \
-            -exportPath "$EXPORT_PATH" \
+            -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
             -allowProvisioningUpdates \
             -exportArchive
 
