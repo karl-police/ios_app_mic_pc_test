@@ -97,8 +97,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          #name: ${IOS_PROJECT_NAME}.ipa
-          name: "${IOS_PROJECT_NAME}.app.zip"
+          #name: ${{env.IOS_PROJECT_NAME}}.ipa
+          name: "${{env.IOS_PROJECT_NAME}}.app.zip"
           path: ${{ github.workspace }}/${{env.IOS_PROJECT_NAME}}.app.zip
-          #name: build_output_${IOS_PROJECT_NAME}.zip
+          #name: build_output_${{env.IOS_PROJECT_NAME}}.zip
           #path: $PWD/build.zip
