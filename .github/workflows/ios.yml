@@ -6,16 +6,17 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+envs:
+  IOS_PROJECT_NAME: Github Xcode Demo.xcodeproj
+
+  # schema name could be selected from 'xcodebuild -list'
+  #IOS_SCHEME_NAME: default
+
 jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-
-    envs:
-      IOS_PROJECT_NAME: Github Xcode Demo.xcodeproj
-
-      # schema name could be selected from 'xcodebuild -list'
-      #IOS_SCHEME_NAME: default
 
     steps:
       - name: Checkout
