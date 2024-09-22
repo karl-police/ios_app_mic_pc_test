@@ -79,7 +79,7 @@ jobs:
             -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
             -allowProvisioningUpdates \
             -verbose \
-            -exportArchive
+            -exportArchive DEVELOPMENT_TEAM=""
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
