@@ -35,7 +35,7 @@ jobs:
           
           # Output Path
           export ARCHIVE_PATH="$PWD/build/ProjectName.xcarchive"
-          export EXPORT_PATH="$PWD/build/ProjectName.ipa"
+          export EXPORT_PATH="$PWD/build/ProjectName"
           
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
             -archivePath "$ARCHIVE_PATH" \
@@ -56,13 +56,10 @@ jobs:
 
       - name: Export .ipa file
         run: |
-          echo "$ARCHIVE_PATH"
-            echo hello
-            echo hello again
-          xcodebuild -exportArchive \
-            -archivePath "$ARCHIVE_PATH" -exportPath "$EXPORT_PATH" \
-            -exportOptionsPlist Support/ExportOptions.plist \
-            -verbose
+          xcodebuild -exportArchive
+            -archivePath "$ARCHIVE_PATH"
+            -exportPath "$EXPORT_PATH"
+            -exportOptionsPlist Support/ExportOptions.plist
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
