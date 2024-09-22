@@ -57,8 +57,7 @@ jobs:
       - name: Export .ipa file
         run: |
           xcodebuild -exportArchive \
-            -exportPath "$EXPORT_PATH" \
-            -archivePath "$ARCHIVE_PATH" \
+            -archivePath "$ARCHIVE_PATH" -exportPath "$EXPORT_PATH" \
             -exportOptionsPlist Support/ExportOptions.plist \
             -verbose
 
