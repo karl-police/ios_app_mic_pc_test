@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 
-envs:
+env:
   IOS_PROJECT_NAME: Github Xcode Demo.xcodeproj
 
   # schema name could be selected from 'xcodebuild -list'
