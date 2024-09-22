@@ -37,8 +37,8 @@ jobs:
       - name: Test2
         run: |
           # Output Path
-          echo "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" >> $ARCHIVE_PATH
-          echo "$PWD/build/${IOS_PROJECT_NAME}" >> $EXPORT_PATH
+          echo ARCHIVE_PATH="$PWD/build/${IOS_PROJECT_NAME}.xcarchive" >> $ARCHIVE_PATH
+          echo EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}" >> $EXPORT_PATH
 
       - name: Build the xcarchive
         env:
