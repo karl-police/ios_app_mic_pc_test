@@ -8,7 +8,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
-        showAlert("Button Clicked!")
+        requestMicrophoneAccess()
     }
 
     func showAlert(_ msg: String) {
