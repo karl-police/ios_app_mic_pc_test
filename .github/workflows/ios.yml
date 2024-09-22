@@ -83,13 +83,13 @@ jobs:
 
       - name: Extract Unsigned App from Archive
         run: | 
-          cd "$PWD/build/" \
-            && zip -r "$PWD/${IOS_PROJECT_NAME}.zip" "${IOS_PROJECT_NAME}.app"
-          ls -ale "$PWD/${IOS_PROJECT_NAME}.app.zip"
+              cd "$PWD/build/"
+              zip -r "$PWD/build.zip" .
+              ls -ale "$PWD/build.zip"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           #name: ${IOS_PROJECT_NAME}.ipa
-          name: ${IOS_PROJECT_NAME}.app.zip
-          path: $PWD/build/*.zip
+          name: build_output_${IOS_PROJECT_NAME}.zip
+          path: $PWD/build.zip
