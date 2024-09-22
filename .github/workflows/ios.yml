@@ -30,9 +30,9 @@ jobs:
           echo Using default scheme: $default
       
     
-      - name: Resolve package dependencies
-        shell: bash
-        run: xcodebuild -resolvePackageDependencies
+      #- name: Resolve package dependencies
+      #  shell: bash
+      #  run: xcodebuild -resolvePackageDependencies
 
 
       - name: Build the xcarchive
@@ -72,13 +72,13 @@ jobs:
       #    ls -d */
       #    ls
 
-      #- name: Export .ipa file
-      #  shell: bash
-      #  run: |
-      #    xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
-      #      -exportOptionsPlist Support/ExportOptions.plist \
-      #      -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
-      #      -exportArchive
+      - name: Export .ipa file
+        shell: bash
+        run: |
+          xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
+            -exportOptionsPlist Support/ExportOptions.plist \
+            -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
+            -exportArchive
 
 
       - name: Extract Unsigned App from Archive
