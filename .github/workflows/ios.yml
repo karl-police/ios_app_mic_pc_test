@@ -39,7 +39,7 @@ jobs:
         shell: bash
         run: xcodebuild -resolvePackageDependencies
 
-      - name: Build
+      - name: Build the xcarchive
         env:
           scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
@@ -51,7 +51,9 @@ jobs:
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           #xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
 
+
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
+            -sdk iphoneos \
             -archivePath "${ARCHIVE_PATH}" \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
