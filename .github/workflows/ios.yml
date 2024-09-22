@@ -86,7 +86,7 @@ jobs:
         run: | 
           cd "$PWD/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/" \
             && zip -r "$PWD/${IOS_PROJECT_NAME}.zip" "${IOS_PROJECT_NAME}.app"
-          ls -ale "$PWD${IOS_PROJECT_NAME}.app.zip"
+          ls -ale "$PWD/${IOS_PROJECT_NAME}.app.zip"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
