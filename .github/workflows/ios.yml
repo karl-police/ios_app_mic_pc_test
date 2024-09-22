@@ -37,7 +37,7 @@ jobs:
           export ARCHIVE_PATH="$PWD/build/MyApp.xcarchive"
           export EXPORT_PATH="$PWD/build"
           
-          xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
+          xcodebuild -sdk "iphonesimulator" -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
             -archivePath "$ARCHIVE_PATH" \
             -destination "generic/platform=iOS" \
             clean archive
