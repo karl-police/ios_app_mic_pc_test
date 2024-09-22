@@ -78,7 +78,7 @@ jobs:
           xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
             -exportOptionsPlist Support/ExportOptions.plist \
             -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
-            -exportArchive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" 
+            -exportArchive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
