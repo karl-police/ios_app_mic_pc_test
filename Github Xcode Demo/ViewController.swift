@@ -3,7 +3,7 @@ import AVFoundation
 
 
 protocol UI_Comms_Delegate: AnyObject {
-    func showAlert(message: String)
+    func showAlert(_ msg: String)
 }
 
 class AudioManager {
