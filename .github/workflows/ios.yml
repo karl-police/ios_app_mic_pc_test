@@ -72,13 +72,13 @@ jobs:
       #    ls -d */
       #    ls
 
-      - name: Export .ipa file
-        shell: bash
-        run: |
-          xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
-            -exportOptionsPlist Support/ExportOptions.plist \
-            -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
-            -exportArchive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
+      #- name: Export .ipa file
+      #  shell: bash
+      #  run: |
+      #    xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
+      #      -exportOptionsPlist Support/ExportOptions.plist \
+      #      -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
+      #      -exportArchive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
 
 
       - name: Extract Unsigned App from Archive
