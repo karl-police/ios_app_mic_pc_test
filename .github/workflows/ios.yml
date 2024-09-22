@@ -99,6 +99,6 @@ jobs:
         with:
           #name: ${IOS_PROJECT_NAME}.ipa
           name: "${IOS_PROJECT_NAME}.app.zip"
-          path: ${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip
+          path: ${{ github.workspace }}/${{env.IOS_PROJECT_NAME}}.app.zip
           #name: build_output_${IOS_PROJECT_NAME}.zip
           #path: $PWD/build.zip
