@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Github Xcode Demo
-//
-//  Created by Paul Solt on 3/2/16.
-//  Copyright © 2016 Super Easy Apps LLC. All rights reserved.
-//
 
 import UIKit
 
