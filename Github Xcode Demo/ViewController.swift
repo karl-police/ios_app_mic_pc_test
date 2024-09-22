@@ -79,7 +79,7 @@ class AudioManager {
 
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UI_Comms_Delegate {
     let audioManager = AudioManager()
 
     override func viewDidLoad() {
