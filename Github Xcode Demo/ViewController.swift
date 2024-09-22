@@ -32,5 +32,20 @@ class ViewController: UIViewController {
             }
         }
     }
+
+
+
+    // List Microphones
+    func listAvailableMicrophones() {
+        let devices = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.builtInMicrophone],
+            mediaType: .audio,
+            position: .unspecified
+        ).devices
+        
+        for device in devices {
+            print("Microphone: \(device.localizedName), ID: \(device.uniqueID)")
+        }
+    }
 }
 
