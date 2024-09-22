@@ -1,5 +1,5 @@
-
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
@@ -8,15 +8,29 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
-        showAlert()
+        showAlert("Button Clicked!")
     }
 
-    func showAlert() {
-        let alert = UIAlertController(title: "Alert", message: "Button Clicked!", preferredStyle: .alert)
+    func showAlert(msg: String) {
+        let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
         present(alert, animated: true, completion: nil)
+    }
+
+
+    // Request Microphone Permission
+    func requestMicrophoneAccess() {
+        AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+            if granted {
+                showAlert("Microphone access granted!")
+
+
+            } else {
+                showAlert("Microphone access denied!")
+            }
+        }
     }
 }
 
