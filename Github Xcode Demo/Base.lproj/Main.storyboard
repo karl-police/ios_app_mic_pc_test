@@ -30,9 +30,14 @@
                                 <rect key="frame" x="260" y="49" width="81" height="30"/>
                                 <state key="normal" title="New Button"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGi-3j-11O">
-                                <rect key="frame" x="20" y="20" width="46" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGi-3j-11O">
                                 <state key="normal" title="Button"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="centerX-button"/>
+                                    <constraint firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="centerY-button"/>
+                                    <constraint firstAttribute="width" constant="100" id="width-button"/>
+                                    <constraint firstAttribute="height" constant="50" id="height-button"/>
+                                </constraints>
                                 <connections>
                                     <action selector="buttonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qn9-yF-JaX"/>
                                 </connections>
