@@ -83,7 +83,8 @@ jobs:
 
       - name: Extract Unsigned App from Archive
         run: | 
-          cd "${{ github.workspace }}/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/" && zip -r "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip" "${IOS_PROJECT_NAME}.app"
+          cd "${{ github.workspace }}/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/"
+          zip -r "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip" "${IOS_PROJECT_NAME}.app"
           ls -ale "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip"
 
 
