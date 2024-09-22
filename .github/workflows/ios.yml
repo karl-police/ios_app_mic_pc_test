@@ -13,11 +13,6 @@ env:
   # schema name could be selected from 'xcodebuild -list'
   #IOS_SCHEME_NAME: default
 
-  # Output Path
-  ARCHIVE_PATH: $PWD/build/${IOS_PROJECT_NAME}.xcarchive
-  EXPORT_PATH: $PWD/build/${IOS_PROJECT_NAME}
-
-
 
 jobs:
   build:
