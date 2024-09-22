@@ -11,7 +11,7 @@ class ViewController: UIViewController {
         showAlert("Button Clicked!")
     }
 
-    func showAlert(msg: String) {
+    func showAlert(_ msg: String) {
         let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
