@@ -13,6 +13,11 @@ env:
   # schema name could be selected from 'xcodebuild -list'
   #IOS_SCHEME_NAME: default
 
+  # Output Path
+  ARCHIVE_PATH: "$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
+  EXPORT_PATH: "$PWD/build/${IOS_PROJECT_NAME}"
+
+
 
 jobs:
   build:
@@ -45,13 +50,9 @@ jobs:
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           #xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
-          
-          # Output Path
-          export ARCHIVE_PATH="$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
-          export EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}"
-          
+
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
+            -archivePath "${ARCHIVE_PATH}" \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       
@@ -70,9 +71,9 @@ jobs:
       - name: Export .ipa file
         shell: bash
         run: |
-          xcodebuild -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
+          xcodebuild -archivePath "${ARCHIVE_PATH}" \
             -exportOptionsPlist Support/ExportOptions.plist \
-            -exportPath "$PWD/build/${IOS_PROJECT_NAME}" \
+            -exportPath "${EXPORT_PATH}" \
             -allowProvisioningUpdates \
             -exportArchive
 
