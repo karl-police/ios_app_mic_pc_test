@@ -83,13 +83,21 @@ jobs:
 
       - name: Extract Unsigned App from Archive
         run: | 
-              cd "$PWD/build/"
-              zip -r "$PWD/build.zip" .
-              ls -ale "$PWD/build.zip"
+          cd "${{ github.workspace }}/build/${IOS_PROJECT_NAME}.xcarchive/Products/Applications/" && zip -r "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip" "${IOS_PROJECT_NAME}.app"
+          ls -ale "${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip"
+
+
+      #- name: Extract Build Folder
+      #  run: | 
+      #        cd "$PWD/build/"
+      #        zip -r "$PWD/build.zip" .
+      #        ls -ale "$PWD/build.zip"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           #name: ${IOS_PROJECT_NAME}.ipa
-          name: build_output_${IOS_PROJECT_NAME}.zip
-          path: $PWD/build.zip
+          name: "${IOS_PROJECT_NAME}.app.zip"
+          path: ${{ github.workspace }}/${IOS_PROJECT_NAME}.app.zip
+          #name: build_output_${IOS_PROJECT_NAME}.zip
+          #path: $PWD/build.zip
