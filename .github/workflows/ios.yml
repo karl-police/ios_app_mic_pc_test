@@ -34,6 +34,12 @@ jobs:
         shell: bash
         run: xcodebuild -resolvePackageDependencies
 
+      - name: Test2
+        run: |
+          # Output Path
+          export ARCHIVE_PATH="$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
+          export EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}"
+
       - name: Build the xcarchive
         env:
           scheme: ${{ 'default' }}
@@ -46,9 +52,6 @@ jobs:
           file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
           #xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
 
-          # Output Path
-          export ARCHIVE_PATH="$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
-          export EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}"
 
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
             -archivePath "$ARCHIVE_PATH" \
