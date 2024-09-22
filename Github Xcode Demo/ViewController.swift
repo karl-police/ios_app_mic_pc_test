@@ -24,11 +24,11 @@ class ViewController: UIViewController {
     func requestMicrophoneAccess() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
-                showAlert("Microphone access granted!")
+                self.showAlert("Microphone access granted!")
 
 
             } else {
-                showAlert("Microphone access denied!")
+                self.showAlert("Microphone access denied!")
             }
         }
     }
