@@ -33,7 +33,7 @@ jobs:
       - name: Resolve package dependencies
         shell: bash
         run: xcodebuild -resolvePackageDependencies
-        
+
       - name: Build
         env:
           scheme: ${{ 'default' }}
