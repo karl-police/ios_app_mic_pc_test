@@ -8,7 +8,7 @@ on:
 
 
 env:
-  IOS_PROJECT_NAME: Github Xcode Demo.xcodeproj
+  IOS_PROJECT_NAME: Github Xcode Demo
 
   # schema name could be selected from 'xcodebuild -list'
   #IOS_SCHEME_NAME: default
@@ -41,11 +41,11 @@ jobs:
           #xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
           
           # Output Path
-          export ARCHIVE_PATH="$PWD/build/ProjectName.xcarchive"
-          export EXPORT_PATH="$PWD/build/ProjectName"
+          export ARCHIVE_PATH="$PWD/build/${IOS_PROJECT_NAME}.xcarchive"
+          export EXPORT_PATH="$PWD/build/${IOS_PROJECT_NAME}"
           
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -archivePath $ARCHIVE_PATH \
+            -archivePath "$ARCHIVE_PATH" \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       
