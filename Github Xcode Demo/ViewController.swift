@@ -5,17 +5,18 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print("Hello!")
-        
-        // Added 1st statement on Branch Update-the-UI
-    
-        doSomething()
     }
     
-    func doSomething() {
-        print("do some algorithm and computation")
+    @IBAction func buttonClicked(_ sender: UIButton) {
+        showAlert()
     }
 
+    func showAlert() {
+        let alert = UIAlertController(title: "Alert", message: "Button Clicked!", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+        present(alert, animated: true, completion: nil)
+    }
 }
 
