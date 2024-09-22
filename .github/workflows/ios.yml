@@ -53,7 +53,7 @@ jobs:
 
 
           xcodebuild -scheme "$scheme" -"$filetype_parameter" "$file_to_build" \
-            -archivePath "${ARCHIVE_PATH}" \
+            -archivePath ${ARCHIVE_PATH} \
             -destination "generic/platform=iOS" \
             clean archive CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       
@@ -73,6 +73,9 @@ jobs:
         run: |
           pwd
           ls -d */
+          ls
+          echo ok
+          cd "$PWD"
           ls
 
       - name: Export .ipa file
