@@ -63,10 +63,12 @@ jobs:
       #    xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$device"
 
       - name: Export .ipa file
+        shell: bash
         run: |
-          xcodebuild -exportArchive \
-            -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
+          xcodebuild -archivePath "$ARCHIVE_PATH" -exportPath "$EXPORT_PATH" \
             -exportOptionsPlist Support/ExportOptions.plist
+            -allowProvisioningUpdates \
+            -exportArchive
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
