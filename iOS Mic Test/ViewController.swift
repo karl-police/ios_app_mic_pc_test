@@ -444,6 +444,8 @@ class ViewController: UIViewController {
         polarPatternTableView = PolarPatternTableView()
         tableView = polarPatternTableView.tableView
         
+        let parentView = self.view
+
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
