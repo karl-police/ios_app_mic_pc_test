@@ -457,18 +457,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let session = AVAudioSession.sharedInstance()
 
         do {
-            // Get the current input data source (e.g., microphone)
             if let dataSource = session.inputDataSource {
                 if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                     try dataSource.setPreferredPolarPattern(pattern)
                     try session.setInputDataSource(dataSource)
-                    print("Polar pattern set to \(pattern.patternName())")
+                    self.debugTextBoxOut.text = "Polar pattern set to \(pattern.patternName())"
                 } else {
-                    print("Selected polar pattern is not supported.")
+                    self.debugTextBoxOut.text = "Selected polar pattern is not supported."
                 }
             }
         } catch {
-            print("Error setting polar pattern: \(error.localizedDescription)")
+            self.debugTextBoxOut.text = "Error setting polar pattern: \(error.localizedDescription)"
         }
     }
 
