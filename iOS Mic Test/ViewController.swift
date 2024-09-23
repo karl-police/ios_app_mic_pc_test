@@ -279,7 +279,8 @@ class AudioManager {
 
 
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    var tableView: UITableView!
     var debugTextBoxOut: UITextView!
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
@@ -361,10 +362,17 @@ class ViewController: UIViewController {
         ])
     }
 
+    func setupTableView() {
+        tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initUI()
+        setupTableView()
 
 
         // Register for keyboard notifications
