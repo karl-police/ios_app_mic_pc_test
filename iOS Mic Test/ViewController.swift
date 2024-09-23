@@ -216,11 +216,22 @@ struct AudioSettings {
 
 class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSource {
     var tableView: UITableView!
-    var polarPatterns: [AVAudioSession.PolarPattern]
+    var polarPatterns: [AVAudioSession.PolarPattern] {
+        // Define the polar patterns based on iOS version
+        var patterns: [AVAudioSession.PolarPattern] = [.cardioid, .subcardioid, .omnidirectional]
+        
+        // Check if the iOS version is 14.0 or newer
+        if #available(iOS 14.0, *) {
+            patterns.append(.stereo) // Add stereo pattern for iOS 14 and above
+        }
+        
+        return patterns
+    }
+
     var selectedPattern: AVAudioSession.PolarPattern?
     var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
 
-    init(polarPatterns: [AVAudioSession.PolarPattern]) {
+    init() {
         self.polarPatterns = polarPatterns
         super.init()
         setupTableView()
@@ -354,7 +365,6 @@ class ViewController: UIViewController {
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: PolarPatternTableView!
-    let polarPatterns: [AVAudioSession.PolarPattern] = [.stereo, .cardioid, .subcardioid, .omnidirectional]
 
     //let audioEngineManager = AudioEngineManager()
     let audioManager = AudioManager()
@@ -438,7 +448,7 @@ class ViewController: UIViewController {
 
     func setupPolarPatternTableView() {
         // Init
-        polarPatternTableView = PolarPatternTableView(polarPatterns: polarPatterns)
+        polarPatternTableView = PolarPatternTableView()
         //polarPatternTableView.setupTableView()
 
         self.view.addSubview(polarPatternTableView.tableView)
