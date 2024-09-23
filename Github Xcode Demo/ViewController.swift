@@ -9,13 +9,12 @@ class AudioManager {
 
     // Get Available Microphones
     func GetAvailableMicrophones() -> [AVCaptureDevice] {
-        let devices = AVCaptureDevice.DiscoverySession(
-            deviceTypes: [.builtInMicrophone],
+        let session = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.builtInMicrophone, .builtInWideAngleCamera, .builtInTelephotoCamera],
             mediaType: .audio,
             position: .unspecified
-        ).devices
-
-        return devices
+        )
+        return session.devices.filter { $0.hasMediaType(.audio) }
     }
 
     // Select a microphone by its unique ID
