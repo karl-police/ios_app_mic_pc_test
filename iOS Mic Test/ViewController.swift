@@ -231,12 +231,22 @@ class AudioManager {
 class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
     var btnMicToggle: UIButton!
+    var ui_connectionLabel: UILabel!
 
     let audioManager = AudioManager()
     var isRecordingTest = false
 
 
     func initUI() {
+        // Create the info label
+        ui_connectionLabel = UILabel()
+        ui_connectionLabel.text = "Status"
+        ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
+        ui_connectionLabel.textAlignment = .center
+        ui_connectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(ui_connectionLabel)
+
+
         // Create the button
         btnMicToggle = UIButton(type: .system)
 
@@ -251,6 +261,11 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
+            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+
             // Center
             btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
