@@ -133,7 +133,32 @@ class AudioManager {
         audioSettings = AudioSettings()
     }
 
+    func setupAudioSession() throws {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+            try audioSession.setActive(true)
+        } catch {
+            throw error
+        }
+    }
+
+    private func deactivateAudioSession() {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setActive(false)
+        } catch {
+            print("Error deactivating audio session: \(error)")
+        }
+    }
+
     func startRecording() throws {
+        do {
+            try self.setupAudioSession()
+        } catch {
+            throw error
+        }
+
         // Create a file URL to save the audio
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
@@ -172,6 +197,9 @@ class AudioManager {
         inputNode.removeTap(onBus: 0)
         audioEngine.stop()
         cleanUpReset()
+
+        // Deactivate the audio session
+        deactivateAudioSession()
     }
 
 
