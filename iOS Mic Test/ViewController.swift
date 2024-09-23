@@ -83,6 +83,7 @@ class AudioManager {
     private var audioFormat: AVAudioFormat!
 
     private var selectedDevice: AVCaptureDevice?
+    var error: Error? // Property to hold error
 
     init() {
         audioEngine = AVAudioEngine()
@@ -128,7 +129,7 @@ class AudioManager {
                     // Write the buffer to the audio file
                     try self.audioFile?.write(from: buffer)
                 } catch {
-                    //throw error
+                    self.error = error
                 }
             }
 
@@ -136,16 +137,21 @@ class AudioManager {
             try audioEngine.start()
         } catch {
             // Clean up in case of an error
-            audioFile = nil
+            cleanUpReset()
             throw error
         }
+    }
+
+    func cleanUpReset() {
+        self.audioFile = nil
+        self.error = nil
     }
 
     func stopRecording() {
         // Remove the tap and stop the audio engine
         inputNode.removeTap(onBus: 0)
         audioEngine.stop()
-        audioFile = nil
+        cleanUpReset()
     }
 
 
