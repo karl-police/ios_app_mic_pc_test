@@ -332,7 +332,7 @@ class ViewController: UIViewController {
     // Toggle button
     @IBAction func micToggleClicked(_ sender: UIButton) {
         RequestCameraAccess() { (granted) in
-            self.requestMicrophoneAccess()
+            self.m_requestMicrophoneAccess()
         }
     }
 
@@ -369,7 +369,7 @@ class ViewController: UIViewController {
 
 
     // Request Microphone Permission
-    func requestMicrophoneAccess() {
+    func m_requestMicrophoneAccess() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
                 DispatchQueue.main.async {
