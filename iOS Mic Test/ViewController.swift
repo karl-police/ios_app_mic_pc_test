@@ -5,6 +5,13 @@
 import UIKit
 import AVFoundation
 
+
+
+public func GetDocumentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    return paths[0]
+}
+
 /// Returns all cameras on the device.
 public func GetListOfCameras() -> [AVCaptureDevice] {
     #if os(iOS)
@@ -109,7 +116,7 @@ class AudioManager {
 
     func startRecording() throws {
         // Create a file URL to save the audio
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         do {
             // Create the audio file
@@ -292,14 +299,8 @@ class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-
     func setupAudioRecorder() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         let settings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatAppleLossless),
@@ -317,7 +318,7 @@ class ViewController: UIViewController {
     }
 
     func shareRecordedAudio() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         let activityViewController = UIActivityViewController(activityItems: [audioFilename], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
