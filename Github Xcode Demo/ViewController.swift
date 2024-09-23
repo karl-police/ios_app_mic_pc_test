@@ -46,7 +46,7 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
     do {
         try audioSession.setCategory(
             AVAudioSession.Category.playAndRecord,
-            options: AVAudioSession.CategoryOptions.DefaultToSpeaker
+            options: AVAudioSession.CategoryOptions.defaultToSpeaker
         )
         try audioSession.setActive(true)
     } catch {
