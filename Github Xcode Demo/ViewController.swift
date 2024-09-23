@@ -211,7 +211,7 @@ class ViewController: UIViewController {
     
     func stopRecording() {
         audioRecorder?.stop()
-        self.showAlert("Recording stopped.")
+        //self.showAlert("Recording stopped.")
         shareRecordedAudio()
     }
 
