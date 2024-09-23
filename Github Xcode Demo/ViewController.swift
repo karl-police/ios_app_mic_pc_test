@@ -166,7 +166,7 @@ class ViewController: UIViewController {
 
                 var message = ""
 
-                if let micInputs = audioSession.availableInputs {
+                if let micInputs = GetAvailableMicrophoneInputs() {
                     for micInput in micInputs {
                         // Builder string
                         message = "Available Mic Inputs:\n\n"
