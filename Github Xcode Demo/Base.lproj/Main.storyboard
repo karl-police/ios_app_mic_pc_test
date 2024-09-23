@@ -43,10 +43,16 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" userInteractionEnabled="YES" contentMode="scaleToFill" editable="NO" scrollEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="myTextView">
-                                <rect key="frame" x="20" y="450" width="560" height="100"/>
+                                <rect key="frame" x="20" y="500" width="560" height="100"/>
                                 <color key="backgroundColor" red="0.9" green="0.9" blue="0.9" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="none"/>
+                                <constraints>
+                                    <constraint firstItem="myTextView" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="leading-myTextView"/>
+                                    <constraint firstItem="myTextView" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-20" id="trailing-myTextView"/>
+                                    <constraint firstItem="myTextView" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" constant="-20" id="bottom-myTextView"/>
+                                    <constraint firstItem="myTextView" firstAttribute="height" constant="100" id="height-myTextView"/>
+                                </constraints>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
