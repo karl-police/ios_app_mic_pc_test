@@ -78,6 +78,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        showAlert("Test Alert!")
+        showAlert("Test Alert 2!")
         debugTextBoxOut.text = "Test"
     }
     
