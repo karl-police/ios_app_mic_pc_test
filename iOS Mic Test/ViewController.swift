@@ -78,6 +78,16 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 struct AudioSettings {
     let sampleRate: Double = 44100
     let channels: Int = 1
+    let qualityEnconder: AVAudioQuality = AVAudioQuality.high.rawValue
+
+    func getForSettings() {
+        return [
+            AVFormatIDKey: formatID,
+            AVSampleRateKey: sampleRate,
+            AVNumberOfChannelsKey: channels,
+            AVEncoderAudioQualityKey: qualityEnconder.rawValue
+        ]
+    }
 }
 
 
