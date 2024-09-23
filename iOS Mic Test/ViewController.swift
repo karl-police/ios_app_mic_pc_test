@@ -469,13 +469,15 @@ class ViewController: UIViewController {
         let session = AVAudioSession.sharedInstance()
 
         do {
-            if let dataSource = session.inputDataSource {
-                if dataSource.supportedPolarPatterns?.contains(pattern) == true {
-                    try dataSource.setPreferredPolarPattern(pattern)
-                    try session.setInputDataSource(dataSource)
-                    self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
-                } else {
-                    self.debugTextBoxOut.text = "Selected polar pattern \(polarPatternTableView.polarPatternName(for: pattern)) is not supported."
+            if let inputDataSources = session.inputDataSources {
+                for dataSource in dataSources {
+                    if dataSource.supportedPolarPatterns?.contains(pattern) == true {
+                        try dataSource.setPreferredPolarPattern(pattern)
+                        try session.setInputDataSource(dataSource)
+                        self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
+                    } else {
+                        self.debugTextBoxOut.text = "Selected polar pattern \(polarPatternTableView.polarPatternName(for: pattern)) is not supported."
+                    }
                 }
             }
         } catch {
