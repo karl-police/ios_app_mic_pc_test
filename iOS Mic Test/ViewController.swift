@@ -65,7 +65,7 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
 
 
 /// Returns all available input ports (microphones) on the device.
-public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
+public func GetAvailableMicrophoneInputs() throws -> [AVAudioSessionPortDescription]? {
     let audioSession = AVAudioSession.sharedInstance()
     
     do {
@@ -78,8 +78,18 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
         print("Error activating audio session: \(error)")
         return nil
     }
+    
+    // Get the available microphone inputs
+    let availableInputs = audioSession.availableInputs
+    
+    // Deactivate the audio session after retrieving inputs
+    do {
+        try audioSession.setActive(false)
+    } catch {
+        throw error
+    }
 
-    return audioSession.availableInputs
+    return availableInputs
 }
 
 
@@ -251,7 +261,7 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
-            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
+            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
