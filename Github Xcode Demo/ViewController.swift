@@ -134,7 +134,13 @@ class ViewController: UIViewController {
                 for mic in microphones {
                     message += "Microphone: \(mic.localizedName)\n"
                     message += "ID: \(mic.uniqueID)\n"
-                    message += "Position: \(mic.position.rawValue)\n"
+                    if mic.position == .front {
+                        message += "Position: Front Camera\n"
+                    } else if mic.position == .back {
+                        message += "Position: Back Camera\n"
+                    } else {
+                        message += "Position: Unspecified\n"
+                    }
                 }
                 
                 // Set text
