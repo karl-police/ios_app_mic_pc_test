@@ -239,7 +239,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
                 return "Subcardioid"
             case .omnidirectional:
                 return "Omnidirectional"
-            @unknown default:
+            default:
                 return "Unknown Pattern"
             }
         } else {
@@ -251,7 +251,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
                 return "Subcardioid"
             case .omnidirectional:
                 return "Omnidirectional"
-            @unknown default:
+            default:
                 return "Unknown Pattern"
             }
         }
