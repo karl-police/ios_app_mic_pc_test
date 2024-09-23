@@ -586,7 +586,7 @@ class ViewController: UIViewController {
                     if let inputDataSources = session.inputDataSources {
                         for dataSource in inputDataSources {
                             message += "Name: \(dataSource.selectedPolarPattern)"
-                            message += "Polar Pattern: \(polarPatternTableView.polarPatternName(for: dataSource.selectedPolarPattern))"
+                            message += "Polar Pattern: \(self.polarPatternTableView.polarPatternName(for: dataSource.selectedPolarPattern))"
                         }
                     }
                     self.debugTextBoxOut.text = message
