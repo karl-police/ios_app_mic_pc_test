@@ -71,7 +71,7 @@ class AudioManager {
 
 
 
-class ViewController: UIViewController, UI_Comms_Delegate {
+class ViewController: UIViewController {
     @IBOutlet weak var debugTextBoxOut: UITextView!
     let audioManager = AudioManager()
 
