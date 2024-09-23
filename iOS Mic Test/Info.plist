@@ -40,5 +40,9 @@
 	<string>App needs Microphone access to record audio.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>App needs Camera access to eventually evaluate more microphones.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>

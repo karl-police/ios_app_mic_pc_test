@@ -133,30 +133,6 @@ class AudioManager {
         audioSettings = AudioSettings()
     }
 
-    // Select a microphone by its unique ID
-    func selectMicrophone(withID id: String) throws {
-        guard let device = AVCaptureDevice.devices(for: .audio).first(where: { $0.uniqueID == id }) else {
-            // Microphone not found
-            return
-        }
-        
-        selectedDevice = device
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default)
-            try audioSession.setActive(true)
-            
-            let input = try AVCaptureDeviceInput(device: device)
-            let captureSession = AVCaptureSession()
-            captureSession.addInput(input)
-            captureSession.startRunning()
-            
-            print("Using microphone: \(device.localizedName)")
-        } catch {
-            throw error
-        }
-    }
-
     func startRecording() throws {
         // Create a file URL to save the audio
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
