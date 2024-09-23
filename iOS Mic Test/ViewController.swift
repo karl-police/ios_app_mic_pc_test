@@ -324,12 +324,17 @@ class ViewController: UIViewController {
     }
 
     func startRecording() {
-        audioRecorder?.record()
-        btnMicToggle.setTitle("Stop", for: .normal)
+        do {
+            try self.audioManager.startRecording()
+            btnMicToggle.setTitle("Stop", for: .normal)
+        } catch {
+            // Handle Error
+            self.debugTextBoxOut.text = "Error starting recording: \(error.localizedDescription)"
+        }
     }
     
     func stopRecording() {
-        audioRecorder?.stop()
+        self.audioManager.stopRecording()
         btnMicToggle.setTitle("Start", for: .normal)
         shareRecordedAudio()
     }
@@ -363,12 +368,11 @@ class ViewController: UIViewController {
 
 
                     if (self.isRecordingTest == false) {
-                        self.setupAudioRecorder()
                         self.isRecordingTest = true
 
                         self.startRecording()
                     } else {
-                        self.stopRecording()
+                        self..stopRecording()
                         self.isRecordingTest = false
                     }
                 }
