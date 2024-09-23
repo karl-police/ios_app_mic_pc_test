@@ -416,7 +416,6 @@ class ViewController: UIViewController {
             audioRecorder?.delegate = self
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
-            isRecording = true
             print("Recording started...")
         } catch {
             print("Failed to start recording: \(error)")
@@ -424,11 +423,8 @@ class ViewController: UIViewController {
     }
 
     func stopRecording() {
-        if isRecording {
-            audioRecorder?.stop()
-            isRecording = false
-            shareRecordedAudio()
-        }
+        audioRecorder?.stop()
+        shareRecordedAudio()
     }
 
     // Request Microphone Permission
