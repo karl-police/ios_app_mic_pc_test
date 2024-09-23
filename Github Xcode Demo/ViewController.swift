@@ -220,38 +220,39 @@ class ViewController: UIViewController {
     func requestMicrophoneAccess() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
-                //self.showAlert("Microphone access granted!")
+                DispatchQueue.main.async {
+                    self.showAlert("Microphone access granted!")
 
-                var message = ""
+                    var message = ""
 
-                /*if let micInputs = GetAvailableMicrophoneInputs() {
-                    for micInput in micInputs {
-                        // Builder string
-                        message = "Available Mic Inputs:\n\n"
+                    /*if let micInputs = GetAvailableMicrophoneInputs() {
                         for micInput in micInputs {
-                            message += "Port Name: \(micInput.portName)\n"
-                            message += "Port Type: \(micInput.portType)\n"
-                            message += "\n" // new line
+                            // Builder string
+                            message = "Available Mic Inputs:\n\n"
+                            for micInput in micInputs {
+                                message += "Port Name: \(micInput.portName)\n"
+                                message += "Port Type: \(micInput.portType)\n"
+                                message += "\n" // new line
+                            }
                         }
+                    } else {
+                        message = "No available microphone inputs."
+                    }*/
+                    
+                    // Set text
+                    self.debugTextBoxOut.text = message
+
+
+                    if (self.isRecordingTest == false) {
+                        self.setupAudioRecorder()
+                        self.isRecordingTest = true
+
+                        self.startRecording()
+                    } else {
+                        self.stopRecording()
+                        self.isRecordingTest = false
                     }
-                } else {
-                    message = "No available microphone inputs."
-                }*/
-                
-                // Set text
-                self.debugTextBoxOut.text = message
-
-
-                if (self.isRecordingTest == false) {
-                    self.setupAudioRecorder()
-                    self.isRecordingTest = true
-
-                    self.startRecording()
-                } else {
-                    self.stopRecording()
-                    self.isRecordingTest = false
                 }
-
             } else {
                 self.showAlert("Microphone access denied!")
             }
