@@ -172,7 +172,6 @@ class AudioManager {
     func stopAudioStream() {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
-        print("Audio streaming stopped.")
     }
 }
 
