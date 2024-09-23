@@ -65,7 +65,7 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
 
 
 /// Returns all available input ports (microphones) on the device.
-public func GetAvailableMicrophoneInputs() throws -> [AVAudioSessionPortDescription]? {
+public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
     let audioSession = AVAudioSession.sharedInstance()
     
     do {
@@ -86,7 +86,7 @@ public func GetAvailableMicrophoneInputs() throws -> [AVAudioSessionPortDescript
     do {
         try audioSession.setActive(false)
     } catch {
-        throw error
+        print("Error deactivating audio session: \(error)")
     }
 
     return availableInputs
@@ -410,14 +410,14 @@ class ViewController: UIViewController {
                     self.debugTextBoxOut.text = message
 
 
-                    if (self.isRecordingTest == false) {
+                    /*if (self.isRecordingTest == false) {
                         self.isRecordingTest = true
 
                         self.startRecording()
                     } else {
                         self.stopRecording()
                         self.isRecordingTest = false
-                    }
+                    }*/
                 }
             } else {
                 DispatchQueue.main.async {
