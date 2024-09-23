@@ -12,6 +12,24 @@ public func GetDocumentsDirectory() -> URL {
     return paths[0]
 }
 
+public func RequestCameraAccess(completion: @escaping (Bool) -> Void) {
+    switch AVCaptureDevice.authorizationStatus(for: .video) {
+    case .authorized:
+        // Camera access is already granted
+        completion(true)
+    case .notDetermined:
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+            completion(granted)
+        }
+    case .denied, .restricted:
+        // Camera access has been denied or is restricted
+        completion(false)
+    @unknown default:
+        completion(false)
+    }
+}
+
+
 /// Returns all cameras on the device.
 public func GetListOfCameras() -> [AVCaptureDevice] {
     #if os(iOS)
@@ -311,7 +329,9 @@ class ViewController: UIViewController {
 
     // Toggle button
     @IBAction func micToggleClicked(_ sender: UIButton) {
-        requestMicrophoneAccess()
+        RequestCameraAccess() {
+            requestMicrophoneAccess()
+        }
     }
 
     func showAlert(_ msg: String) {
