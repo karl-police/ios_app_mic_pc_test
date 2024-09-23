@@ -443,12 +443,10 @@ class ViewController: UIViewController {
         polarPatternTableView = PolarPatternTableView()
         tableView = polarPatternTableView.tableView
         
-        let parentView = self.view
-
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: 50),
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 50),
             tableView.heightAnchor.constraint(equalToConstant: 150)
         ])
 
