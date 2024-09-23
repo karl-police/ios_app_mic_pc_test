@@ -6,24 +6,34 @@ import UIKit
 import AVFoundation
 
 /// Returns all cameras on the device.
-public func getListOfCameras() -> [AVCaptureDevice] {
-    
-#if os(iOS)
+public func GetListOfCameras() -> [AVCaptureDevice] {
+    #if os(iOS)
+        let session = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [
+                .builtInWideAngleCamera,
+                .builtInTelephotoCamera
+            ],
+            mediaType: .video,
+            position: .unspecified)
+    #elseif os(macOS)
+        let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [
+                .builtInWideAngleCamera
+            ],
+            mediaType: .video,
+            position: .unspecified)
+    #endif
+        return session.devices
+}
+
+/// Returns all microphones on the device.
+public func GetListOfMicrophones() -> [AVCaptureDevice] {
     let session = AVCaptureDevice.DiscoverySession(
         deviceTypes: [
-            .builtInWideAngleCamera,
-            .builtInTelephotoCamera
+            .builtInMicrophone
         ],
-        mediaType: .video,
+        mediaType: .audio,
         position: .unspecified)
-#elseif os(macOS)
-    let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
-        deviceTypes: [
-            .builtInWideAngleCamera
-        ],
-        mediaType: .video,
-        position: .unspecified)
-#endif
     
     return session.devices
 }
@@ -31,16 +41,6 @@ public func getListOfCameras() -> [AVCaptureDevice] {
 class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var selectedDevice: AVCaptureDevice?
-
-    // Get Available Microphones
-    func GetAvailableMicrophones() -> [AVCaptureDevice] {
-        let session = AVCaptureDevice.DiscoverySession(
-            deviceTypes: [.builtInMicrophone, .builtInWideAngleCamera, .builtInTelephotoCamera],
-            mediaType: .audio,
-            position: .unspecified
-        )
-        return session.devices.filter { $0.hasMediaType(.audio) }
-    }
 
     // Select a microphone by its unique ID
     func selectMicrophone(withID id: String) {
@@ -147,21 +147,21 @@ class ViewController: UIViewController {
             if granted {
                 self.showAlert("Microphone access granted!")
 
-                let microphones = self.audioManager.GetAvailableMicrophones()
+                let microphones = GetListOfMicrophones()
+                let cameras = GetListOfCameras()
 
                 // Builder string
                 var message = "Available Microphones:\n\n"
+                for device in microphones {
+                    message += "Device: \(device.localizedName)\n"
+                    message += "ID: \(device.uniqueID)\n"
+                }
 
-                for mic in microphones {
-                    message += "Microphone: \(mic.localizedName)\n"
-                    message += "ID: \(mic.uniqueID)\n"
-                    if mic.position == .front {
-                        message += "Position: Front Camera\n"
-                    } else if mic.position == .back {
-                        message += "Position: Back Camera\n"
-                    } else {
-                        message += "Position: Unspecified\n"
-                    }
+                message += "\n\n"
+                message += "Available Cameras:\n\n"
+                for device in cameras {
+                    message += "Device: \(device.localizedName)\n"
+                    message += "ID: \(device.uniqueID)\n"
                 }
                 
                 // Set text
