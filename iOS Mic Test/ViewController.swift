@@ -293,7 +293,7 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
 
-                    var message = ""
+                    let message = ""
 
                     /*if let micInputs = GetAvailableMicrophoneInputs() {
                         for micInput in micInputs {
