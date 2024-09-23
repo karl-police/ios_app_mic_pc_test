@@ -274,7 +274,6 @@ class AudioManager {
 
     func stopRecording() {
         audioRecorder?.stop()
-        shareRecordedAudio()
     }
 }
 
