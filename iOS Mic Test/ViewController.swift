@@ -228,7 +228,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         return patterns
     }
 
-    func polarPatternName(for pattern: AVAudioSession.PolarPattern) -> String {
+    func polarPatternName(for pattern: AVAudioSession.PolarPattern?) -> String {
         switch pattern {
         case .stereo:
             return "Stereo"
