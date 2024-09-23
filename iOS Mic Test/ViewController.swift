@@ -251,7 +251,7 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
-            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
             ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
