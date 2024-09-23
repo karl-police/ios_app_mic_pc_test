@@ -580,6 +580,16 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
 
+                    // Quick Debug
+                    let session = AVAudioSession.sharedInstance()
+                    
+                    var message = "Data Sources:\n"
+                    if let inputDataSources = session.inputDataSources {
+                        for dataSource in inputDataSources {
+                            message += "Name: \(dataSource.selectedPolarPattern)"
+                            message += "Polar Pattern: \(polarPatternTableView.polarPatternName(for: dataSource.selectedPolarPattern))"
+                        }
+                    }
 
                     if (self.isRecordingTest == false) {
                         self.isRecordingTest = true
