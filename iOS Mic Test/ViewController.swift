@@ -276,12 +276,12 @@ class ViewController: UIViewController {
 
     func startRecording() {
         audioRecorder?.record()
-        btnMicToggle.setTitle("Stop")
+        btnMicToggle.setTitle("Stop", for: .normal)
     }
     
     func stopRecording() {
         audioRecorder?.stop()
-        btnMicToggle.setTitle("Start")
+        btnMicToggle.setTitle("Start", for: .normal)
         shareRecordedAudio()
     }
 
