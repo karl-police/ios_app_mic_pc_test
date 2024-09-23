@@ -221,6 +221,7 @@ class ViewController: UIViewController {
 
     let audioManager = AudioManager()
     var isRecordingTest = false
+    var audioRecorder: AVAudioRecorder?
 
 
     func initUI() {
