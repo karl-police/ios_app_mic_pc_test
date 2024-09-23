@@ -279,7 +279,9 @@ class ViewController: UIViewController {
         // Reset the view position
         self.view.frame.origin.y = 0
     }
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true) // Dismiss the keyboard
+    }
 
     // Toggle button
     @IBAction func micToggleClicked(_ sender: UIButton) {
