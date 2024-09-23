@@ -226,17 +226,25 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         setupTableView(frame: frame)
     }
 
-    private func setupTableView(frame: CGRect) {
+    private func setupTableView(frame: CGRect)  {
         // Initialize and set up the table view
         tableView = UITableView(frame: frame)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
         
-        // Additional configuration, such as appearance
         tableView.layer.cornerRadius = 8
         tableView.clipsToBounds = true
         tableView.backgroundColor = .white
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: 50),
+            tableView.heightAnchor.constraint(equalToConstant: 150)
+        ])
     }
     
     // MARK: - TableView DataSource Methods
@@ -345,6 +353,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
+    var polarPatternTableView: PolarPatternTableView!
+    let polarPatterns: [AVAudioSession.PolarPattern] = [.stereo, .cardioid, .subcardioid, .omnidirectional]
+
     //let audioEngineManager = AudioEngineManager()
     let audioManager = AudioManager()
     var isRecordingTest = false
@@ -422,30 +433,53 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         ])
     }
 
-    func setupTableView() {
-        tableView = UITableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tableView)
 
-        // Register UITableViewCell
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
+    
+
+    func setupPolarPatternTableView() {
+        // Init
+        polarPatternTableView = PolarPatternTableView(polarPatterns: polarPatterns)
         
-        // Auto Layout constraints to ensure it doesn't overlap with other UI components
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: debugTextBoxOut.bottomAnchor, constant: 10),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        // Set up the table view in the main view and capture the returned UITableView
+        let tableViewFrame = CGRect(x: 0, y: 500, width: view.frame.width, height: 200) // Adjust the frame as needed
+        let tableView = polarPatternTableView.setupTableView(in: view, frame: tableViewFrame)
+
+        // Optionally, use constraints instead
+        // let tableView = polarPatternTableView.setupTableViewWithConstraints(in: view)
+
+        // Set up callback when a polar pattern is selected
+        polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
+            self?.updatePolarPattern(selectedPattern)
+        }
     }
+
+    func updatePolarPattern(_ pattern: AVAudioSession.PolarPattern) {
+        let session = AVAudioSession.sharedInstance()
+
+        do {
+            // Get the current input data source (e.g., microphone)
+            if let dataSource = session.inputDataSource {
+                if dataSource.supportedPolarPatterns?.contains(pattern) == true {
+                    try dataSource.setPreferredPolarPattern(pattern)
+                    try session.setInputDataSource(dataSource)
+                    print("Polar pattern set to \(pattern.patternName())")
+                } else {
+                    print("Selected polar pattern is not supported.")
+                }
+            }
+        } catch {
+            print("Error setting polar pattern: \(error.localizedDescription)")
+        }
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initUI()
-        setupTableView()
+        setupPolarPatternTableView()
+
+        self.view.addSubview(polarPatternTableView.tableView)
 
 
         // Register for keyboard notifications
