@@ -401,7 +401,7 @@ class ViewController: UIViewController {
     func startRecording() {
         setupAudioSessionWithPolarPattern()
 
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
 
         let audioSettings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC), // Use .m4a format
