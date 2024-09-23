@@ -228,7 +228,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         return patterns
     }
 
-    func polarPatternName(for pattern: AVAudioSession.PolarPattern?) -> String {
+    func polarPatternName(_ for pattern: AVAudioSession.PolarPattern?) -> String {
         if #available(iOS 14.0, *) {
             switch pattern {
             case .stereo:
@@ -243,7 +243,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
                 return "Unknown Pattern"
             }
         } else {
-            // Fallback for earlier versions (you may handle differently based on your app logic)
+            // Fallback for earlier versions
             switch pattern {
             case .cardioid:
                 return "Cardioid"
