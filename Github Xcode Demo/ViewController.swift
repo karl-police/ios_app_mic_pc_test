@@ -180,7 +180,7 @@ class ViewController: UIViewController {
     }
 
     func setupAudioRecorder() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.mp3")
         
         let settings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatAppleLossless),
@@ -198,7 +198,7 @@ class ViewController: UIViewController {
     }
 
     func shareRecordedAudio() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.mp3")
         
         let activityViewController = UIActivityViewController(activityItems: [audioFilename], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
