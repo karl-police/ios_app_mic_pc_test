@@ -372,7 +372,7 @@ class ViewController: UIViewController {
 
                         self.startRecording()
                     } else {
-                        self..stopRecording()
+                        self.stopRecording()
                         self.isRecordingTest = false
                     }
                 }
