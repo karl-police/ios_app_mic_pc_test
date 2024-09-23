@@ -219,7 +219,7 @@ class ViewController: UIViewController {
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
-    let audioManager = AudioEngineManager()
+    //let audioEngineManager = AudioEngineManager()
     var isRecordingTest = false
     var audioRecorder: AVAudioRecorder?
 
@@ -355,7 +355,7 @@ class ViewController: UIViewController {
 
     /*func startRecording() {
         do {
-            try self.audioManager.startRecording()
+            try self.audioEngineManager.startRecording()
             btnMicToggle.setTitle("Stop", for: .normal)
         } catch {
             // Handle Error
@@ -364,7 +364,7 @@ class ViewController: UIViewController {
     }
     
     func stopRecording() {
-        self.audioManager.stopRecording()
+        self.audioEngineManager.stopRecording()
         btnMicToggle.setTitle("Start", for: .normal)
         shareRecordedAudio()
     }*/
@@ -404,10 +404,10 @@ class ViewController: UIViewController {
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
 
         let audioSettings: [String: Any] = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC), // Use .m4a format
-            AVSampleRateKey: 44100,                   // Sample rate in Hz
-            AVNumberOfChannelsKey: 1,                 // Mono recording
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue // High quality
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
 
         do {
