@@ -220,15 +220,15 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     var selectedPattern: AVAudioSession.PolarPattern?
     var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
 
-    init(polarPatterns: [AVAudioSession.PolarPattern], frame: CGRect) {
+    init(polarPatterns: [AVAudioSession.PolarPattern]) {
         self.polarPatterns = polarPatterns
         super.init()
-        setupTableView(frame: frame)
+        setupTableView()
     }
 
-    private func setupTableView(frame: CGRect)  {
+    private func setupTableView()  {
         // Initialize and set up the table view
-        tableView = UITableView(frame: frame)
+        tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
@@ -442,10 +442,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         // Set up the table view in the main view and capture the returned UITableView
         let tableViewFrame = CGRect(x: 0, y: 500, width: view.frame.width, height: 200) // Adjust the frame as needed
-        let tableView = polarPatternTableView.setupTableView(in: view, frame: tableViewFrame)
-
-        // Optionally, use constraints instead
-        // let tableView = polarPatternTableView.setupTableViewWithConstraints(in: view)
+        let tableView = polarPatternTableView.setupTableView()
 
         // Set up callback when a polar pattern is selected
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
