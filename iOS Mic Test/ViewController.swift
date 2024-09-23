@@ -76,7 +76,7 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 
 
 struct AudioSettings {
-    let sampleRate = 44100
+    let sampleRate: Double = 44100
     let channels: Int = 1
 }
 
