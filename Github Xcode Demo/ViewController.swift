@@ -79,7 +79,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         showAlert("Test Alert!")
-        //showAlert("Test Alert 2!")
+        showAlert("Test Alert 2!")
         //debugTextBoxOut.text = "Test"
     }
     
