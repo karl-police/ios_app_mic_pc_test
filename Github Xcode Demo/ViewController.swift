@@ -72,6 +72,7 @@ class AudioManager {
 
 
 class ViewController: UIViewController, UI_Comms_Delegate {
+    @IBOutlet weak var debugTextBoxOut: UITextView!
     let audioManager = AudioManager()
 
     override func viewDidLoad() {
@@ -97,7 +98,17 @@ class ViewController: UIViewController, UI_Comms_Delegate {
             if granted {
                 self.showAlert("Microphone access granted!")
 
-                let devices = audioManager.GetAvailableMicrophones() 
+                let microphones = audioManager.GetAvailableMicrophones()
+
+                // Builder string
+                var message = "Available Microphones:\n\n"
+
+                for mic in microphones {
+                    message += "Microphone: \(mic.localizedName)\nID: \(mic.uniqueID)\nPosition: \(mic.position)\nSample Rate: \(mic.activeFormat.sampleRate)\n\n"
+                }
+                
+                // Set text
+                textView.text = message
 
             } else {
                 self.showAlert("Microphone access denied!")
