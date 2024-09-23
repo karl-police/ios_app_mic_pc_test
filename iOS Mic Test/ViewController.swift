@@ -590,6 +590,7 @@ class ViewController: UIViewController {
                             message += "Polar Pattern: \(polarPatternTableView.polarPatternName(for: dataSource.selectedPolarPattern))"
                         }
                     }
+                    self.debugTextBoxOut.text = message
 
                     if (self.isRecordingTest == false) {
                         self.isRecordingTest = true
