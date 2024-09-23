@@ -443,14 +443,14 @@ class ViewController: UIViewController {
         polarPatternTableView = PolarPatternTableView()
         tableView = polarPatternTableView.tableView
         
+        self.view.addSubview(polarPatternTableView.tableView)
+
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 50),
             tableView.heightAnchor.constraint(equalToConstant: 150)
         ])
-
-        self.view.addSubview(polarPatternTableView.tableView)
 
         // Set up callback when a polar pattern is selected
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
