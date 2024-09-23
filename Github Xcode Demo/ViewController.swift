@@ -38,6 +38,8 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
     return session.devices
 }
 
+
+
 class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var selectedDevice: AVCaptureDevice?
