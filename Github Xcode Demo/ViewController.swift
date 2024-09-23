@@ -232,7 +232,7 @@ class ViewController: UIViewController {
                 self.debugTextBoxOut.text = message
 
 
-                if (isRecordingTest == false) {
+                if (self.isRecordingTest == false) {
                     self.setupAudioRecorder()
                     self.isRecordingTest = true
 
