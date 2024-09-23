@@ -410,14 +410,14 @@ class ViewController: UIViewController {
                     self.debugTextBoxOut.text = message
 
 
-                    /*if (self.isRecordingTest == false) {
+                    if (self.isRecordingTest == false) {
                         self.isRecordingTest = true
 
                         self.startRecording()
                     } else {
                         self.stopRecording()
                         self.isRecordingTest = false
-                    }*/
+                    }
                 }
             } else {
                 DispatchQueue.main.async {
