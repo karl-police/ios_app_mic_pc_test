@@ -96,7 +96,7 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 struct AudioSettings {
     let formatIDKey = Int(kAudioFormatAppleLossless)
     let sampleRate: Double = 44100.0
-    let channelCount: AVAudioChannelCount = 1
+    let channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
     let qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
     func getForSettings() -> [String: Any] {
