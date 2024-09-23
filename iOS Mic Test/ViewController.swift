@@ -209,7 +209,6 @@ class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
     var btnMicToggle: UIButton!
 
-    var audioRecorder: AVAudioRecorder?
     let audioManager = AudioManager()
     var isRecordingTest = false
 
@@ -318,24 +317,6 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
         present(alert, animated: true, completion: nil)
-    }
-
-    func setupAudioRecorder() {
-        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        
-        let settings: [String: Any] = [
-            AVFormatIDKey: Int(kAudioFormatAppleLossless),
-            AVSampleRateKey: 44100,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            audioRecorder?.prepareToRecord()
-        } catch {
-            self.debugTextBoxOut.text = "Failed to set up audio recorder: \(error)"
-        }
     }
 
     func shareRecordedAudio() {
