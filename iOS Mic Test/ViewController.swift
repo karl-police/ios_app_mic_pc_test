@@ -107,7 +107,7 @@ struct AudioSettings {
             AVEncoderAudioQualityKey: qualityEnconder.rawValue
         ]
     }
-    func getForFormat(): AVAudioFormat {
+    func getForFormat() -> AVAudioFormat {
         return AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channelCount)
     }
 
