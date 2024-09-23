@@ -261,7 +261,7 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
-            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
             ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
@@ -390,8 +390,7 @@ class ViewController: UIViewController {
                 DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
 
-                    var message = ""
-
+                    /*var message = ""
                     if let micInputs = GetAvailableMicrophoneInputs() {
                         for micInput in micInputs {
                             // Builder string
@@ -405,9 +404,7 @@ class ViewController: UIViewController {
                     } else {
                         message = "No available microphone inputs."
                     }
-                    
-                    // Set text
-                    self.debugTextBoxOut.text = message
+                    self.debugTextBoxOut.text = message // Set text*/
 
 
                     if (self.isRecordingTest == false) {
