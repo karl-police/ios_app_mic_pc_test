@@ -97,6 +97,8 @@ class ViewController: UIViewController, UI_Comms_Delegate {
             if granted {
                 self.showAlert("Microphone access granted!")
 
+                let devices = audioManager.GetAvailableMicrophones() 
+
             } else {
                 self.showAlert("Microphone access denied!")
             }
