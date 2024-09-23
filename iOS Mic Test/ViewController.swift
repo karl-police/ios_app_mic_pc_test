@@ -99,6 +99,8 @@ struct AudioSettings {
     let channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
     let qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
+    let polarPattern: AVAudioSession.PolarPattern? = AVAudioSession.PolarPattern.cardioid
+
     func getForSettings() -> [String: Any] {
         return [
             AVFormatIDKey: formatIDKey,
@@ -318,6 +320,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
 
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
+    var audioSettings = AudioSettings()
 
     func setupAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
@@ -333,10 +336,10 @@ class AudioManager {
             if let inputDataSources = session.inputDataSources {
                 for dataSource in inputDataSources {
                     // Check if the Subcardioid pattern is supported
-                    if dataSource.supportedPolarPatterns?.contains(AVAudioSession.PolarPattern.subcardioid) == true {
+                    if dataSource.supportedPolarPatterns?.contains(audioSettings.polarPattern) == true {
                         
                         // Set the preferred polar pattern to Subcardioid
-                        try dataSource.setPreferredPolarPattern(AVAudioSession.PolarPattern.subcardioid)
+                        try dataSource.setPreferredPolarPattern(audioSettings.polarPattern)
                         
                         // Optionally set this as the preferred input data source
                         try session.setInputDataSource(dataSource)
@@ -497,9 +500,9 @@ class ViewController: UIViewController {
                 if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                     try dataSource.setPreferredPolarPattern(pattern)
                     try session.setInputDataSource(dataSource)
-                    self.debugTextBoxOut.text = "Polar pattern set to \(polarPatternTableView.polarPatternName(for: pattern))"
+                    self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
                 } else {
-                    self.debugTextBoxOut.text = "Selected polar pattern is not supported."
+                    self.debugTextBoxOut.text = "Selected polar pattern \(polarPatternTableView.polarPatternName(for: pattern)) is not supported."
                 }
             }
         } catch {
