@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BD2161871C878A4700D57735 /* Github Xcode Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Github Xcode Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD2161871C878A4700D57735 /* iOS Mic Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Mic Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD21618A1C878A4700D57735 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BD21618C1C878A4700D57735 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		BD21618F1C878A4700D57735 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -38,7 +38,7 @@
 		BD21617E1C878A4700D57735 = {
 			isa = PBXGroup;
 			children = (
-				BD2161891C878A4700D57735 /* Github Xcode Demo */,
+				BD2161891C878A4700D57735 /* iOS Mic Test */,
 				BD2161881C878A4700D57735 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -46,12 +46,12 @@
 		BD2161881C878A4700D57735 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BD2161871C878A4700D57735 /* Github Xcode Demo.app */,
+				BD2161871C878A4700D57735 /* iOS Mic Test.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BD2161891C878A4700D57735 /* Github Xcode Demo */ = {
+		BD2161891C878A4700D57735 /* iOS Mic Test */ = {
 			isa = PBXGroup;
 			children = (
 				BD21618A1C878A4700D57735 /* AppDelegate.swift */,
@@ -61,15 +61,15 @@
 				BD2161931C878A4700D57735 /* LaunchScreen.storyboard */,
 				BD2161961C878A4700D57735 /* Info.plist */,
 			);
-			path = "Github Xcode Demo";
+			path = "iOS Mic Test";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BD2161861C878A4700D57735 /* Github Xcode Demo */ = {
+		BD2161861C878A4700D57735 /* iOS Mic Test */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BD2161991C878A4700D57735 /* Build configuration list for PBXNativeTarget "Github Xcode Demo" */;
+			buildConfigurationList = BD2161991C878A4700D57735 /* Build configuration list for PBXNativeTarget "iOS Mic Test" */;
 			buildPhases = (
 				BD2161831C878A4700D57735 /* Sources */,
 				BD2161841C878A4700D57735 /* Frameworks */,
@@ -79,9 +79,9 @@
 			);
 			dependencies = (
 			);
-			name = "Github Xcode Demo";
-			productName = "Github Xcode Demo";
-			productReference = BD2161871C878A4700D57735 /* Github Xcode Demo.app */;
+			name = "iOS Mic Test";
+			productName = "iOS Mic Test";
+			productReference = BD2161871C878A4700D57735 /* iOS Mic Test.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BD2161821C878A4700D57735 /* Build configuration list for PBXProject "Github Xcode Demo" */;
+			buildConfigurationList = BD2161821C878A4700D57735 /* Build configuration list for PBXProject "iOS Mic Test" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BD2161861C878A4700D57735 /* Github Xcode Demo */,
+				BD2161861C878A4700D57735 /* iOS Mic Test */,
 			);
 		};
 /* End PBXProject section */
@@ -252,7 +252,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = "Github Xcode Demo/Info.plist";
+				INFOPLIST_FILE = "iOS Mic Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paulsolt.Github-Xcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -264,7 +264,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = "Github Xcode Demo/Info.plist";
+				INFOPLIST_FILE = "iOS Mic Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.paulsolt.Github-Xcode-Demo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -274,7 +274,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BD2161821C878A4700D57735 /* Build configuration list for PBXProject "Github Xcode Demo" */ = {
+		BD2161821C878A4700D57735 /* Build configuration list for PBXProject "iOS Mic Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BD2161971C878A4700D57735 /* Debug */,
@@ -283,7 +283,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BD2161991C878A4700D57735 /* Build configuration list for PBXNativeTarget "Github Xcode Demo" */ = {
+		BD2161991C878A4700D57735 /* Build configuration list for PBXNativeTarget "iOS Mic Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BD21619A1C878A4700D57735 /* Debug */,

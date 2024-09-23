@@ -8,7 +8,7 @@ on:
 
 
 env:
-  IOS_PROJECT_NAME: Github Xcode Demo
+  IOS_PROJECT_NAME: iOS Mic Test
 
   # schema name could be selected from 'xcodebuild -list'
   #IOS_SCHEME_NAME: default

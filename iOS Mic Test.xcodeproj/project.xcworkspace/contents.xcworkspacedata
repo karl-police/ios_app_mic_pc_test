@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Github Xcode Demo.xcodeproj">
+      location = "self:iOS Mic Test.xcodeproj">
    </FileRef>
 </Workspace>
