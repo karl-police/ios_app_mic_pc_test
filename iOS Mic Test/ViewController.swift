@@ -413,7 +413,6 @@ class ViewController: UIViewController {
         do {
             // Initialize the recorder with the file URL and settings
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: audioSettings)
-            audioRecorder?.delegate = self
             audioRecorder?.prepareToRecord()
             audioRecorder?.record()
             print("Recording started...")
