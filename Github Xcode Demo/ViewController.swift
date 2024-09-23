@@ -108,7 +108,7 @@ class ViewController: UIViewController {
                 }
                 
                 // Set text
-                textView.text = message
+                debugTextBoxOut.text = message
 
             } else {
                 self.showAlert("Microphone access denied!")
