@@ -128,6 +128,7 @@ class AudioManager {
 
 class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
+    var btnMicToggle: UIButton!
 
     var audioRecorder: AVAudioRecorder?
     let audioManager = AudioManager()
@@ -135,6 +136,38 @@ class ViewController: UIViewController {
 
 
     func initUI() {
+        // Create the button
+        btnMicToggle = UIButton(type: .system)
+
+        // Set button title
+        btnMicToggle.setTitle("Button", for: .normal)
+
+        // Disable automatic translation of autoresizing masks into constraints
+        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
+
+        // Add the button to the view
+        view.addSubview(btnMicToggle)
+
+        // Set up constraints
+        NSLayoutConstraint.activate([
+            // Center the button horizontally in the view
+            btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            // Center the button vertically in the view
+            btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            // Set the button's width
+            btnMicToggle.widthAnchor.constraint(equalToConstant: 100),
+            
+            // Set the button's height
+            btnMicToggle.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        // Add action to the button
+        btnMicToggle.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+
+
+
         // Create UITextView without setting a frame
         debugTextBoxOut = UITextView()
         debugTextBoxOut.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
