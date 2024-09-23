@@ -497,7 +497,7 @@ class ViewController: UIViewController {
                 if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                     try dataSource.setPreferredPolarPattern(pattern)
                     try session.setInputDataSource(dataSource)
-                    self.debugTextBoxOut.text = "Polar pattern set to \(pattern.patternName())"
+                    self.debugTextBoxOut.text = "Polar pattern set to \(polarPatternTableView.polarPatternName(pattern))"
                 } else {
                     self.debugTextBoxOut.text = "Selected polar pattern is not supported."
                 }
