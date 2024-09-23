@@ -349,7 +349,7 @@ class AudioManager {
 
     func stopRecording() {
         audioRecorder?.stop()
-        try AVAudioSession.sharedInstance().setActive(false)
+        AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
