@@ -106,10 +106,6 @@ class ViewController: UIViewController {
                 var message = "Available Microphones:\n\n"
 
                 for mic in microphones {
-                    let formatDescription = mic.activeFormat.formatDescription
-                    
-                    let audioFormatDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription)
-
                     message += "Microphone: \(mic.localizedName)\n"
                     message += "ID: \(mic.uniqueID)\n"
                     message += "Position: \(mic.position.rawValue)\n"
