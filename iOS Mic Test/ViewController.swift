@@ -208,16 +208,12 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
-            // Center the button horizontally in the view
+            // Center
             btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            // Center the button vertically in the view
             btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            // Set the button's width
+            // Set width and height
             btnMicToggle.widthAnchor.constraint(equalToConstant: 100),
-            
-            // Set the button's height
             btnMicToggle.heightAnchor.constraint(equalToConstant: 50)
         ])
 
