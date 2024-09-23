@@ -94,12 +94,12 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 
 
 struct AudioSettings {
-    let formatIDKey = Int(kAudioFormatAppleLossless)
-    let sampleRate: Double = 44100.0
-    let channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
-    let qualityEnconder: AVAudioQuality = AVAudioQuality.high
+    var formatIDKey = Int(kAudioFormatAppleLossless)
+    var sampleRate: Double = 44100.0
+    var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
+    var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
-    let polarPattern: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
+    var polarPattern: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
 
     func getForSettings() -> [String: Any] {
         return [
@@ -113,7 +113,7 @@ struct AudioSettings {
         return AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channelCount)
     }
 
-    let bufferSize: AVAudioFrameCount = 1024
+    var bufferSize: AVAudioFrameCount = 1024
 }
 
 
