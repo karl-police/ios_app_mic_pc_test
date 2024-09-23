@@ -236,16 +236,12 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
             } else {
                 return "Stereo (Unavailable)"
             }
-            
         case .cardioid:
             return "Cardioid"
-            
         case .subcardioid:
             return "Subcardioid"
-            
         case .omnidirectional:
             return "Omnidirectional"
-            
         @unknown default:
             return "Unknown Pattern"
         }
