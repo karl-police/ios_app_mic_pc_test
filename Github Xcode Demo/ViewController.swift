@@ -164,14 +164,20 @@ class ViewController: UIViewController {
             if granted {
                 self.showAlert("Microphone access granted!")
 
-                let micInputs = GetAvailableMicrophoneInputs()
+                var message = ""
 
-                // Builder string
-                var message = "Available Mic Inputs:\n\n"
-                for micInput in micInputs {
-                    message += "Port Name: \(micInput.portName)\n"
-                    message += "Port Type: \(micInput.portType)\n"
-                    message += "\n" // new line
+                if let micInputs = audioSession.availableInputs {
+                    for micInput in micInputs {
+                        // Builder string
+                        message = "Available Mic Inputs:\n\n"
+                        for micInput in micInputs {
+                            message += "Port Name: \(micInput.portName)\n"
+                            message += "Port Type: \(micInput.portType)\n"
+                            message += "\n" // new line
+                        }
+                    }
+                } else {
+                    message = "No available microphone inputs."
                 }
                 
                 // Set text
