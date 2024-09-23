@@ -218,7 +218,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     var tableView: UITableView!
     var polarPatterns: [AVAudioSession.PolarPattern] {
         // Define the polar patterns based on iOS version
-        var patterns: [AVAudioSession.PolarPattern] = [.cardioid, .subcardioid, .omnidirectional]
+        var patterns: [AVAudioSession.PolarPattern]? = [.cardioid, .subcardioid, .omnidirectional]
         
         // Check if the iOS version is 14.0 or newer
         if #available(iOS 14.0, *) {
@@ -231,11 +231,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     func polarPatternName(for pattern: AVAudioSession.PolarPattern) -> String {
         switch pattern {
         case .stereo:
-            if #available(iOS 14.0, *) {
-                return "Stereo"
-            } else {
-                return "Stereo (Unavailable)"
-            }
+            return "Stereo"
         case .cardioid:
             return "Cardioid"
         case .subcardioid:
