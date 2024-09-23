@@ -2,14 +2,10 @@ import UIKit
 import AVFoundation
 
 
-protocol UI_Comms_Delegate: AnyObject {
-    func showAlert(_ msg: String)
-}
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var selectedDevice: AVCaptureDevice?
-    weak var delegate: UI_Comms_Delegate?
 
     // List available microphones
     func listAvailableMicrophones() -> [AVCaptureDevice] {
@@ -19,17 +15,13 @@ class AudioManager {
             position: .unspecified
         ).devices
 
-        for device in devices {
-            delegate?.showAlert("Microphone: \(device.localizedName), ID: \(device.uniqueID)")
-        }
-
         return devices
     }
 
     // Select a microphone by its unique ID
     func selectMicrophone(withID id: String) {
         guard let device = AVCaptureDevice.devices(for: .audio).first(where: { $0.uniqueID == id }) else {
-            delegate?.showAlert("Microphone not found")
+            // Microphone not found
             return
         }
         
@@ -44,9 +36,9 @@ class AudioManager {
             captureSession.addInput(input)
             captureSession.startRunning()
             
-            delegate?.showAlert("Using microphone: \(device.localizedName)")
+            print("Using microphone: \(device.localizedName)")
         } catch {
-            delegate?.showAlert("Error setting up microphone: \(error.localizedDescription)")
+            print("Error setting up microphone: \(error.localizedDescription)")
         }
     }
 
@@ -63,9 +55,9 @@ class AudioManager {
         
         do {
             try audioEngine.start()
-            delegate?.showAlert("Audio streaming started.")
+            print("Audio streaming started.")
         } catch {
-            delegate?.showAlert("Error starting audio stream: \(error.localizedDescription)")
+            print("Error starting audio stream: \(error.localizedDescription)")
         }
     }
 
@@ -73,7 +65,7 @@ class AudioManager {
     func stopAudioStream() {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
-        delegate?.showAlert("Audio streaming stopped.")
+        print("Audio streaming stopped.")
     }
 }
 
@@ -84,7 +76,6 @@ class ViewController: UIViewController, UI_Comms_Delegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        audioManager.delegate = self
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
