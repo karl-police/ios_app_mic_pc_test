@@ -221,7 +221,7 @@ class ViewController: UIViewController {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
                 DispatchQueue.main.async {
-                    self.showAlert("Microphone access granted!")
+                    //self.showAlert("Microphone access granted!")
 
                     var message = ""
 
@@ -254,7 +254,9 @@ class ViewController: UIViewController {
                     }
                 }
             } else {
-                self.showAlert("Microphone access denied!")
+                DispatchQueue.main.async {
+                    self.showAlert("Microphone access denied!")
+                }
             }
         }
     }
