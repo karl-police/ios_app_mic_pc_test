@@ -230,31 +230,31 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
 
     func polarPatternName(for pattern: AVAudioSession.PolarPattern?) -> String {
         if #available(iOS 14.0, *) {
-        switch pattern {
-        case .stereo:
-            return "Stereo"
-        case .cardioid:
-            return "Cardioid"
-        case .subcardioid:
-            return "Subcardioid"
-        case .omnidirectional:
-            return "Omnidirectional"
-        @unknown default:
-            return "Unknown Pattern"
+            switch pattern {
+            case .stereo:
+                return "Stereo"
+            case .cardioid:
+                return "Cardioid"
+            case .subcardioid:
+                return "Subcardioid"
+            case .omnidirectional:
+                return "Omnidirectional"
+            @unknown default:
+                return "Unknown Pattern"
+            }
+        } else {
+            // Fallback for earlier versions (you may handle differently based on your app logic)
+            switch pattern {
+            case .cardioid:
+                return "Cardioid"
+            case .subcardioid:
+                return "Subcardioid"
+            case .omnidirectional:
+                return "Omnidirectional"
+            @unknown default:
+                return "Unknown Pattern"
+            }
         }
-    } else {
-        // Fallback for earlier versions (you may handle differently based on your app logic)
-        switch pattern {
-        case .cardioid:
-            return "Cardioid"
-        case .subcardioid:
-            return "Subcardioid"
-        case .omnidirectional:
-            return "Omnidirectional"
-        @unknown default:
-            return "Unknown Pattern"
-        }
-    }
     }
 
     var selectedPattern: AVAudioSession.PolarPattern?
