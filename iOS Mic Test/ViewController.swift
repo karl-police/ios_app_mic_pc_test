@@ -366,6 +366,7 @@ class ViewController: UIViewController {
     //let audioEngineManager = AudioEngineManager()
     let audioManager = AudioManager()
     var isRecordingTest = false
+    var isInVoIP = false
 
 
     func initUI() {
