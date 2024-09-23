@@ -90,7 +90,7 @@ struct AudioSettings {
         ]
     }
 
-    let bufferSize = 1024
+    let bufferSize: AVAudioFrameCount = 1024
 }
 
 
