@@ -347,9 +347,9 @@ class AudioManager {
         }
     }
 
-    func stopRecording() {
+    func stopRecording() throws {
         audioRecorder?.stop()
-        AVAudioSession.sharedInstance().setActive(false)
+        try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
@@ -562,7 +562,12 @@ class ViewController: UIViewController {
     }
     
     func stopRecording() {
-        self.audioManager.stopRecording()
+        do {
+            try self.audioManager.stopRecording()
+        } catch {
+            self.debugTextBoxOut.text = "Error stopping recording: \(error.localizedDescription)"
+        }
+
         btnMicToggle.setTitle("Start", for: .normal)
         shareRecordedAudio()
     }
