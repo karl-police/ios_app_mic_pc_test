@@ -78,7 +78,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       // Initialize the UITextView programmatically
+       // Create UITextView
         debugTextBoxOut = UITextView(frame: CGRect(x: 20, y: 100, width: 300, height: 200))
         debugTextBoxOut.backgroundColor = UIColor.lightGray
         debugTextBoxOut.textColor = UIColor.black
@@ -89,6 +89,19 @@ class ViewController: UIViewController {
 
         // Add the UITextView to the view hierarchy
         self.view.addSubview(debugTextBoxOut)
+
+        // Set up constraints
+        NSLayoutConstraint.activate([
+            // Full width
+            debugTextBoxOut.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            debugTextBoxOut.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            // Small height
+            debugTextBoxOut.heightAnchor.constraint(equalToConstant: 100),
+            
+            // Pin to the bottom of the screen
+            debugTextBoxOut.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
