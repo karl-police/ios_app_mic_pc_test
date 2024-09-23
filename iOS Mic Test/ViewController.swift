@@ -214,14 +214,80 @@ struct AudioSettings {
 
 
 
+class AudioManager {
+    var audioRecorder: AVAudioRecorder?
+
+    func setupAudioSessionWithPolarPattern() throws {
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            // Set the audio session category to Record
+            try session.setCategory(.record, mode: .default, options: [])
+            
+            // Activate the audio session
+            try session.setActive(true)
+            
+            // Get the input data sources (e.g., microphone)
+            if let inputDataSources = session.inputDataSources {
+                for dataSource in inputDataSources {
+                    // Check if the Subcardioid pattern is supported
+                    if dataSource.supportedPolarPatterns?.contains(AVAudioSession.PolarPattern.subcardioid) == true {
+                        
+                        // Set the preferred polar pattern to Subcardioid
+                        try dataSource.setPreferredPolarPattern(AVAudioSession.PolarPattern.subcardioid)
+                        
+                        // Optionally set this as the preferred input data source
+                        try session.setInputDataSource(dataSource)
+                    }
+                }
+            }
+        } catch {
+            throw error
+        }
+    }
+
+    func startRecording() throws {
+        do {
+            try setupAudioSessionWithPolarPattern()
+        } catch {
+            throw error
+        }
+
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
+
+        let audioSettings: [String: Any] = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+
+        do {
+            // Initialize the recorder with the file URL and settings
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: audioSettings)
+            audioRecorder?.prepareToRecord()
+            audioRecorder?.record()
+        } catch {
+            throw error
+        }
+    }
+
+    func stopRecording() {
+        audioRecorder?.stop()
+        shareRecordedAudio()
+    }
+}
+
+
+
 class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
     //let audioEngineManager = AudioEngineManager()
+    let audioManager = AudioManager()
     var isRecordingTest = false
-    var audioRecorder: AVAudioRecorder?
 
 
     func initUI() {
@@ -353,9 +419,9 @@ class ViewController: UIViewController {
         present(activityViewController, animated: true, completion: nil)
     }
 
-    /*func startRecording() {
+    func startRecording() {
         do {
-            try self.audioEngineManager.startRecording()
+            try self.audioManager.startRecording()
             btnMicToggle.setTitle("Stop", for: .normal)
         } catch {
             // Handle Error
@@ -364,65 +430,8 @@ class ViewController: UIViewController {
     }
     
     func stopRecording() {
-        self.audioEngineManager.stopRecording()
+        self.audioManager.stopRecording()
         btnMicToggle.setTitle("Start", for: .normal)
-        shareRecordedAudio()
-    }*/
-
-    func setupAudioSessionWithPolarPattern() {
-        let session = AVAudioSession.sharedInstance()
-        
-        do {
-            // Set the audio session category to Record
-            try session.setCategory(.record, mode: .default, options: [])
-            
-            // Activate the audio session
-            try session.setActive(true)
-            
-            // Get the input data sources (e.g., microphone)
-            if let inputDataSources = session.inputDataSources {
-                for dataSource in inputDataSources {
-                    // Check if the Subcardioid pattern is supported
-                    if dataSource.supportedPolarPatterns?.contains(AVAudioSession.PolarPattern.subcardioid) == true {
-                        
-                        // Set the preferred polar pattern to Subcardioid
-                        try dataSource.setPreferredPolarPattern(AVAudioSession.PolarPattern.subcardioid)
-                        
-                        // Optionally set this as the preferred input data source
-                        try session.setInputDataSource(dataSource)
-                    }
-                }
-            }
-        } catch {
-            self.debugTextBoxOut.text = "Error setting up audio session or polar pattern: \(error)"
-        }
-    }
-
-    func startRecording() {
-        setupAudioSessionWithPolarPattern()
-
-        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-
-        let audioSettings: [String: Any] = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 44100,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-
-        do {
-            // Initialize the recorder with the file URL and settings
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: audioSettings)
-            audioRecorder?.prepareToRecord()
-            audioRecorder?.record()
-            print("Recording started...")
-        } catch {
-            print("Failed to start recording: \(error)")
-        }
-    }
-
-    func stopRecording() {
-        audioRecorder?.stop()
         shareRecordedAudio()
     }
 
