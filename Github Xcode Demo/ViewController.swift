@@ -98,7 +98,7 @@ class ViewController: UIViewController {
             if granted {
                 self.showAlert("Microphone access granted!")
 
-                let microphones = audioManager.GetAvailableMicrophones()
+                let microphones = self.audioManager.GetAvailableMicrophones()
 
                 // Builder string
                 var message = "Available Microphones:\n\n"
