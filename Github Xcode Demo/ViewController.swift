@@ -54,7 +54,17 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
         return nil
     }
     
-    return audioSession.availableInputs
+    // Get the available microphone inputs
+    let availableInputs = audioSession.availableInputs
+    
+    // Deactivate the audio session after retrieving inputs
+    do {
+        try audioSession.setActive(false)
+    } catch {
+        print("Error deactivating audio session: \(error)")
+    }
+
+    return availableInputs
 }
 
 
