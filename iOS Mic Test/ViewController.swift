@@ -471,9 +471,9 @@ class ViewController: UIViewController {
 
         do {
             if let inputDataSources = session.inputDataSources {
+                var isSupported = false
+                
                 for dataSource in inputDataSources {
-                    var isSupported = false
-
                     if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                         isSupported = true
 
