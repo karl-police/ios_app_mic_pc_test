@@ -112,6 +112,25 @@ class AudioManager {
         audioEngine.inputNode.removeTap(onBus: 0)
         print("Audio streaming stopped.")
     }
+
+
+    func setupAudioRecorder() {
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        
+        let settings: [String: Any] = [
+            AVFormatIDKey: Int(kAudioFormatAppleLossless),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder?.prepareToRecord()
+        } catch {
+            print("Failed to set up audio recorder: \(error)")
+        }
+    }
 }
 
 
