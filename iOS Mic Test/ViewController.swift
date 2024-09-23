@@ -69,7 +69,7 @@ struct AudioSettings {
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
     var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
-    var polarPattern: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
+    var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
 
     func getForSettings() -> [String: Any] {
         return [
@@ -306,13 +306,13 @@ class AudioManager {
             /*if let inputDataSources = session.inputDataSources {
                 for dataSource in inputDataSources {
                     // Check if the Subcardioid pattern is supported
-                    if dataSource.supportedPolarPatterns?.contains(audioSettings.polarPattern) == true {
+                    if dataSource.supportedPolarPatterns?.contains(audioSettings.polarPatternCfg) == true {
                         
                         // Set the preferred polar pattern to Subcardioid
-                        try dataSource.setPreferredPolarPattern(audioSettings.polarPattern)
+                        try dataSource.setPreferredPolarPattern(audioSettings.polarPatternCfg)
                         
                         // Optionally set this as the preferred input data source
-                        try session.setInputDataSource(dataSource)
+                        //try session.setInputDataSource(dataSource)
                     }
                 }
             }*/
@@ -466,7 +466,7 @@ class ViewController: UIViewController {
 
     func updatePolarPattern(_ pattern: AVAudioSession.PolarPattern) {
         // Update in the settings struct
-        audioManager.audioSettings.polarPattern = pattern
+        audioManager.audioSettings.polarPatternCfg = pattern
 
         let session = AVAudioSession.sharedInstance()
 
@@ -479,7 +479,7 @@ class ViewController: UIViewController {
                         isSupported = true
 
                         try dataSource.setPreferredPolarPattern(pattern)
-                        try session.setInputDataSource(dataSource)
+                        //try session.setInputDataSource(dataSource)
                         self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
                     }
 
