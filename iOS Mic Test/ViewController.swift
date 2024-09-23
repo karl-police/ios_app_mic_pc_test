@@ -115,7 +115,7 @@ struct AudioSettings {
 }
 
 
-class AudioEngineManager {
+/*class AudioEngineManager {
     private var audioEngine: AVAudioEngine!
     private var inputNode: AVAudioInputNode!
     private var audioFile: AVAudioFile?
@@ -210,7 +210,7 @@ class AudioEngineManager {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
     }
-}
+}*/
 
 
 
