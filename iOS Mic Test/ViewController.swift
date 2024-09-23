@@ -123,7 +123,7 @@ class AudioManager {
             audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioFormat.settings)
             
             // Install a tap on the input node
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) throws { (buffer, time) in
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) throws { (buffer, time) throws in
                 do {
                     // Write the buffer to the audio file
                     try self.audioFile?.write(from: buffer)
@@ -164,7 +164,8 @@ class AudioManager {
             try audioEngine.start()
             // Started
         } catch {
-            throw "Error starting audio stream: \(error.localizedDescription)"
+            //throw "Error starting audio stream: \(error.localizedDescription)"
+            throw error
         }
     }
 
