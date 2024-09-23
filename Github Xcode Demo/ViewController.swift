@@ -1,3 +1,7 @@
+// Be aware, since I didn't create this with XCode
+// nor with a proper Intellisense
+// Some parts of the code are literally from ChatGPT
+
 import UIKit
 import AVFoundation
 
