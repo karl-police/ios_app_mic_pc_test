@@ -164,6 +164,11 @@ class ViewController: UIViewController {
     }
 
 
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+
     func setupAudioRecorder() {
         let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
         
