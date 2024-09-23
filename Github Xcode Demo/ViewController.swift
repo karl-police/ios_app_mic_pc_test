@@ -39,6 +39,21 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
 }
 
 
+/// Returns all available input ports (microphones) on the device.
+public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
+    let audioSession = AVAudioSession.sharedInstance()
+    
+    do {
+        try audioSession.setActive(true)
+    } catch {
+        print("Error activating audio session: \(error)")
+        return nil
+    }
+    
+    return audioSession.availableInputs
+}
+
+
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
@@ -149,21 +164,14 @@ class ViewController: UIViewController {
             if granted {
                 self.showAlert("Microphone access granted!")
 
-                let microphones = GetListOfMicrophones()
-                let cameras = GetListOfCameras()
+                let micInputs = GetAvailableMicrophoneInputs()
 
                 // Builder string
-                var message = "Available Microphones:\n\n"
-                for device in microphones {
-                    message += "Device: \(device.localizedName)\n"
-                    message += "ID: \(device.uniqueID)\n"
-                }
-
-                message += "\n"
-                message += "Available Cameras:\n\n"
-                for device in cameras {
-                    message += "Device: \(device.localizedName)\n"
-                    message += "ID: \(device.uniqueID)\n"
+                var message = "Available Mic Inputs:\n\n"
+                for micInput in micInputs {
+                    message += "Port Name: \(micInput.portName)\n"
+                    message += "Port Type: \(micInput.portType)\n"
+                    message += "\n" // new line
                 }
                 
                 // Set text
