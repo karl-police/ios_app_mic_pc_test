@@ -108,16 +108,16 @@ class ViewController: UIViewController {
                     
                     let audioFormatDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription)
                     
-                    var sampleRateString = "Unknown"
+                    var sampleRateStr = "Unknown"
                     if let audioFormatDescription = audioFormatDescription {
                         let sampleRate = audioFormatDescription.pointee.mSampleRate
-                        sampleRateString = "\(sampleRate) Hz"
+                        sampleRateStr = "\(sampleRate) Hz"
                     }
                     
                     message += "Microphone: \(mic.localizedName)\n"
                     message += "ID: \(mic.uniqueID)\n"
                     message += "Position: \(mic.position.rawValue)\n"
-                    message += "Sample Rate: \(sampleRateString)\n\n"
+                    message += "Sample Rate: \(sampleRateStr)\n\n"
                 }
                 
                 // Set text
