@@ -63,36 +63,6 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
     return session.devices
 }
 
-
-/// Returns all available input ports (microphones) on the device.
-public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
-    let audioSession = AVAudioSession.sharedInstance()
-    
-    do {
-        try audioSession.setCategory(
-            AVAudioSession.Category.playAndRecord,
-            options: AVAudioSession.CategoryOptions.defaultToSpeaker
-        )
-        try audioSession.setActive(true)
-    } catch {
-        print("Error activating audio session: \(error)")
-        return nil
-    }
-    
-    // Get the available microphone inputs
-    let availableInputs = audioSession.availableInputs
-    
-    // Deactivate the audio session after retrieving inputs
-    do {
-        try audioSession.setActive(false)
-    } catch {
-        print("Error deactivating audio session: \(error)")
-    }
-
-    return availableInputs
-}
-
-
 struct AudioSettings {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 44100.0
@@ -327,7 +297,7 @@ class AudioManager {
         
         do {
             // Set the audio session category to Record
-            try session.setCategory(.record, mode: .default, options: [])
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
             
             // Activate the audio session
             try session.setActive(true)
