@@ -113,7 +113,7 @@ class AudioManager {
     }
 
     // Select a microphone by its unique ID
-    func selectMicrophone(withID id: String) {
+    func selectMicrophone(withID id: String) throws {
         guard let device = AVCaptureDevice.devices(for: .audio).first(where: { $0.uniqueID == id }) else {
             // Microphone not found
             return
@@ -132,7 +132,7 @@ class AudioManager {
             
             print("Using microphone: \(device.localizedName)")
         } catch {
-            print("Error setting up microphone: \(error.localizedDescription)")
+            throw error
         }
     }
 
