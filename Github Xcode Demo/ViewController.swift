@@ -112,31 +112,13 @@ class AudioManager {
         audioEngine.inputNode.removeTap(onBus: 0)
         print("Audio streaming stopped.")
     }
-
-
-    func setupAudioRecorder() {
-        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
-        
-        let settings: [String: Any] = [
-            AVFormatIDKey: Int(kAudioFormatAppleLossless),
-            AVSampleRateKey: 44100,
-            AVNumberOfChannelsKey: 1,
-            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-        ]
-        
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
-            audioRecorder?.prepareToRecord()
-        } catch {
-            print("Failed to set up audio recorder: \(error)")
-        }
-    }
 }
 
 
 
 class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
+    var audioRecorder: AVAudioRecorder?
     let audioManager = AudioManager()
 
     override func viewDidLoad() {
@@ -178,6 +160,43 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 
         present(alert, animated: true, completion: nil)
+    }
+
+
+    func setupAudioRecorder() {
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        
+        let settings: [String: Any] = [
+            AVFormatIDKey: Int(kAudioFormatAppleLossless),
+            AVSampleRateKey: 44100,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder?.prepareToRecord()
+        } catch {
+            print("Failed to set up audio recorder: \(error)")
+        }
+    }
+
+    func shareRecordedAudio() {
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.wav")
+        
+        let activityViewController = UIActivityViewController(activityItems: [audioFilename], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+
+    func startRecording() {
+        audioRecorder?.record()
+        self.showAlert("Recording started...")
+    }
+    
+    func stopRecording() {
+        audioRecorder?.stop()
+        self.showAlert("Recording stopped.")
+        shareRecordedAudio()
     }
 
 
