@@ -120,6 +120,7 @@ class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
     var audioRecorder: AVAudioRecorder?
     let audioManager = AudioManager()
+    var isRecordingTest = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -224,6 +225,17 @@ class ViewController: UIViewController {
                 
                 // Set text
                 self.debugTextBoxOut.text = message
+
+
+                if (isRecordingTest == false) {
+                    self.setupAudioRecorder()
+                    self.isRecordingTest = true
+
+                    self.startRecording()
+                } else {
+                    self.stopRecording()
+                    self.isRecordingTest = false
+                }
 
             } else {
                 self.showAlert("Microphone access denied!")
