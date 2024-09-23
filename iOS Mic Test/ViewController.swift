@@ -81,7 +81,7 @@ struct AudioSettings {
     let channels: Int = 1
     let qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
-    func getForSettings() -> [String: any] {
+    func getForSettings() -> [String: Any] {
         return [
             AVFormatIDKey: formatIDKey,
             AVSampleRateKey: sampleRate,
