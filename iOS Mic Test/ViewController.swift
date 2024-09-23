@@ -392,7 +392,7 @@ class ViewController: UIViewController {
 
                     var message = ""
 
-                    if let micInputs = GetAvailableMicrophoneInputs() {
+                    /*if let micInputs = GetAvailableMicrophoneInputs() {
                         for micInput in micInputs {
                             // Builder string
                             message = "Available Mic Inputs:\n\n"
@@ -407,7 +407,7 @@ class ViewController: UIViewController {
                     }
                     
                     // Set text
-                    self.debugTextBoxOut.text = message
+                    self.debugTextBoxOut.text = message*/
 
 
                     if (self.isRecordingTest == false) {
