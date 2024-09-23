@@ -44,7 +44,10 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
     let audioSession = AVAudioSession.sharedInstance()
     
     do {
-        try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: .allowBluetooth)
+        try audioSession.setCategory(
+            AVAudioSession.Category.playAndRecord, options: .allowBluetooth,
+            withOptions: AVAudioSessionCategoryOptions.DefaultToSpeaker
+        )
         try audioSession.setActive(true)
     } catch {
         print("Error activating audio session: \(error)")
