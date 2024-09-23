@@ -159,7 +159,7 @@ class ViewController: UIViewController {
                     message += "ID: \(device.uniqueID)\n"
                 }
 
-                message += "\n\n"
+                message += "\n"
                 message += "Available Cameras:\n\n"
                 for device in cameras {
                     message += "Device: \(device.localizedName)\n"
