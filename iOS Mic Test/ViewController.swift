@@ -214,10 +214,70 @@ struct AudioSettings {
 
 
 
+class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSource {
+    var tableView: UITableView!
+    var polarPatterns: [AVAudioSession.PolarPattern]
+    var selectedPattern: AVAudioSession.PolarPattern?
+    var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
+
+    init(polarPatterns: [AVAudioSession.PolarPattern], frame: CGRect) {
+        self.polarPatterns = polarPatterns
+        super.init()
+        setupTableView(frame: frame)
+    }
+
+    private func setupTableView(frame: CGRect) {
+        // Initialize and set up the table view
+        tableView = UITableView(frame: frame)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
+        
+        // Additional configuration, such as appearance
+        tableView.layer.cornerRadius = 8
+        tableView.clipsToBounds = true
+        tableView.backgroundColor = .white
+    }
+    
+    // MARK: - TableView DataSource Methods
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return polarPatterns.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "polarPatternCell", for: indexPath)
+        
+        // Get polar pattern name (using an extension or mapping)
+        let patternName = polarPatterns[indexPath.row].patternName()
+        cell.textLabel?.text = patternName
+        
+        // Set a checkmark for the selected cell
+        if polarPatterns[indexPath.row] == selectedPattern {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        
+        return cell
+    }
+
+    // MARK: - TableView Delegate Methods
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedPattern = polarPatterns[indexPath.row]
+        tableView.reloadData() // Reload to update checkmarks
+
+        // Notify the ViewController about the selection
+        if let onPatternSelected = onPatternSelected {
+            onPatternSelected(selectedPattern!)
+        }
+    }
+}
+
+
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
 
-    func setupAudioSessionWithPolarPattern() throws {
+    func setupAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
         
         do {
@@ -248,7 +308,7 @@ class AudioManager {
 
     func startRecording() throws {
         do {
-            try setupAudioSessionWithPolarPattern()
+            try setupAudioSession()
         } catch {
             throw error
         }
@@ -366,6 +426,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+
+        // Register UITableViewCell
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
+        
+        // Auto Layout constraints to ensure it doesn't overlap with other UI components
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: debugTextBoxOut.bottomAnchor, constant: 10),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
 
     override func viewDidLoad() {
