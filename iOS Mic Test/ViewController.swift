@@ -75,12 +75,19 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 }
 
 
+struct AudioSettings {
+    let sampleRate = 44100
+    let channels: Int = 1
+}
+
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var inputNode: AVAudioInputNode!
     private var audioFile: AVAudioFile?
     private var audioFormat: AVAudioFormat!
+
+    public var audioSettings: AudioSettings
 
     private var selectedDevice: AVCaptureDevice?
     var error: Error? // Property to hold error
