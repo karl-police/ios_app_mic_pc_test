@@ -135,8 +135,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       // Create UITextView
-        debugTextBoxOut = UITextView(frame: CGRect(x: 20, y: 100, width: 300, height: 200))
+        // Create UITextView without setting a frame
+        debugTextBoxOut = UITextView()
+        debugTextBoxOut.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
+
+        // Customize the appearance of the UITextView
         debugTextBoxOut.backgroundColor = UIColor.lightGray
         debugTextBoxOut.textColor = UIColor.black
         debugTextBoxOut.font = UIFont.systemFont(ofSize: 18)
@@ -161,6 +164,7 @@ class ViewController: UIViewController {
         ])
     }
     
+    // Toggle button
     @IBAction func buttonClicked(_ sender: UIButton) {
         requestMicrophoneAccess()
     }
