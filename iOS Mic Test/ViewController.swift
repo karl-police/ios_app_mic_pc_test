@@ -303,7 +303,7 @@ class AudioManager {
             try session.setActive(true)
             
             // Get the input data sources (e.g., microphone)
-            if let inputDataSources = session.inputDataSources {
+            /*if let inputDataSources = session.inputDataSources {
                 for dataSource in inputDataSources {
                     // Check if the Subcardioid pattern is supported
                     if dataSource.supportedPolarPatterns?.contains(audioSettings.polarPattern) == true {
@@ -315,7 +315,7 @@ class AudioManager {
                         try session.setInputDataSource(dataSource)
                     }
                 }
-            }
+            }*/
         } catch {
             throw error
         }
