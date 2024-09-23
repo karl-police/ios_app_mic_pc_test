@@ -196,10 +196,10 @@ class AudioManager {
         // Remove the tap and stop the audio engine
         inputNode.removeTap(onBus: 0)
         audioEngine.stop()
-        cleanUpReset()
+        self.cleanUpReset()
 
         // Deactivate the audio session
-        deactivateAudioSession()
+        self.deactivateAudioSession()
     }
 
 
