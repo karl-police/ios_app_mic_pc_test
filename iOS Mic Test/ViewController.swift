@@ -136,16 +136,12 @@ class AudioManager {
             try audioEngine.start()
         } catch {
             // Clean up in case of an error
-            isRecording = false
             audioFile = nil
             throw error
         }
     }
 
     func stopRecording() {
-        guard isRecording else { return }
-        isRecording = false
-        
         // Remove the tap and stop the audio engine
         inputNode.removeTap(onBus: 0)
         audioEngine.stop()
