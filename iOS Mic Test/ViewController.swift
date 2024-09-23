@@ -470,7 +470,7 @@ class ViewController: UIViewController {
 
         do {
             if let inputDataSources = session.inputDataSources {
-                for dataSource in dataSources {
+                for dataSource in inputDataSources {
                     if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                         try dataSource.setPreferredPolarPattern(pattern)
                         try session.setInputDataSource(dataSource)
