@@ -79,8 +79,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         showAlert("Test Alert!")
-        showAlert("Test Alert 2!")
-        debugTextBoxOut.text = "Test"
+        //showAlert("Test Alert 2!")
+        //debugTextBoxOut.text = "Test"
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
