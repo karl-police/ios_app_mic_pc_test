@@ -249,13 +249,6 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         tableView.backgroundColor = .white
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: 50),
-            tableView.heightAnchor.constraint(equalToConstant: 150)
-        ])
     }
     
     // MARK: - TableView DataSource Methods
@@ -449,7 +442,14 @@ class ViewController: UIViewController {
     func setupPolarPatternTableView() {
         // Init
         polarPatternTableView = PolarPatternTableView()
-        //polarPatternTableView.setupTableView()
+        tableView = polarPatternTableView.tableView
+        
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: 50),
+            tableView.heightAnchor.constraint(equalToConstant: 150)
+        ])
 
         self.view.addSubview(polarPatternTableView.tableView)
 
