@@ -228,6 +228,21 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         return patterns
     }
 
+    func polarPatternName(for pattern: AVAudioSession.PolarPattern) -> String {
+        switch pattern {
+        case .stereo:
+            return "Stereo"
+        case .cardioid:
+            return "Cardioid"
+        case .subcardioid:
+            return "Subcardioid"
+        case .omnidirectional:
+            return "Omnidirectional"
+        @unknown default:
+            return "Unknown Pattern"
+        }
+    }
+
     var selectedPattern: AVAudioSession.PolarPattern?
     var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
 
@@ -258,8 +273,10 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "polarPatternCell", for: indexPath)
         
-        // Get polar pattern name (using an extension or mapping)
-        let patternName = polarPatterns[indexPath.row].patternName()
+        let pattern = polarPatterns[indexPath.row]
+
+        // Get polar pattern name
+        let patternName = polarPatternName(for: pattern)
         cell.textLabel?.text = patternName
         
         // Set a checkmark for the selected cell
