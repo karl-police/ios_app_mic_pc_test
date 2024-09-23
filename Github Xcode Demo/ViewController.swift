@@ -75,7 +75,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var debugTextBoxOut: UITextView!
     let audioManager = AudioManager()
 
-    self.debugTextBoxOut.text = "Test"
+    debugTextBoxOut.text = "Test"
 
     override func viewDidLoad() {
         super.viewDidLoad()
