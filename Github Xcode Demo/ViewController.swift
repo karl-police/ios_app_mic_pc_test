@@ -163,7 +163,7 @@ class ViewController: UIViewController {
     func requestMicrophoneAccess() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
-                self.showAlert("Microphone access granted!")
+                //self.showAlert("Microphone access granted!")
 
                 var message = ""
 
