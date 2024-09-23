@@ -349,6 +349,7 @@ class AudioManager {
 
     func stopRecording() {
         audioRecorder?.stop()
+        try session.setActive(false)
     }
 }
 
