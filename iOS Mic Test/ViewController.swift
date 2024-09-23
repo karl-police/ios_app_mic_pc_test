@@ -153,11 +153,11 @@ class AudioManager {
     }
 
     func startRecording() throws {
-        do {
+        /*do {
             try self.setupAudioSession()
         } catch {
             throw error
-        }
+        }*/
 
         // Create a file URL to save the audio
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
@@ -199,7 +199,7 @@ class AudioManager {
         self.cleanUpReset()
 
         // Deactivate the audio session
-        self.deactivateAudioSession()
+        //self.deactivateAudioSession()
     }
 
 
