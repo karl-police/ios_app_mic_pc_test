@@ -7,8 +7,8 @@ class AudioManager {
     private var audioEngine: AVAudioEngine!
     private var selectedDevice: AVCaptureDevice?
 
-    // List available microphones
-    func listAvailableMicrophones() -> [AVCaptureDevice] {
+    // Get Available Microphones
+    func GetAvailableMicrophones() -> [AVCaptureDevice] {
         let devices = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInMicrophone],
             mediaType: .audio,
@@ -96,7 +96,6 @@ class ViewController: UIViewController, UI_Comms_Delegate {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
                 self.showAlert("Microphone access granted!")
-
 
             } else {
                 self.showAlert("Microphone access denied!")
