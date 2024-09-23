@@ -493,6 +493,9 @@ class ViewController: UIViewController {
     }
 
     func updatePolarPattern(_ pattern: AVAudioSession.PolarPattern) {
+        // Update in the settings struct
+        audioManager.audioSettings.polarPattern = pattern
+
         let session = AVAudioSession.sharedInstance()
 
         do {
