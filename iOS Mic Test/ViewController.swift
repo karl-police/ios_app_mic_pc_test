@@ -99,7 +99,7 @@ struct AudioSettings {
     let channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
     let qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
-    let polarPattern: AVAudioSession.PolarPattern? = AVAudioSession.PolarPattern.cardioid
+    let polarPattern: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
 
     func getForSettings() -> [String: Any] {
         return [
