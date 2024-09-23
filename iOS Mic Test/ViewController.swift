@@ -107,6 +107,45 @@ class AudioManager {
         }
     }
 
+    func startRecording() throws {
+        // Create a file URL to save the audio
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+        
+        do {
+            // Create the audio file
+            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioFormat.settings)
+            
+            // Install a tap on the input node
+            inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) { (buffer, time) in
+                do {
+                    // Write the buffer to the audio file
+                    try self.audioFile?.write(from: buffer)
+                } catch {
+                    print("Error writing buffer to audio file: \(error)")
+                }
+            }
+
+            // Start the audio engine
+            try audioEngine.start()
+        } catch {
+            // Clean up in case of an error
+            isRecording = false
+            audioFile = nil
+            throw error
+        }
+    }
+
+    func stopRecording() {
+        guard isRecording else { return }
+        isRecording = false
+        
+        // Remove the tap and stop the audio engine
+        inputNode.removeTap(onBus: 0)
+        audioEngine.stop()
+        audioFile = nil
+    }
+
+
     // Start streaming audio
     func startAudioStream() {
         audioEngine = AVAudioEngine()
@@ -174,7 +213,7 @@ class ViewController: UIViewController {
         ])
 
         // Add action to the button
-        btnMicToggle.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+        btnMicToggle.addTarget(self, action: #selector(micToggleClicked), for: .touchUpInside)
 
 
 
@@ -241,7 +280,7 @@ class ViewController: UIViewController {
     
 
     // Toggle button
-    @IBAction func buttonClicked(_ sender: UIButton) {
+    @IBAction func micToggleClicked(_ sender: UIButton) {
         requestMicrophoneAccess()
     }
 
