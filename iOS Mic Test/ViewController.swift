@@ -115,7 +115,7 @@ struct AudioSettings {
 }
 
 
-class AudioManager {
+class AudioEngineManager {
     private var audioEngine: AVAudioEngine!
     private var inputNode: AVAudioInputNode!
     private var audioFile: AVAudioFile?
@@ -219,7 +219,7 @@ class ViewController: UIViewController {
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
-    let audioManager = AudioManager()
+    let audioManager = AudioEngineManager()
     var isRecordingTest = false
     var audioRecorder: AVAudioRecorder?
 
