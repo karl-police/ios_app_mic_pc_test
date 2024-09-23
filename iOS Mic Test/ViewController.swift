@@ -166,7 +166,9 @@ class AudioManager {
             audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
             
             // Install a tap on the input node
-            inputNode.installTap(onBus: 0, bufferSize: self.audioSettings.bufferSize, format: audioFormat) { (buffer, time) in
+            inputNode.installTap(
+                onBus: 0, bufferSize: self.audioSettings.bufferSize, format: audioFormat
+            ) { (buffer, time) in
                 do {
                     // Write the buffer to the audio file
                     try self.audioFile?.write(from: buffer)
