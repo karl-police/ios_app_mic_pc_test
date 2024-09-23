@@ -231,7 +231,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     var selectedPattern: AVAudioSession.PolarPattern?
     var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
 
-    init() {
+    override init() {
         self.polarPatterns = polarPatterns
         super.init()
         setupTableView()
