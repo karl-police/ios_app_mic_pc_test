@@ -228,7 +228,7 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         return patterns
     }
 
-    func polarPatternName(_ for pattern: AVAudioSession.PolarPattern?) -> String {
+    func polarPatternName(for pattern: AVAudioSession.PolarPattern?) -> String {
         if #available(iOS 14.0, *) {
             switch pattern {
             case .stereo:
@@ -497,7 +497,7 @@ class ViewController: UIViewController {
                 if dataSource.supportedPolarPatterns?.contains(pattern) == true {
                     try dataSource.setPreferredPolarPattern(pattern)
                     try session.setInputDataSource(dataSource)
-                    self.debugTextBoxOut.text = "Polar pattern set to \(polarPatternTableView.polarPatternName(pattern))"
+                    self.debugTextBoxOut.text = "Polar pattern set to \(polarPatternTableView.polarPatternName(for: pattern))"
                 } else {
                     self.debugTextBoxOut.text = "Selected polar pattern is not supported."
                 }
