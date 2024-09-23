@@ -582,7 +582,6 @@ class ViewController: UIViewController {
 
                     // Quick Debug
                     let session = AVAudioSession.sharedInstance()
-                    
                     var message = "Data Sources:\n"
                     if let inputDataSources = session.inputDataSources {
                         for dataSource in inputDataSources {
@@ -591,6 +590,7 @@ class ViewController: UIViewController {
                         }
                     }
                     self.debugTextBoxOut.text = message
+
 
                     if (self.isRecordingTest == false) {
                         self.isRecordingTest = true
