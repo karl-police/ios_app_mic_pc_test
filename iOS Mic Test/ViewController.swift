@@ -439,10 +439,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func setupPolarPatternTableView() {
         // Init
         polarPatternTableView = PolarPatternTableView(polarPatterns: polarPatterns)
-        
-        // Set up the table view in the main view and capture the returned UITableView
-        let tableViewFrame = CGRect(x: 0, y: 500, width: view.frame.width, height: 200) // Adjust the frame as needed
-        let tableView = polarPatternTableView.setupTableView()
+        //polarPatternTableView.setupTableView()
+
+        self.view.addSubview(polarPatternTableView.tableView)
 
         // Set up callback when a polar pattern is selected
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
@@ -474,9 +473,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         initUI()
         setupPolarPatternTableView()
-
-        self.view.addSubview(polarPatternTableView.tableView)
-
 
         // Register for keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
