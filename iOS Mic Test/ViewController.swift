@@ -128,7 +128,7 @@ class AudioManager {
                     // Write the buffer to the audio file
                     try self.audioFile?.write(from: buffer)
                 } catch {
-                    print("Error writing buffer to audio file: \(error)")
+                    throw error
                 }
             }
 
