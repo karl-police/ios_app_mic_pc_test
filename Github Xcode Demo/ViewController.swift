@@ -183,7 +183,7 @@ class ViewController: UIViewController {
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
             audioRecorder?.prepareToRecord()
         } catch {
-            print("Failed to set up audio recorder: \(error)")
+            self.debugTextBoxOut.text = "Failed to set up audio recorder: \(error)"
         }
     }
 
