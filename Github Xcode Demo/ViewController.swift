@@ -45,7 +45,7 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
     
     do {
         try audioSession.setCategory(
-            AVAudioSession.Category.playAndRecord, options: .allowBluetooth,
+            AVAudioSession.Category.playAndRecord,
             withOptions: AVAudioSessionCategoryOptions.DefaultToSpeaker
         )
         try audioSession.setActive(true)
