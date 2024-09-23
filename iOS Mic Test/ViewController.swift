@@ -107,6 +107,7 @@ class AudioManager {
         audioEngine = AVAudioEngine()
         inputNode = audioEngine.inputNode
         audioFormat = inputNode.inputFormat(forBus: 0)
+        audioSettings = AudioSettings()
     }
 
     // Select a microphone by its unique ID
