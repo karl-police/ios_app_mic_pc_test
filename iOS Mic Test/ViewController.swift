@@ -352,7 +352,7 @@ class ViewController: UIViewController {
         present(activityViewController, animated: true, completion: nil)
     }
 
-    func startRecording() {
+    /*func startRecording() {
         do {
             try self.audioManager.startRecording()
             btnMicToggle.setTitle("Stop", for: .normal)
@@ -366,8 +366,69 @@ class ViewController: UIViewController {
         self.audioManager.stopRecording()
         btnMicToggle.setTitle("Start", for: .normal)
         shareRecordedAudio()
+    }*/
+
+    func setupAudioSessionWithPolarPattern() {
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            // Set the audio session category to Record
+            try session.setCategory(.record, mode: .default, options: [])
+            
+            // Activate the audio session
+            try session.setActive(true)
+            
+            // Get the input data sources (e.g., microphone)
+            if let inputDataSources = session.inputDataSources {
+                for dataSource in inputDataSources {
+                    // Check if the Subcardioid pattern is supported
+                    if dataSource.supportedPolarPatterns?.contains(AVAudioSession.PolarPattern.subcardioid) == true {
+                        
+                        // Set the preferred polar pattern to Subcardioid
+                        try dataSource.setPreferredPolarPattern(AVAudioSession.PolarPattern.subcardioid)
+                        
+                        // Optionally set this as the preferred input data source
+                        try session.setInputDataSource(dataSource)
+                    }
+                }
+            }
+        } catch {
+            self.debugTextBoxOut.text = "Error setting up audio session or polar pattern: \(error)"
+        }
     }
 
+    func startRecording() {
+        setupAudioSessionWithPolarPattern()
+
+        let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
+
+        let audioSettings: [String: Any] = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC), // Use .m4a format
+            AVSampleRateKey: 44100,                   // Sample rate in Hz
+            AVNumberOfChannelsKey: 1,                 // Mono recording
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue // High quality
+        ]
+
+        do {
+            // Initialize the recorder with the file URL and settings
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: audioSettings)
+            audioRecorder?.delegate = self
+            audioRecorder?.prepareToRecord()
+            audioRecorder?.record()
+            isRecording = true
+            print("Recording started...")
+        } catch {
+            print("Failed to start recording: \(error)")
+        }
+    }
+
+    func stopRecording() {
+        if isRecording {
+            audioRecorder?.stop()
+            isRecording = false
+            shareRecordedAudio()
+        }
+    }
 
     // Request Microphone Permission
     func m_requestMicrophoneAccess() {
@@ -375,22 +436,6 @@ class ViewController: UIViewController {
             if granted {
                 DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
-
-                    /*var message = ""
-                    if let micInputs = GetAvailableMicrophoneInputs() {
-                        for micInput in micInputs {
-                            // Builder string
-                            message = "Available Mic Inputs:\n\n"
-                            for micInput in micInputs {
-                                message += "Port Name: \(micInput.portName)\n"
-                                message += "Port Type: \(micInput.portType)\n"
-                                message += "\n" // new line
-                            }
-                        }
-                    } else {
-                        message = "No available microphone inputs."
-                    }
-                    self.debugTextBoxOut.text = message // Set text*/
 
 
                     if (self.isRecordingTest == false) {
