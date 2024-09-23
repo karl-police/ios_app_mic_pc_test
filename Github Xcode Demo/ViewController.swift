@@ -5,7 +5,28 @@
 import UIKit
 import AVFoundation
 
-
+/// Returns all cameras on the device.
+public func getListOfCameras() -> [AVCaptureDevice] {
+    
+#if os(iOS)
+    let session = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [
+            .builtInWideAngleCamera,
+            .builtInTelephotoCamera
+        ],
+        mediaType: .video,
+        position: .unspecified)
+#elseif os(macOS)
+    let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(
+        deviceTypes: [
+            .builtInWideAngleCamera
+        ],
+        mediaType: .video,
+        position: .unspecified)
+#endif
+    
+    return session.devices
+}
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
