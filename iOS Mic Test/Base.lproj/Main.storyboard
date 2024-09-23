@@ -26,18 +26,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGi-3j-11O">
-                                <state key="normal" title="Button"/>
-                                <constraints>
-                                    <constraint firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="centerX-button"/>
-                                    <constraint firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="centerY-button"/>
-                                    <constraint firstAttribute="width" constant="100" id="width-button"/>
-                                    <constraint firstAttribute="height" constant="50" id="height-button"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="buttonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qn9-yF-JaX"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
