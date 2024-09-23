@@ -471,12 +471,19 @@ class ViewController: UIViewController {
         do {
             if let inputDataSources = session.inputDataSources {
                 for dataSource in inputDataSources {
+                    var isSupported = false
+
                     if dataSource.supportedPolarPatterns?.contains(pattern) == true {
+                        isSupported = true
+
                         try dataSource.setPreferredPolarPattern(pattern)
                         try session.setInputDataSource(dataSource)
                         self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
-                    } else {
-                        self.debugTextBoxOut.text = "Selected polar pattern \(polarPatternTableView.polarPatternName(for: pattern)) is not supported."
+                    }
+
+                    if (isSupported == false) {
+                        self.debugTextBoxOut.text
+                            = "Selected polar pattern \(polarPatternTableView.polarPatternName(for: pattern)) is not supported on any data source."
                     }
                 }
             }
