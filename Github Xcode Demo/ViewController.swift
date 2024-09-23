@@ -72,15 +72,23 @@ class AudioManager {
 
 
 class ViewController: UIViewController {
-    @IBOutlet weak var debugTextBoxOut: UITextView!
+    var debugTextBoxOut: UITextView!
     let audioManager = AudioManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        showAlert("Test Alert!")
-        showAlert("Test Alert 2!")
-        //debugTextBoxOut.text = "Test"
+       // Initialize the UITextView programmatically
+        debugTextBoxOut = UITextView(frame: CGRect(x: 20, y: 100, width: 300, height: 200))
+        debugTextBoxOut.backgroundColor = UIColor.lightGray
+        debugTextBoxOut.textColor = UIColor.black
+        debugTextBoxOut.font = UIFont.systemFont(ofSize: 18)
+        
+        // Set initial text
+        debugTextBoxOut.text = "Test"
+
+        // Add the UITextView to the view hierarchy
+        self.view.addSubview(debugTextBoxOut)
     }
     
     @IBAction func buttonClicked(_ sender: UIButton) {
