@@ -128,13 +128,13 @@ class AudioManager {
 
 class ViewController: UIViewController {
     var debugTextBoxOut: UITextView!
+
     var audioRecorder: AVAudioRecorder?
     let audioManager = AudioManager()
     var isRecordingTest = false
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
+    func initUI() {
         // Create UITextView without setting a frame
         debugTextBoxOut = UITextView()
         debugTextBoxOut.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
@@ -163,7 +163,40 @@ class ViewController: UIViewController {
             debugTextBoxOut.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        initUI()
+
+
+        // Register for keyboard notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    deinit {
+        // Remove the observers when the view controller is deallocated
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    // Called when the keyboard will appear
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardHeight = keyboardFrame.cgRectValue.height
+            
+            // Move the view up by the height of the keyboard
+            self.view.frame.origin.y = -keyboardHeight
+        }
+    }
+    // Called when the keyboard will disappear
+    @objc func keyboardWillHide(notification: NSNotification) {
+        // Reset the view position
+        self.view.frame.origin.y = 0
+    }
     
+
     // Toggle button
     @IBAction func buttonClicked(_ sender: UIButton) {
         requestMicrophoneAccess()
