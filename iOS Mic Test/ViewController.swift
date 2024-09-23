@@ -71,7 +71,17 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
 
 class AudioManager {
     private var audioEngine: AVAudioEngine!
+    private var inputNode: AVAudioInputNode!
+    private var audioFile: AVAudioFile?
+    private var audioFormat: AVAudioFormat!
+
     private var selectedDevice: AVCaptureDevice?
+
+    init() {
+        audioEngine = AVAudioEngine()
+        inputNode = audioEngine.inputNode
+        audioFormat = inputNode.inputFormat(forBus: 0)
+    }
 
     // Select a microphone by its unique ID
     func selectMicrophone(withID id: String) {
