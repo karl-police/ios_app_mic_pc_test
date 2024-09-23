@@ -347,7 +347,7 @@ class AudioManager {
 
 
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut: UITextView!
     var btnMicToggle: UIButton!
