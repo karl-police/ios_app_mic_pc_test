@@ -332,7 +332,7 @@ class ViewController: UIViewController {
     // Toggle button
     @IBAction func micToggleClicked(_ sender: UIButton) {
         RequestCameraAccess() { (granted) in
-            requestMicrophoneAccess()
+            self.requestMicrophoneAccess()
         }
     }
 
