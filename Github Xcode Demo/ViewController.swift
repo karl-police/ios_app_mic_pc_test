@@ -104,7 +104,20 @@ class ViewController: UIViewController {
                 var message = "Available Microphones:\n\n"
 
                 for mic in microphones {
-                    message += "Microphone: \(mic.localizedName)\nID: \(mic.uniqueID)\nPosition: \(mic.position)\nSample Rate: \(mic.activeFormat.sampleRate)\n\n"
+                    let formatDescription = mic.activeFormat.formatDescription
+                    
+                    let audioFormatDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription)
+                    
+                    var sampleRateString = "Unknown"
+                    if let audioFormatDescription = audioFormatDescription {
+                        let sampleRate = audioFormatDescription.pointee.mSampleRate
+                        sampleRateString = "\(sampleRate) Hz"
+                    }
+                    
+                    message += "Microphone: \(mic.localizedName)\n"
+                    message += "ID: \(mic.uniqueID)\n"
+                    message += "Position: \(mic.position.rawValue)\n"
+                    message += "Sample Rate: \(sampleRateString)\n\n"
                 }
                 
                 // Set text
