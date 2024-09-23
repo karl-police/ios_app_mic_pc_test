@@ -150,7 +150,7 @@ class AudioManager {
 
 
     // Start streaming audio
-    func startAudioStream() {
+    func startAudioStream() throws {
         audioEngine = AVAudioEngine()
         
         let inputNode = audioEngine.inputNode
@@ -162,9 +162,9 @@ class AudioManager {
         
         do {
             try audioEngine.start()
-            print("Audio streaming started.")
+            // Started
         } catch {
-            print("Error starting audio stream: \(error.localizedDescription)")
+            throw "Error starting audio stream: \(error.localizedDescription)"
         }
     }
 
