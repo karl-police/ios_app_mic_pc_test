@@ -168,7 +168,7 @@ class AudioManager {
             
             // Install a tap on the input node
             inputNode.installTap(
-                onBus: 0, bufferSize: self.audioSettings.bufferSize, format: audioFormat
+                onBus: 0, bufferSize: 1024, format: audioFormat
             ) { (buffer, time) in
                 do {
                     // Write the buffer to the audio file
@@ -210,7 +210,7 @@ class AudioManager {
         let inputNode = audioEngine.inputNode
         let inputFormat = inputNode.inputFormat(forBus: 0)
 
-        inputNode.installTap(onBus: 0, bufferSize: self.audioSettings.bufferSize, format: inputFormat) { (buffer, time) in
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { (buffer, time) in
             // Handle the audio buffer here
         }
         
