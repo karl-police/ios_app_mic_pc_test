@@ -79,7 +79,7 @@ public func GetAvailableMicrophoneInputs() -> [AVAudioSessionPortDescription]? {
         return nil
     }
 
-    return availableInputs
+    return audioSession.availableInputs
 }
 
 
