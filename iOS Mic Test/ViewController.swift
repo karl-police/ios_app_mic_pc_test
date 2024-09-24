@@ -562,6 +562,24 @@ class ViewController: UIViewController {
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
         let activityViewController = UIActivityViewController(activityItems: [audioFilename], applicationActivities: nil)
+
+        // Handle completion with deletion of the file
+        activityViewController.completionWithItemsHandler = { (activityType, completed, returnedItems, activityError) in
+            if completed {
+                // File shared successfully
+            } else {
+                // File sharing canceled or failed
+            }
+            
+            // Now we can safely delete the file whether or not the sharing was completed
+            do {
+                try FileManager.default.removeItem(at: audioFilename)
+                print("Recording file deleted.")
+            } catch {
+                self.debugTextBoxOut.text = "Error deleting recording file: \(error)"
+            }
+        }
+
         present(activityViewController, animated: true, completion: nil)
     }
 
