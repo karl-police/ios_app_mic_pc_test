@@ -537,18 +537,23 @@ class ViewController: UIViewController {
     }
 
 
+    // On view loaded
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initUI()
         setupCombinedSettingsTableView()
 
+        displayLocalIP()
+
+
         // Register for keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
-    deinit { // Deinit
+    // Deinit
+    deinit {
         // Remove the observers when the view controller is deallocated
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -676,6 +681,19 @@ class ViewController: UIViewController {
         }
     }
 
+
+
+    // Update Connection Label
+    func updateConnectionLabel(_ newStr: String) {
+        ui_connectionLabel.text = newStr
+    }
+    func displayLocalIP() {
+        if let localIP = GetLocalIPAddress() {
+            updateConnectionLabel("Local IP: \(localIP)")
+        } {
+            updateConnectionLabel("Local IP: N/A")
+        }
+    }
 
 
     // VoIP
