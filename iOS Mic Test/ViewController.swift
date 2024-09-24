@@ -186,9 +186,9 @@ struct AudioSettings {
 
 
 
-class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSource {
+class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataSource {
     var tableView: UITableView!
-    var polarPatterns: [AVAudioSession.PolarPattern] {
+    var polarPatternSelections: [AVAudioSession.PolarPattern] {
         // Define the polar patterns based on iOS version
         var patterns: [AVAudioSession.PolarPattern] = [.cardioid, .subcardioid, .omnidirectional]
         
@@ -199,6 +199,25 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         
         return patterns
     }
+
+    // Input data sources for selection
+    var dataSourceSelections: [AVAudioSessionDataSourceDescription] = []
+    // inputDataSources
+
+    enum TableSection: Int, CaseIterable {
+        case SectionDataSource = 0
+        case SectionPolarPattern
+        
+        var title: String {
+            switch self {
+            case .SectionDataSource:
+                return "Input Data Sources"
+            case .SectionPolarPattern:
+                return "Polar Patterns"
+            }
+        }
+    }
+
 
     func polarPatternName(for pattern: AVAudioSession.PolarPattern?) -> String {
         if #available(iOS 14.0, *) {
@@ -230,8 +249,20 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     }
 
     var selectedPattern: AVAudioSession.PolarPattern?
-    var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
+    var selectedDataSource: AVAudioSessionDataSourceDescription?
 
+    var onPatternSelected: ((AVAudioSession.PolarPattern) -> Void)? // Callback to notify selection
+    var onDataSourceSelected: ((AVAudioSessionDataSourceDescription) -> Void)? // Callback for data source
+
+
+    // Update the input data sources when needed
+    func updateInputDataSources(_ sources: [AVAudioSessionDataSourceDescription]) {
+        dataSourceSelections = sources
+        tableView.reloadSections([TableSection.SectionDataSource.rawValue], with: .automatic)
+    }
+
+
+    // Init
     override init() {
         super.init()
         setupTableView()
@@ -242,8 +273,12 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
         tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+
+        // If these things are not registered, the app can crash.
+        // Crash logs on iOS are found in the Analytics
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "polarPatternCell")
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "inputDataSourceCell")
+
         tableView.layer.cornerRadius = 8
         tableView.clipsToBounds = true
         tableView.backgroundColor = .white
@@ -252,37 +287,72 @@ class PolarPatternTableView: NSObject, UITableViewDelegate, UITableViewDataSourc
     }
     
     // MARK: - TableView DataSource Methods
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return TableSection.allCases.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return polarPatterns.count
+        guard let sectionType = TableSection(rawValue: section) else { return 0 }
+        switch sectionType {
+        case .SectionDataSource:
+            return dataSourceSelections.count
+        case .SectionPolarPattern:
+            return polarPatternSelections.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return TableSection(rawValue: section)?.title
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "polarPatternCell", for: indexPath)
+        let sectionType = TableSection(rawValue: indexPath.section)!
         
-        let pattern = polarPatterns[indexPath.row]
-
-        // Get polar pattern name
-        let patternName = polarPatternName(for: pattern)
-        cell.textLabel?.text = patternName
-        
-        // Set a checkmark for the selected cell
-        if polarPatterns[indexPath.row] == selectedPattern {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
+        switch sectionType {
+        case .SectionDataSource:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "inputDataSourceCell", for: indexPath)
+            let dataSource = dataSourceSelections[indexPath.row]
+            cell.textLabel?.text = dataSource.dataSourceName
+            
+            // Add checkmark if this is the selected input data source
+            if selectedDataSource == dataSource {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+            return cell
+            
+        case .SectionPolarPattern:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "polarPatternCell", for: indexPath)
+            let pattern = polarPatternSelections[indexPath.row]
+            cell.textLabel?.text = polarPatternName(for: pattern)
+            
+            // Add checkmark if this is the selected polar pattern
+            if selectedPattern == pattern {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
+            }
+            return cell
         }
-        
-        return cell
     }
 
     // MARK: - TableView Delegate Methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedPattern = polarPatterns[indexPath.row]
-        tableView.reloadData() // Reload to update checkmarks
+        let sectionType = TableSection(rawValue: indexPath.section)!
+        
+        switch sectionType {
+        case .SectionDataSource:
+            selectedDataSource = dataSourceSelections[indexPath.row]
+            tableView.reloadData() // Reload to update checkmarks
 
-        // Notify the ViewController about the selection
-        if let onPatternSelected = onPatternSelected {
-            onPatternSelected(selectedPattern!)
+            onDataSourceSelected?(selectedDataSource!)
+            
+        case .SectionPolarPattern:
+            selectedPattern = polarPatternSelections[indexPath.row]
+            tableView.reloadData() // Reload to update checkmarks
+
+            onPatternSelected?(selectedPattern!)
         }
     }
 }
@@ -361,7 +431,7 @@ class ViewController: UIViewController {
     var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
-    var polarPatternTableView: PolarPatternTableView!
+    var polarPatternTableView: CombinedSettingsTableView!
 
     let audioManager = AudioManager()
     var isRecordingTest = false
@@ -443,9 +513,9 @@ class ViewController: UIViewController {
 
     
 
-    func setupPolarPatternTableView() {
+    func setupCombinedSettingsTableView() {
         // Init
-        polarPatternTableView = PolarPatternTableView()
+        polarPatternTableView = CombinedSettingsTableView()
         tableView = polarPatternTableView.tableView
         
         self.view.addSubview(polarPatternTableView.tableView)
@@ -454,15 +524,39 @@ class ViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.debugTextBoxOut.topAnchor, constant: -10),
-            tableView.heightAnchor.constraint(equalToConstant: 150)
+            tableView.heightAnchor.constraint(equalToConstant: 200)
         ])
 
+
+        // Update the data sources, I guess
+        let session = AVAudioSession.sharedInstance()
+        if let inputDataSources = session.inputDataSources, !inputDataSources.isEmpty {
+            self.polarPatternTableView.updateInputDataSources(inputDataSources)
+        }
+
         // Set up callback when a polar pattern is selected
+        polarPatternTableView.onDataSourceSelected = { [weak self] selectedDataSource in
+            self?.updateDataSource(selectedDataSource)
+        }
+
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
             self?.updatePolarPattern(selectedPattern)
         }
     }
 
+    // Update DataSource
+    func updateDataSource(_ dataSource: AVAudioSessionDataSourceDescription) {
+        let session = AVAudioSession.sharedInstance()
+
+        do {
+            try session.setInputDataSource(dataSource)
+            self.debugTextBoxOut.text = "Data Source set to: \(dataSource.dataSourceName)"
+        } catch {
+            self.debugTextBoxOut.text = "Error setting dataSource: \(error.localizedDescription)"
+        }
+    }
+
+    // Update Polar Pattern
     func updatePolarPattern(_ pattern: AVAudioSession.PolarPattern) {
         // Update in the settings struct
         audioManager.audioSettings.polarPatternCfg = pattern
@@ -478,7 +572,6 @@ class ViewController: UIViewController {
                         isSupported = true
 
                         try dataSource.setPreferredPolarPattern(pattern)
-                        //try session.setInputDataSource(dataSource)
                         self.debugTextBoxOut.text = "Polar pattern set to: \(polarPatternTableView.polarPatternName(for: pattern))"
                     }
 
@@ -498,7 +591,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         initUI()
-        setupPolarPatternTableView()
+        setupCombinedSettingsTableView()
 
         // Register for keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
