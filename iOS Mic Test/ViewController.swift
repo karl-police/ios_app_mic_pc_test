@@ -698,7 +698,7 @@ class ViewController: UIViewController {
         // Request Microphone Permission
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
-                DispatchQueue.main.async {
+                //DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
 
                     // Quick Debug
@@ -721,7 +721,7 @@ class ViewController: UIViewController {
                         self.stopRecording()
                         self.is_RecordingTest = false
                     }
-                }
+                //}
             } else {
                 DispatchQueue.main.async {
                     self.showAlert("Microphone access denied!")
