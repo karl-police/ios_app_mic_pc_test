@@ -49,14 +49,32 @@ public func GetLocalIPAddress() -> String? {
 public func RequestCameraAccess(completion: @escaping (Bool) -> Void) {
     switch AVCaptureDevice.authorizationStatus(for: .video) {
     case .authorized:
-        // Camera access is already granted
+        // Access is already granted
         completion(true)
     case .notDetermined:
         AVCaptureDevice.requestAccess(for: .video) { granted in
             completion(granted)
         }
     case .denied, .restricted:
-        // Camera access has been denied or is restricted
+        // Access has been denied or is restricted
+        completion(false)
+    @unknown default:
+        completion(false)
+    }
+}
+
+public func RequestMicrophoneAccess(completion: @escaping (Bool) -> Void) {
+    switch AVCaptureDevice.authorizationStatus(for: .audio) {
+    case .authorized:
+        // Access is already granted
+        completion(true)
+    case .notDetermined:
+        // Request microphone access
+        AVCaptureDevice.requestAccess(for: .audio) { granted in
+            completion(granted)
+        }
+    case .denied, .restricted:
+        // Access has been denied or is restricted
         completion(false)
     @unknown default:
         completion(false)
@@ -696,9 +714,10 @@ class ViewController: UIViewController {
 
     func m_toggleTestRecord() {
         // Request Microphone Permission
-        AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+        //AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+        RequestMicrophoneAccess() { (granted) in
             if granted {
-                DispatchQueue.main.async {
+                //DispatchQueue.main.async {
                     //self.showAlert("Microphone access granted!")
 
                     // Quick Debug
@@ -721,11 +740,11 @@ class ViewController: UIViewController {
                         self.stopRecording()
                         self.is_RecordingTest = false
                     }
-                }
+                //}
             } else {
-                DispatchQueue.main.async {
+                //DispatchQueue.main.async {
                     self.showAlert("Microphone access denied!")
-                }
+                //}
             }
         }
     }
@@ -775,7 +794,7 @@ class ViewController: UIViewController {
     func m_toggle_MicVoIP() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
             if granted {
-                //DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     if (self.is_VoIP_active == false) {
                         self.is_VoIP_active = true
 
@@ -784,7 +803,7 @@ class ViewController: UIViewController {
                         self.stop_VoIPMic()
                         self.is_VoIP_active = false
                     }
-                //}
+                }
             } else {
                 DispatchQueue.main.async {
                     self.showAlert("Microphone access denied!")
