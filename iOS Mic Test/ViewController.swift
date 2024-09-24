@@ -352,9 +352,18 @@ class AudioManager {
             throw error
         }
     }
-
     func stopRecording() throws {
         audioRecorder?.stop()
+        try AVAudioSession.sharedInstance().setActive(false)
+    }
+
+
+    // VoIP
+    func start_VoIP() throws {
+
+    }
+
+    func stop_VoIP() throws {
         try AVAudioSession.sharedInstance().setActive(false)
     }
 }
@@ -725,7 +734,7 @@ class ViewController: UIViewController {
     // VoIP
     func start_VoIPMic() {
         do {
-            //try self.audioManager.startRecording()
+            try self.audioManager.start_VoIP()
         } catch {
             // Handle Error
             self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
@@ -735,7 +744,7 @@ class ViewController: UIViewController {
     }
     func stop_startVoIPMic() {
         do {
-            //try self.audioManager.stopRecording()
+            try self.audioManager.stop_VoIP()
         } catch {
             self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
         }
