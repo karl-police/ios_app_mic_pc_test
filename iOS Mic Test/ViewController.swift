@@ -368,6 +368,7 @@ struct STR_TBL {
 
 
 struct StatusInfoStruct {
+    var connectionStatusText = "Not Connected"
     var localIP = "Not Retrieved"
 }
 
@@ -693,8 +694,11 @@ class ViewController: UIViewController {
 
     // Update Connection Label
     func updateStatusConnectionLabel() {
-        ui_connectionLabel.text = "Status: N/A" + "\n"
+        ui_connectionLabel.text = "Status: \(statusInfoStruct.connectionStatusText)" + "\n"
             + "Local IP: \(statusInfoStruct.localIP)" + "\n"
+
+        // Change Label size to fit content.
+        ui_connectionLabel.sizeToFit()
     }
     func updateLocalIPStatusText() {
         if let localIP = GetLocalIPAddress() {
