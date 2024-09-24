@@ -367,11 +367,17 @@ struct STR_TBL {
 }
 
 
+struct StatusInfoStruct {
+    var localIP = "Not Retrieved"
+}
+
+
 class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut: UITextView!
     var btnRecordTestToggle: UIButton!
     var btnMicToggle: UIButton!
+    
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: CombinedSettingsTableView!
@@ -544,7 +550,7 @@ class ViewController: UIViewController {
         initUI()
         setupCombinedSettingsTableView()
 
-        displayLocalIP()
+        updateLocalIPStatusText()
 
 
         // Register for keyboard notifications
@@ -684,15 +690,18 @@ class ViewController: UIViewController {
 
 
     // Update Connection Label
-    func updateConnectionLabel(_ newStr: String) {
-        ui_connectionLabel.text = newStr
+    func updateStatusConnectionLabel() {
+        ui_connectionLabel.text = "Status: N/A"
+            + "Local IP: \(StatusInfoStruct.localIP)"
     }
-    func displayLocalIP() {
+    func updateLocalIPStatusText() {
         if let localIP = GetLocalIPAddress() {
-            updateConnectionLabel("Local IP: \(localIP)")
+            StatusInfoStruct.localIP = localIP
         } {
-            updateConnectionLabel("Local IP: N/A")
+            StatusInfoStruct.localIP = "N/A"
         }
+
+        updateStatusConnectionLabel()
     }
 
 
