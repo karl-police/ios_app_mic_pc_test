@@ -4,6 +4,7 @@
 
 import UIKit
 import AVFoundation
+import Network
 
 
 
@@ -11,6 +12,39 @@ public func GetDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     return paths[0]
 }
+
+public func GetLocalIPAddress() -> String? {
+    var address: String?
+    
+    var ifaddrs: UnsafeMutablePointer<ifaddrs>? = nil
+    if getifaddrs(&ifaddrs) == 0 {
+        var ptr = ifaddrs
+        
+        while ptr != nil {
+            defer { ptr = ptr?.pointee.ifa_next }
+            guard let interface = ptr?.pointee else { continue }
+            
+            let addrFamily = interface.ifa_addr.pointee.sa_family
+            
+            // Check if the interface is IPv4 and not loopback
+            if addrFamily == AF_INET {
+                let name = String(cString: interface.ifa_name)
+                if name == "en0" { // en0 is usually WiFi interface
+                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                    if getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len),
+                                   &hostname, socklen_t(hostname.count),
+                                   nil, 0, NI_NUMERICHOST) == 0 {
+                        address = String(cString: hostname)
+                    }
+                }
+            }
+        }
+        freeifaddrs(ifaddrs)
+    }
+    
+    return address
+}
+
 
 public func RequestCameraAccess(completion: @escaping (Bool) -> Void) {
     switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -428,8 +462,7 @@ class ViewController: UIViewController {
     }
 
 
-    
-
+    // Fast made Settings
     func setupCombinedSettingsTableView() {
         // Init
         polarPatternTableView = CombinedSettingsTableView()
@@ -515,7 +548,7 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
-    deinit {
+    deinit { // Deinit
         // Remove the observers when the view controller is deallocated
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -539,6 +572,16 @@ class ViewController: UIViewController {
         self.view.endEditing(true) // Dismiss the keyboard
     }
 
+
+    func showAlert(_ msg: String) {
+        let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+        present(alert, animated: true, completion: nil)
+    }
+
+
     // Toggle button
     @IBAction func action_recordTestToggleClicked(_ sender: UIButton) {
         RequestCameraAccess() { (granted) in
@@ -550,14 +593,7 @@ class ViewController: UIViewController {
         self.m_toggle_MicVoIP()
     }
 
-    func showAlert(_ msg: String) {
-        let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-
-        present(alert, animated: true, completion: nil)
-    }
-
+    // Prompt to save file
     func shareRecordedAudio() {
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         
