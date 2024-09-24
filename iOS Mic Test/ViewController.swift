@@ -395,7 +395,9 @@ class AudioManager {
             try self.setup_VoIP()
 
             var audioEngine = AVAudioEngine()
-            //try audioEngine.start()
+            if (audioEngine.isRunning == false) {
+                try audioEngine.start()
+            }
         } catch {
             throw error
         }
