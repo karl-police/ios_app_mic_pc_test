@@ -412,7 +412,7 @@ class ViewController: UIViewController {
             ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
 
-            // Center
+            // Center with offset
             btnRecordTestToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             btnRecordTestToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50), // Moved up by 50 points
             // Set width and height
@@ -422,7 +422,7 @@ class ViewController: UIViewController {
             
             // VoIP Button
             btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnMicToggle.topAnchor.constraint(equalTo: view.centerYAnchor),
+            btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
             btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
@@ -572,7 +572,8 @@ class ViewController: UIViewController {
         self.view.endEditing(true) // Dismiss the keyboard
     }
 
-
+    
+    // Pop-up Prompt thing
     func showAlert(_ msg: String) {
         let alert = UIAlertController(title: "Alert", message: msg, preferredStyle: .alert)
 
@@ -588,10 +589,10 @@ class ViewController: UIViewController {
             self.m_toggleTestRecord()
         }
     }
-
     @IBAction func action_micToggleClicked(_ sender: UIButton) {
         self.m_toggle_MicVoIP()
     }
+
 
     // Prompt to save file
     func shareRecordedAudio() {
