@@ -353,7 +353,7 @@ class ViewController: UIViewController {
         btnMicToggle = UIButton(type: .system)
 
         // Set button title
-        btnMicToggle.setTitle("Button", for: .normal)
+        btnMicToggle.setTitle("Record Test", for: .normal)
 
         // Disable automatic translation of autoresizing masks into constraints
         btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
@@ -548,7 +548,7 @@ class ViewController: UIViewController {
     func startRecording() {
         do {
             try self.audioManager.startRecording()
-            btnMicToggle.setTitle("Stop", for: .normal)
+            btnMicToggle.setTitle("Stop Recording", for: .normal)
         } catch {
             // Handle Error
             self.debugTextBoxOut.text = "Error starting recording: \(error.localizedDescription)"
@@ -562,7 +562,7 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error stopping recording: \(error.localizedDescription)"
         }
 
-        btnMicToggle.setTitle("Start", for: .normal)
+        btnMicToggle.setTitle("Start Recording", for: .normal)
         shareRecordedAudio()
     }
 
