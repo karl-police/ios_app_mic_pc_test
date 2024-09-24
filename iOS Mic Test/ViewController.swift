@@ -329,7 +329,7 @@ class AudioManager {
 class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut: UITextView!
-    var btnMicToggle: UIButton!
+    var btnRecordTestToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: CombinedSettingsTableView!
@@ -350,16 +350,16 @@ class ViewController: UIViewController {
 
 
         // Create the button
-        btnMicToggle = UIButton(type: .system)
+        btnRecordTestToggle = UIButton(type: .system)
 
         // Set button title
-        btnMicToggle.setTitle("Record Test", for: .normal)
+        btnRecordTestToggle.setTitle("Record Test", for: .normal)
 
         // Disable automatic translation of autoresizing masks into constraints
-        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
+        btnRecordTestToggle.translatesAutoresizingMaskIntoConstraints = false
 
         // Add the button to the view
-        view.addSubview(btnMicToggle)
+        view.addSubview(btnRecordTestToggle)
 
         // Set up constraints
         NSLayoutConstraint.activate([
@@ -369,16 +369,16 @@ class ViewController: UIViewController {
 
 
             // Center
-            btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            btnRecordTestToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            btnRecordTestToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             // Set width and height
-            btnMicToggle.widthAnchor.constraint(equalToConstant: 100),
-            btnMicToggle.heightAnchor.constraint(equalToConstant: 50)
+            btnRecordTestToggle.widthAnchor.constraint(equalToConstant: 100),
+            btnRecordTestToggle.heightAnchor.constraint(equalToConstant: 50)
         ])
 
         // Add action to the button
-        btnMicToggle.addTarget(self, action: #selector(micToggleClicked), for: .touchUpInside)
+        btnRecordTestToggle.addTarget(self, action: #selector(micToggleClicked), for: .touchUpInside)
 
 
 
@@ -548,7 +548,7 @@ class ViewController: UIViewController {
     func startRecording() {
         do {
             try self.audioManager.startRecording()
-            btnMicToggle.setTitle("Stop Recording", for: .normal)
+            btnRecordTestToggle.setTitle("Stop Recording", for: .normal)
         } catch {
             // Handle Error
             self.debugTextBoxOut.text = "Error starting recording: \(error.localizedDescription)"
@@ -562,7 +562,7 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error stopping recording: \(error.localizedDescription)"
         }
 
-        btnMicToggle.setTitle("Start Recording", for: .normal)
+        btnRecordTestToggle.setTitle("Start Recording", for: .normal)
         shareRecordedAudio()
     }
 
