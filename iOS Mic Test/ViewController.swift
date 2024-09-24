@@ -346,7 +346,8 @@ class AudioManager {
 
     func startRecording() throws {
         do {
-            try self.setupAudioSession()
+            // self. would also work
+            try setupAudioSession()
         } catch {
             throw error
         }
@@ -471,7 +472,7 @@ class ViewController: UIViewController {
             btnRecordTestToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             btnRecordTestToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50), // Moved up by 50 points
             // Set width and height
-            btnRecordTestToggle.widthAnchor.constraint(equalToConstant: 100),
+            btnRecordTestToggle.widthAnchor.constraint(equalToConstant: 150),
             btnRecordTestToggle.heightAnchor.constraint(equalToConstant: 50),
 
             
@@ -706,8 +707,6 @@ class ViewController: UIViewController {
         }
 
         btnRecordTestToggle.setTitle("Start Recording", for: .normal)
-        btnRecordTestToggle.sizeToFit() // temp test
-
         shareRecordedAudio()
     }
 
