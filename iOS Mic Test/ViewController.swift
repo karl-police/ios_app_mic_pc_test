@@ -367,7 +367,7 @@ struct STR_TBL {
 }
 
 
-struct StatusInfoStruct {
+public struct StatusInfoStruct {
     var localIP = "Not Retrieved"
 }
 
