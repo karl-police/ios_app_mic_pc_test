@@ -455,7 +455,6 @@ class ViewController: UIViewController {
             
             // Small height
             debugTextBoxOut.heightAnchor.constraint(equalToConstant: 100),
-            
             // Pin to the bottom of the screen
             debugTextBoxOut.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
