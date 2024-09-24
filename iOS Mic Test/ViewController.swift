@@ -587,7 +587,6 @@ class ViewController: UIViewController {
         self.view.endEditing(true) // Dismiss the keyboard
     }
 
-
     // Recalculate constraints on orientation change
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
