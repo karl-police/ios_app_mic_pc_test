@@ -396,6 +396,7 @@ class ViewController: UIViewController {
         ui_connectionLabel.text = "Status"
         ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
         ui_connectionLabel.textAlignment = .center
+        ui_connectionLabel.numberOfLines = 0  // Allow multiple lines
         ui_connectionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(ui_connectionLabel)
 
