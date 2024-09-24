@@ -697,7 +697,7 @@ class ViewController: UIViewController {
     func updateLocalIPStatusText() {
         if let localIP = GetLocalIPAddress() {
             StatusInfoStruct.localIP = localIP
-        } {
+        } else {
             StatusInfoStruct.localIP = "N/A"
         }
 
