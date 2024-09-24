@@ -346,7 +346,7 @@ class AudioManager {
 
     func startRecording() throws {
         do {
-            try setupAudioSession()
+            try self.setupAudioSession()
         } catch {
             throw error
         }
