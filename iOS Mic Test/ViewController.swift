@@ -706,6 +706,8 @@ class ViewController: UIViewController {
         }
 
         btnRecordTestToggle.setTitle("Start Recording", for: .normal)
+        btnRecordTestToggle.sizeToFit() // temp test
+
         shareRecordedAudio()
     }
 
