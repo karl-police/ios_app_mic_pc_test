@@ -363,10 +363,9 @@ class ViewController: UIViewController {
 
     var polarPatternTableView: PolarPatternTableView!
 
-    //let audioEngineManager = AudioEngineManager()
     let audioManager = AudioManager()
     var isRecordingTest = false
-    var isInVoIP = false
+    var is_InVoIP = false
 
 
     func initUI() {
