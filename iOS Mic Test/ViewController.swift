@@ -714,10 +714,10 @@ class ViewController: UIViewController {
 
     func m_toggleTestRecord() {
         // Request Microphone Permission
-        //AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
-        RequestMicrophoneAccess() { (granted) in
-            if granted {
-                //DispatchQueue.main.async {
+        AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+
+            DispatchQueue.main.async { // This is needed or else it will crash
+                if granted {
                     //self.showAlert("Microphone access granted!")
 
                     // Quick Debug
@@ -740,12 +740,11 @@ class ViewController: UIViewController {
                         self.stopRecording()
                         self.is_RecordingTest = false
                     }
-                //}
-            } else {
-                //DispatchQueue.main.async {
+                } else {
                     self.showAlert("Microphone access denied!")
-                //}
+                }
             }
+
         }
     }
 
