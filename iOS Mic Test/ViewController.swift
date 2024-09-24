@@ -691,8 +691,8 @@ class ViewController: UIViewController {
 
     // Update Connection Label
     func updateStatusConnectionLabel() {
-        ui_connectionLabel.text = "Status: N/A"
-            + "Local IP: \(StatusInfoStruct.localIP)"
+        ui_connectionLabel.text = "Status: N/A" + "\n"
+            + "Local IP: \(StatusInfoStruct.localIP)" + "\n"
     }
     func updateLocalIPStatusText() {
         if let localIP = GetLocalIPAddress() {
