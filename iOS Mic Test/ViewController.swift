@@ -792,8 +792,9 @@ class ViewController: UIViewController {
 
     func m_toggle_MicVoIP() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
-            if granted {
-                DispatchQueue.main.async {
+
+            DispatchQueue.main.async {
+                if granted {
                     if (self.is_VoIP_active == false) {
                         self.is_VoIP_active = true
 
@@ -802,12 +803,11 @@ class ViewController: UIViewController {
                         self.stop_VoIPMic()
                         self.is_VoIP_active = false
                     }
-                }
-            } else {
-                DispatchQueue.main.async {
+                } else {
                     self.showAlert("Microphone access denied!")
                 }
             }
+            
         }
     }
 }
