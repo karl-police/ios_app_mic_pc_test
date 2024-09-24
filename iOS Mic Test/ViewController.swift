@@ -720,7 +720,7 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
         }
 
-        btnRecordTestToggle.setTitle("Stop Mic", for: .normal)
+        btnMicToggle.setTitle("Stop Mic", for: .normal)
     }
     func stop_startVoIPMic() {
         do {
@@ -729,7 +729,7 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
         }
 
-        btnRecordTestToggle.setTitle("Start Mic", for: .normal)
+        btnMicToggle.setTitle("Start Mic", for: .normal)
     }
 
     func m_toggle_MicVoIP() {
