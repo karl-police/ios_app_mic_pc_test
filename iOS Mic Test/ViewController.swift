@@ -342,8 +342,8 @@ class ViewController: UIViewController {
     var polarPatternTableView: CombinedSettingsTableView!
 
     let audioManager = AudioManager()
-    var isRecordingTest = false
-    var is_InVoIP = false
+    var is_RecordingTest = false
+    var is_VoIP_active = false
 
 
     func initUI() {
@@ -394,8 +394,8 @@ class ViewController: UIViewController {
         ])
 
         // Add action to the button
-        btnRecordTestToggle.addTarget(self, action: #selector(recordTestToggleClicked), for: .touchUpInside)
-
+        btnRecordTestToggle.addTarget(self, action: #selector(action_recordTestToggleClicked), for: .touchUpInside)
+        btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
 
 
         // Create UITextView without setting a frame
@@ -540,10 +540,14 @@ class ViewController: UIViewController {
     }
 
     // Toggle button
-    @IBAction func recordTestToggleClicked(_ sender: UIButton) {
+    @IBAction func action_recordTestToggleClicked(_ sender: UIButton) {
         RequestCameraAccess() { (granted) in
             self.m_toggleTestRecord()
         }
+    }
+
+    @IBAction func action_micToggleClicked(_ sender: UIButton) {
+        self.m_toggle_MicVoIP()
     }
 
     func showAlert(_ msg: String) {
@@ -570,7 +574,6 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error starting recording: \(error.localizedDescription)"
         }
     }
-    
     func stopRecording() {
         do {
             try self.audioManager.stopRecording()
@@ -601,13 +604,57 @@ class ViewController: UIViewController {
                     self.debugTextBoxOut.text = message
 
 
-                    if (self.isRecordingTest == false) {
-                        self.isRecordingTest = true
+                    if (self.is_RecordingTest == false) {
+                        self.is_RecordingTest = true
 
                         self.startRecording()
                     } else {
                         self.stopRecording()
-                        self.isRecordingTest = false
+                        self.is_RecordingTest = false
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlert("Microphone access denied!")
+                }
+            }
+        }
+    }
+
+
+
+    // VoIP
+    func start_VoIPMic() {
+        do {
+            //try self.audioManager.startRecording()
+        } catch {
+            // Handle Error
+            self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
+        }
+
+        btnRecordTestToggle.setTitle("Stop Mic", for: .normal)
+    }
+    func stop_startVoIPMic() {
+        do {
+            //try self.audioManager.stopRecording()
+        } catch {
+            self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
+        }
+
+        btnRecordTestToggle.setTitle("Start Mic", for: .normal)
+    }
+
+    func m_toggle_MicVoIP() {
+        AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+            if granted {
+                DispatchQueue.main.async {
+                    if (self.is_VoIP_active == false) {
+                        self.is_VoIP_active = true
+
+                        self.start_VoIPMic()
+                    } else {
+                        self.stop_startVoIPMic()
+                        self.is_VoIP_active = false
                     }
                 }
             } else {
