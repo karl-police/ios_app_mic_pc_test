@@ -336,7 +336,8 @@ class AudioManager {
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
 
         let audioSettings: [String: Any] = [
-            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            // other was kAudioFormatMPEG4AAC
+            AVFormatIDKey: Int(kAudioFormatAppleLossless),
             AVSampleRateKey: 44100,
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
