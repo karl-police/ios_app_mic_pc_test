@@ -5,6 +5,7 @@
 import UIKit
 import AVFoundation
 import Network
+import WebRTC
 
 
 
@@ -393,11 +394,6 @@ class AudioManager {
     func start_VoIP() throws {
         do {
             try self.setup_VoIP()
-
-            var audioEngine = AVAudioEngine()
-            if (audioEngine.isRunning == false) {
-                try audioEngine.start()
-            }
         } catch {
             throw error
         }
