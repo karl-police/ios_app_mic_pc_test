@@ -325,11 +325,18 @@ class AudioManager {
 }
 
 
+// Collection of some Strings
+struct STR_TBL {
+    var BTN_START_TEST_RECORD = "Record Test"
+    var BTN_STOP_RECORDING = "Stop Recording"
+}
+
 
 class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut: UITextView!
     var btnRecordTestToggle: UIButton!
+    var btnMicToggle: UIButton!
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: CombinedSettingsTableView!
@@ -351,15 +358,18 @@ class ViewController: UIViewController {
 
         // Create the button
         btnRecordTestToggle = UIButton(type: .system)
-
-        // Set button title
         btnRecordTestToggle.setTitle("Record Test", for: .normal)
-
         // Disable automatic translation of autoresizing masks into constraints
         btnRecordTestToggle.translatesAutoresizingMaskIntoConstraints = false
-
         // Add the button to the view
         view.addSubview(btnRecordTestToggle)
+
+
+        btnMicToggle = UIButton(type: .system)
+        btnMicToggle.setTitle("Start Mic", for: .normal)
+        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(btnMicToggle)
+
 
         // Set up constraints
         NSLayoutConstraint.activate([
@@ -370,15 +380,21 @@ class ViewController: UIViewController {
 
             // Center
             btnRecordTestToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnRecordTestToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
+            btnRecordTestToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50), // Moved up by 50 points
             // Set width and height
             btnRecordTestToggle.widthAnchor.constraint(equalToConstant: 100),
-            btnRecordTestToggle.heightAnchor.constraint(equalToConstant: 50)
+            btnRecordTestToggle.heightAnchor.constraint(equalToConstant: 50),
+
+            
+            // VoIP Button
+            btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            btnMicToggle.topAnchor.constraint(equalTo: view.centerYAnchor),
+            btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
+            btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
 
         // Add action to the button
-        btnRecordTestToggle.addTarget(self, action: #selector(micToggleClicked), for: .touchUpInside)
+        btnRecordTestToggle.addTarget(self, action: #selector(recordTestToggleClicked), for: .touchUpInside)
 
 
 
@@ -524,7 +540,7 @@ class ViewController: UIViewController {
     }
 
     // Toggle button
-    @IBAction func micToggleClicked(_ sender: UIButton) {
+    @IBAction func recordTestToggleClicked(_ sender: UIButton) {
         RequestCameraAccess() { (granted) in
             self.m_requestMicrophoneAccess()
         }
