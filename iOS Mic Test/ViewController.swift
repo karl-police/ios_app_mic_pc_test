@@ -425,7 +425,7 @@ class ViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.debugTextBoxOut.topAnchor, constant: -10),
-            tableView.heightAnchor.constraint(equalToConstant: 200)
+            tableView.heightAnchor.constraint(equalToConstant: 180)
         ])
 
 
