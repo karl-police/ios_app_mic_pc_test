@@ -587,6 +587,17 @@ class ViewController: UIViewController {
         self.view.endEditing(true) // Dismiss the keyboard
     }
 
+
+    // Recalculate constraints on orientation change
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        coordinator.animate(alongsideTransition: { _ in
+            self.view.setNeedsUpdateConstraints()  // Request constraint updates
+            self.view.layoutIfNeeded()  // Apply updated constraints immediately
+        })
+    }
+
     
     // Pop-up Prompt thing
     func showAlert(_ msg: String) {
