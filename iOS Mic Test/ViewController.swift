@@ -742,7 +742,7 @@ class ViewController: UIViewController {
 
         btnMicToggle.setTitle("Stop Mic", for: .normal)
     }
-    func stop_startVoIPMic() {
+    func stop_VoIPMic() {
         do {
             try self.audioManager.stop_VoIP()
         } catch {
@@ -761,7 +761,7 @@ class ViewController: UIViewController {
 
                         self.start_VoIPMic()
                     } else {
-                        self.stop_startVoIPMic()
+                        self.stop_VoIPMic()
                         self.is_VoIP_active = false
                     }
                 }
