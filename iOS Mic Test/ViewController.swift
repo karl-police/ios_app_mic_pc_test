@@ -633,6 +633,7 @@ class ViewController: UIViewController {
     }
 
     // Recalculate constraints on orientation change
+    // This probably isn't needed though...
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
