@@ -352,13 +352,26 @@ class AudioManager {
             throw error
         }
     }
+
     func stopRecording() throws {
         audioRecorder?.stop()
         try AVAudioSession.sharedInstance().setActive(false)
     }
 
 
+
     // VoIP
+    func setup_VoIP() throws {
+        let session = AVAudioSession.sharedInstance()
+
+        do {
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
+            try session.setActive(true)
+        } catch {
+            throw error
+        }
+    }
+
     func start_VoIP() throws {
 
     }
