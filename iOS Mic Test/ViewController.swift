@@ -329,6 +329,8 @@ class AudioTestEngine {
     init() {
         audioEngine = AVAudioEngine()
         audioSettings = AudioSettings()
+
+        setup()
     }
 
     func startRecordingEngine() throws {
@@ -488,11 +490,11 @@ class AudioManager {
             // Call this because .stop() may be removing
             // some allocated nodes that we need to ensure
             // exist
-            audioTest.setup()
+            //audioTest.setup()
 
             //audioEngine.prepare()
-            audioTest.audioEngine.prepare()
-            try self.setup_VoIP()
+            //audioTest.audioEngine.prepare()
+            //try self.setup_VoIP()
             //try audioEngine.start()
             try audioTest.startRecordingEngine()
         } catch {
