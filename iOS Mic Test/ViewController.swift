@@ -482,6 +482,7 @@ class AudioManager {
         //var audioEngine = AVAudioEngine()
         try AVAudioSession.sharedInstance().setActive(false)
         //try audioEngine.stop()
+        try audioTest.stopRecordingEngine()
     }
 }
 
