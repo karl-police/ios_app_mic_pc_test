@@ -468,6 +468,11 @@ class AudioManager {
             var inputNode = audioEngine.inputNode
             var audioFormat = inputNode.inputFormat(forBus: 0)*/
 
+            // Call this because .stop() may be removing
+            // some allocated nodes that we need to ensure
+            // exist
+            audioTest.init()
+
             //audioEngine.prepare()
             audioTest.audioEngine.prepare()
             try self.setup_VoIP()
