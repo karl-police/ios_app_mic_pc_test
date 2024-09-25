@@ -310,27 +310,32 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
     }
 }
 
-class AudioTestEngine {
+
+
+class AudioEngineManager {
     var audioEngine: AVAudioEngine!
-    private var inputNode: AVAudioInputNode!
-    private var audioFile: AVAudioFile?
+    var inputNode: AVAudioInputNode!
     private var audioFormat: AVAudioFormat!
 
-    public var audioSettings: AudioSettingsClass
+    var tempError: Error? // Property to hold temporary error
 
-    private var selectedDevice: AVCaptureDevice?
-    var error: Error? // Property to hold error
+    var audioSettings: AudioSettingsClass
 
-    func setup() {
+
+    init(withAudioSettings: AudioSettingsClass) {
+        audioEngine = AVAudioEngine()
+        audioSettings = withAudioSettings
+    }
+
+    // It's important to call this function before starting the Engine
+    func setupInit() {
         inputNode = audioEngine.inputNode
         audioFormat = inputNode.inputFormat(forBus: 0)
     }
 
-    init() {
-        audioEngine = AVAudioEngine()
-        audioSettings = AudioSettingsClass()
-    }
 
+
+    // Temp testing
     func startRecordingEngine() throws {
         // Create a file URL to save the audio
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
@@ -370,29 +375,6 @@ class AudioTestEngine {
         inputNode.removeTap(onBus: 0)
         audioEngine.stop()
         self.cleanUpReset()
-    }
-}
-
-
-class AudioEngineManager {
-    var audioEngine: AVAudioEngine!
-    var inputNode: AVAudioInputNode!
-    private var audioFormat: AVAudioFormat!
-
-    var tempError: Error? // Property to hold temporary error
-
-    var audioSettings: AudioSettingsClass
-
-
-    init(withAudioSettings: AudioSettingsClass) {
-        audioEngine = AVAudioEngine()
-        audioSettings = withAudioSettings
-    }
-
-    // It's important to call this function before starting the Engine
-    func setupInit() {
-        inputNode = audioEngine.inputNode
-        audioFormat = inputNode.inputFormat(forBus: 0)
     }
 }
 
@@ -486,12 +468,11 @@ class AudioManager {
             // Call this because .stop() used with .preare() may be removing
             // some allocated nodes that we need to ensure
             // exist
-            //audioTest.setup()
+            audioEngineManager.setupInit()
 
-            //audioTest.audioEngine.prepare()
+            audioEngineManager.audioEngine.prepare()
             try self.setup_VoIP()
-            //try audioEngine.start()
-            //try audioTest.startRecordingEngine()
+            try audioEngineManager.startRecordingEngine()
         } catch {
             throw error
         }
@@ -499,7 +480,7 @@ class AudioManager {
 
     func stop_VoIP() throws {
         try AVAudioSession.sharedInstance().setActive(false)
-        //try audioTest.stopRecordingEngine()
+        try audioEngineManager.stopRecordingEngine()
     }
 }
 
