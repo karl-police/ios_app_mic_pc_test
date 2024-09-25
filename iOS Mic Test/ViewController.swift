@@ -321,11 +321,16 @@ class AudioTestEngine {
     private var selectedDevice: AVCaptureDevice?
     var error: Error? // Property to hold error
 
-    init() {
-        audioEngine = AVAudioEngine()
+    func setup() {
         inputNode = audioEngine.inputNode
         audioFormat = inputNode.inputFormat(forBus: 0)
+    }
+
+    init() {
+        audioEngine = AVAudioEngine()
         audioSettings = AudioSettings()
+
+        setup()
     }
 
     func startRecordingEngine() throws {
@@ -471,7 +476,7 @@ class AudioManager {
             // Call this because .stop() may be removing
             // some allocated nodes that we need to ensure
             // exist
-            audioTest.init()
+            audioTest.setup()
 
             //audioEngine.prepare()
             audioTest.audioEngine.prepare()
