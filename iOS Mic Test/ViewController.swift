@@ -321,15 +321,16 @@ class AudioTestEngine {
     private var selectedDevice: AVCaptureDevice?
     var error: Error? // Property to hold error
 
+    func setup() {
+        inputNode = audioEngine.inputNode
+        audioFormat = inputNode.inputFormat(forBus: 0)
+    }
 
     init() {
         audioEngine = AVAudioEngine()
         audioSettings = AudioSettings()
-    }
 
-    func setup() {
-        inputNode = audioEngine.inputNode
-        audioFormat = inputNode.inputFormat(forBus: 0)
+        setup()
     }
 
     func startRecordingEngine() throws {
@@ -377,6 +378,9 @@ class AudioTestEngine {
 
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
+    private var inputNode: AVAudioInputNode!
+    private var audioFormat: AVAudioFormat!
+
 
     init() {
         audioEngine = AVAudioEngine()
