@@ -381,9 +381,12 @@ class AudioEngineManager {
 
     var tempError: Error? // Property to hold temporary error
 
+    var audioSettings: AudioSettingsClass
 
-    init() {
+
+    init(withAudioSettings: AudioSettingsClass) {
         audioEngine = AVAudioEngine()
+        audioSettings = withAudioSettings
     }
 
     // It's important to call this function before starting the Engine
@@ -398,7 +401,7 @@ class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettingsClass()
 
-    var audioEngineManager = AudioEngineManager()
+    var audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
 
 
     func setupAudioSession() throws {
