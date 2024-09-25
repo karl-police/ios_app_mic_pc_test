@@ -480,16 +480,15 @@ class AudioManager {
 
     func start_VoIP() throws {
         do {
-            // Call this because .stop() may be removing
+            // Call this because .stop() used with .preare() may be removing
             // some allocated nodes that we need to ensure
             // exist
-            audioTest.setup()
+            //audioTest.setup()
 
-            //audioEngine.prepare()
-            audioTest.audioEngine.prepare()
+            //audioTest.audioEngine.prepare()
             try self.setup_VoIP()
             //try audioEngine.start()
-            try audioTest.startRecordingEngine()
+            //try audioTest.startRecordingEngine()
         } catch {
             throw error
         }
@@ -497,7 +496,7 @@ class AudioManager {
 
     func stop_VoIP() throws {
         try AVAudioSession.sharedInstance().setActive(false)
-        try audioTest.stopRecordingEngine()
+        //try audioTest.stopRecordingEngine()
     }
 }
 
