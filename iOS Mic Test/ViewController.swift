@@ -311,7 +311,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 }
 
 class AudioTestEngine {
-    private var audioEngine: AVAudioEngine!
+    var audioEngine: AVAudioEngine!
     private var inputNode: AVAudioInputNode!
     private var audioFile: AVAudioFile?
     private var audioFormat: AVAudioFormat!
@@ -463,6 +463,7 @@ class AudioManager {
             var audioFormat = inputNode.inputFormat(forBus: 0)*/
 
             //audioEngine.prepare()
+            try audioTestin.audioEngine.prepare()
             try self.setup_VoIP()
             //try audioEngine.start()
             try audioTest.startRecordingEngine()
