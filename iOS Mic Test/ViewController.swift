@@ -666,7 +666,16 @@ class ViewController: UIViewController {
         }
     }
     @IBAction func action_micToggleClicked(_ sender: UIButton) {
-        self.m_toggle_MicVoIP()
+        //self.m_toggle_MicVoIP()
+
+        if (self.is_VoIP_active == false) {
+            self.is_VoIP_active = true
+
+            self.start_VoIPMic()
+        } else {
+            self.stop_VoIPMic()
+            self.is_VoIP_active = false
+        }
     }
 
 
