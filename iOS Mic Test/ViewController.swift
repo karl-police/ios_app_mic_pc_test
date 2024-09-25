@@ -447,7 +447,7 @@ class AudioManager {
 
         do {
             try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
-            //try session.setActive(true)
+            try session.setActive(true)
         } catch {
             throw error
         }
@@ -461,7 +461,7 @@ class AudioManager {
             var audioFormat = inputNode.inputFormat(forBus: 0)
 
             //audioEngine.prepare()
-            //try self.setup_VoIP()
+            try self.setup_VoIP()
             try audioEngine.start()
         } catch {
             throw error
@@ -470,7 +470,7 @@ class AudioManager {
 
     func stop_VoIP() throws {
         var audioEngine = AVAudioEngine()
-        //try AVAudioSession.sharedInstance().setActive(false)
+        try AVAudioSession.sharedInstance().setActive(false)
         try audioEngine.stop()
     }
 }
