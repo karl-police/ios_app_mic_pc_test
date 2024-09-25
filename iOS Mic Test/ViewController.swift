@@ -374,6 +374,9 @@ class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettings()
 
+    //var audioEngine: AVAudioEngine!
+
+
     func setupAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
         
@@ -466,6 +469,7 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
+        var audioEngine = AVAudioEngine()
         //try AVAudioSession.sharedInstance().setActive(false)
         try audioEngine.stop()
     }
