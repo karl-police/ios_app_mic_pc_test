@@ -310,7 +310,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
     }
 }
 
-class AudioTestEngine {
+/*class AudioTestEngine {
     private var audioEngine: AVAudioEngine!
     private var inputNode: AVAudioInputNode!
     private var audioFile: AVAudioFile?
@@ -368,7 +368,7 @@ class AudioTestEngine {
         audioEngine.stop()
         self.cleanUpReset()
     }
-}
+}*/
 
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
@@ -450,8 +450,6 @@ class AudioManager {
         }
     }
 
-    var audioEngine = try AudioTestEngine()
-
     func start_VoIP() throws {
         do {
             // testing
@@ -462,14 +460,14 @@ class AudioManager {
             //audioEngine.prepare()
             //try self.setup_VoIP()
             try audioEngine.start()
-            //try audioEngine.startRecordingEngine()
         } catch {
             throw error
         }
     }
 
     func stop_VoIP() throws {
-        try AVAudioSession.sharedInstance().setActive(false)
+        //try AVAudioSession.sharedInstance().setActive(false)
+        try audioEngine.stop()
     }
 }
 
