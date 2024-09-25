@@ -329,8 +329,6 @@ class AudioTestEngine {
     init() {
         audioEngine = AVAudioEngine()
         audioSettings = AudioSettings()
-
-        setup()
     }
 
     func startRecordingEngine() throws {
