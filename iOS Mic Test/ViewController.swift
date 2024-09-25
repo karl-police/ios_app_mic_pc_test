@@ -452,7 +452,7 @@ class AudioManager {
         let session = AVAudioSession.sharedInstance()
 
         do {
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
+            try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             //try session.setActive(true)
         } catch {
             throw error
@@ -469,7 +469,7 @@ class AudioManager {
             var audioFormat = inputNode.inputFormat(forBus: 0)*/
 
             //audioEngine.prepare()
-            try audioTest.audioEngine.prepare()
+            audioTest.audioEngine.prepare()
             try self.setup_VoIP()
             //try audioEngine.start()
             try audioTest.startRecordingEngine()
