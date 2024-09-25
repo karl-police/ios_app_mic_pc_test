@@ -405,7 +405,7 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        try AVAudioSession.sharedInstance().setActive(false)
+        //try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
