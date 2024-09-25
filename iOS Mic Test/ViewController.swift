@@ -455,21 +455,21 @@ class AudioManager {
     func start_VoIP() throws {
         do {
             // testing
-            //var audioEngine = try AVAudioEngine()
-            
+            var audioEngine = AVAudioEngine()
+            var inputNode = audioEngine.inputNode
+            var audioFormat = inputNode.inputFormat(forBus: 0)
 
             //audioEngine.prepare()
             //try self.setup_VoIP()
-            //try audioEngine.start()
-            try audioEngine.startRecordingEngine()
+            try audioEngine.start()
+            //try audioEngine.startRecordingEngine()
         } catch {
             throw error
         }
     }
 
     func stop_VoIP() throws {
-        //try AVAudioSession.sharedInstance().setActive(false)
-        try audioEngine.stopRecordingEngine()
+        try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
@@ -856,7 +856,6 @@ class ViewController: UIViewController {
         }
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
-        shareRecordedAudio() // temp
     }
 
     func m_toggle_MicVoIP() {
