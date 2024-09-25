@@ -115,7 +115,7 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
     return session.devices
 }
 
-struct AudioSettings {
+class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 44100.0
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
@@ -316,7 +316,7 @@ class AudioTestEngine {
     private var audioFile: AVAudioFile?
     private var audioFormat: AVAudioFormat!
 
-    public var audioSettings: AudioSettings
+    public var audioSettings: AudioSettingsClass
 
     private var selectedDevice: AVCaptureDevice?
     var error: Error? // Property to hold error
@@ -328,7 +328,7 @@ class AudioTestEngine {
 
     init() {
         audioEngine = AVAudioEngine()
-        audioSettings = AudioSettings()
+        audioSettings = AudioSettingsClass()
     }
 
     func startRecordingEngine() throws {
@@ -376,8 +376,10 @@ class AudioTestEngine {
 
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
-    private var inputNode: AVAudioInputNode!
+    var inputNode: AVAudioInputNode!
     private var audioFormat: AVAudioFormat!
+
+    var tempError: Error? // Property to hold temporary error
 
 
     init() {
@@ -394,9 +396,9 @@ class AudioEngineManager {
 
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
-    var audioSettings = AudioSettings()
+    var audioSettings = AudioSettingsClass()
 
-    //var audioEngineManager = AudioEngineManager()
+    var audioEngineManager = AudioEngineManager()
 
 
     func setupAudioSession() throws {
@@ -476,15 +478,8 @@ class AudioManager {
         }
     }
 
-    var audioTest = AudioTestEngine()
-
     func start_VoIP() throws {
         do {
-            // testing
-            /*var audioEngine = try AVAudioEngine()
-            var inputNode = audioEngine.inputNode
-            var audioFormat = inputNode.inputFormat(forBus: 0)*/
-
             // Call this because .stop() may be removing
             // some allocated nodes that we need to ensure
             // exist
@@ -501,9 +496,7 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        //var audioEngine = AVAudioEngine()
-        //try AVAudioSession.sharedInstance().setActive(false)
-        //try audioEngine.stop()
+        try AVAudioSession.sharedInstance().setActive(false)
         try audioTest.stopRecordingEngine()
     }
 }
