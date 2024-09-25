@@ -465,7 +465,7 @@ class AudioManager {
             //audioEngine.prepare()
             try self.setup_VoIP()
             //try audioEngine.start()
-            audioTest.startRecordingEngine()
+            try audioTest.startRecordingEngine()
         } catch {
             throw error
         }
