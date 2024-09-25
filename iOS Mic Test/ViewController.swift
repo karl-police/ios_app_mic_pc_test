@@ -370,6 +370,12 @@ class AudioTestEngine {
     }
 }
 
+
+class AudioEngineManager {
+    var audioEngine: AVAudioEngine!
+}
+
+
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettings()
