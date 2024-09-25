@@ -319,7 +319,9 @@ class AudioEngineManager {
 
     var tempError: Error? // Property to hold temporary error
 
-    var audioSettings: AudioSettingsClass
+    var audioSettings: AudioSettingsClass!
+
+    var audioFile: AVAudioFile?
 
 
     init(withAudioSettings: AudioSettingsClass) {
@@ -352,7 +354,7 @@ class AudioEngineManager {
                     // Write the buffer to the audio file
                     try self.audioFile?.write(from: buffer)
                 } catch {
-                    self.error = error
+                    self.tempError = error
                 }
             }
 
@@ -367,7 +369,7 @@ class AudioEngineManager {
 
     func cleanUpReset() {
         self.audioFile = nil
-        self.error = nil
+        self.tempError = nil
     }
 
     func stopRecordingEngine() {
@@ -383,7 +385,12 @@ class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettingsClass()
 
-    var audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
+    var audioEngineManager: AudioEngineManager!
+
+    // Init function
+    init() {
+        self.audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
+    }
 
 
     func setupAudioSession() throws {
@@ -759,7 +766,7 @@ class ViewController: UIViewController {
                 // File sharing canceled or failed
             }
             
-            // Now we can safely delete the file whether or not the sharing was completed
+            // Is this even needed?
             do {
                 try FileManager.default.removeItem(at: audioFilename)
                 print("Recording file deleted.")
