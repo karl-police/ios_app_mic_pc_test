@@ -447,7 +447,7 @@ class AudioManager {
 
         do {
             try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
-            try session.setActive(true)
+            //try session.setActive(true)
         } catch {
             throw error
         }
