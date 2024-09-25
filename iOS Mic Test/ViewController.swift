@@ -456,7 +456,7 @@ class AudioManager {
     func start_VoIP() throws {
         do {
             // testing
-            var audioEngine = AVAudioEngine()
+            var audioEngine = try AVAudioEngine()
             var inputNode = audioEngine.inputNode
             var audioFormat = inputNode.inputFormat(forBus: 0)
 
