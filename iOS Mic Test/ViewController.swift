@@ -639,14 +639,14 @@ class ViewController: UIViewController {
 
     // Recalculate constraints on orientation change
     // This probably isn't needed though...
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    /*override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
         coordinator.animate(alongsideTransition: { _ in
             self.view.setNeedsUpdateConstraints()  // Request constraint updates
             self.view.layoutIfNeeded()  // Apply updated constraints immediately
         })
-    }
+    }*/
 
     
     // Pop-up Prompt thing
