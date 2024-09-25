@@ -779,19 +779,19 @@ class ViewController: UIViewController {
             try self.audioManager.start_VoIP()
         } catch {
             // Handle Error
-            self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
+            //self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
         }
 
-        btnMicToggle.setTitle("Stop Mic", for: .normal)
+        //btnMicToggle.setTitle("Stop Mic", for: .normal)
     }
     func stop_VoIPMic() {
         do {
             try self.audioManager.stop_VoIP()
         } catch {
-            self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
+            //self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
         }
 
-        btnMicToggle.setTitle("Start Mic", for: .normal)
+        //btnMicToggle.setTitle("Start Mic", for: .normal)
     }
 
     func m_toggle_MicVoIP() {
@@ -808,7 +808,7 @@ class ViewController: UIViewController {
                         self.is_VoIP_active = false
                     }
                 } else {
-                    self.showAlert("Microphone access denied!")
+                    //self.showAlert("Microphone access denied!")
                 }
             }
             
