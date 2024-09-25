@@ -470,7 +470,7 @@ class AudioManager {
 
             //audioEngine.prepare()
             try audioTest.audioEngine.prepare()
-            try self.setup_VoIP()
+            //try self.setup_VoIP()
             //try audioEngine.start()
             try audioTest.startRecordingEngine()
         } catch {
