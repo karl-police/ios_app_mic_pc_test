@@ -396,7 +396,7 @@ class AudioManager {
             // testing
             var audioEngine = AVAudioEngine()
 
-            audioEngine.prepare()
+            //audioEngine.prepare()
             //try self.setup_VoIP()
             try audioEngine.start()
         } catch {
