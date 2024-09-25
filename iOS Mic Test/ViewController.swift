@@ -310,6 +310,92 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
     }
 }
 
+class AudioTestEngine {
+    private var audioEngine: AVAudioEngine!
+    private var inputNode: AVAudioInputNode!
+    private var audioFile: AVAudioFile?
+    private var audioFormat: AVAudioFormat!
+
+    public var audioSettings: AudioSettings
+
+    private var selectedDevice: AVCaptureDevice?
+    var error: Error? // Property to hold error
+
+    init() {
+        audioEngine = AVAudioEngine()
+        inputNode = audioEngine.inputNode
+        audioFormat = inputNode.inputFormat(forBus: 0)
+        audioSettings = AudioSettings()
+    }
+
+    func startRecordingEngine() throws {
+        // Create a file URL to save the audio
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
+        
+        do {
+            // Create the audio file
+            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+            
+            // Install a tap on the input node
+            inputNode.installTap(
+                onBus: 0, bufferSize: self.audioSettings.bufferSize, format: audioFormat
+            ) { (buffer, time) in
+                do {
+                    // Write the buffer to the audio file
+                    try self.audioFile?.write(from: buffer)
+                } catch {
+                    self.error = error
+                }
+            }
+
+            // Start the audio engine
+            try audioEngine.start()
+        } catch {
+            // Clean up in case of an error
+            cleanUpReset()
+            throw error
+        }
+    }
+
+    func cleanUpReset() {
+        self.audioFile = nil
+        self.error = nil
+    }
+
+    func stopRecordingEngine() {
+        // Remove the tap and stop the audio engine
+        inputNode.removeTap(onBus: 0)
+        audioEngine.stop()
+        self.cleanUpReset()
+    }
+
+
+    // Start streaming audio
+    func startAudioStream() throws {
+        audioEngine = AVAudioEngine()
+        
+        let inputNode = audioEngine.inputNode
+        let inputFormat = inputNode.inputFormat(forBus: 0)
+
+        inputNode.installTap(onBus: 0, bufferSize: self.audioSettings.bufferSize, format: inputFormat) { (buffer, time) in
+            // Handle the audio buffer here
+        }
+        
+        do {
+            try audioEngine.start()
+            // Started
+        } catch {
+            //throw "Error starting audio stream: \(error.localizedDescription)"
+            throw error
+        }
+    }
+
+    // Stop streaming audio
+    func stopAudioStream() {
+        audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
+    }
+}
 
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
@@ -394,11 +480,13 @@ class AudioManager {
     func start_VoIP() throws {
         do {
             // testing
-            var audioEngine = try AVAudioEngine()
+            //var audioEngine = try AVAudioEngine()
+            var audioEngine = try AudioTestEngine()
 
-            audioEngine.prepare()
+            //audioEngine.prepare()
             //try self.setup_VoIP()
-            try audioEngine.start()
+            //try audioEngine.start()
+            try audioEngine.startRecordingEngine()
         } catch {
             throw error
         }
@@ -639,14 +727,14 @@ class ViewController: UIViewController {
 
     // Recalculate constraints on orientation change
     // This probably isn't needed though...
-    /*override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
         coordinator.animate(alongsideTransition: { _ in
             self.view.setNeedsUpdateConstraints()  // Request constraint updates
             self.view.layoutIfNeeded()  // Apply updated constraints immediately
         })
-    }*/
+    }
 
     
     // Pop-up Prompt thing
@@ -666,16 +754,7 @@ class ViewController: UIViewController {
         }
     }
     @IBAction func action_micToggleClicked(_ sender: UIButton) {
-        //self.m_toggle_MicVoIP()
-
-        if (self.is_VoIP_active == false) {
-            self.is_VoIP_active = true
-
-            self.start_VoIPMic()
-        } else {
-            self.stop_VoIPMic()
-            self.is_VoIP_active = false
-        }
+        self.m_toggle_MicVoIP()
     }
 
 
