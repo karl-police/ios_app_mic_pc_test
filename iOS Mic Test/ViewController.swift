@@ -463,7 +463,7 @@ class AudioManager {
             var audioFormat = inputNode.inputFormat(forBus: 0)*/
 
             //audioEngine.prepare()
-            try audioTesting.audioEngine.prepare()
+            try audioTest.audioEngine.prepare()
             try self.setup_VoIP()
             //try audioEngine.start()
             try audioTest.startRecordingEngine()
