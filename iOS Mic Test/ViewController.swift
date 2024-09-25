@@ -334,7 +334,7 @@ class AudioTestEngine {
         
         do {
             // Create the audio file
-            /*audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
             
             // Install a tap on the input node
             inputNode.installTap(
@@ -346,7 +346,7 @@ class AudioTestEngine {
                 } catch {
                     self.error = error
                 }
-            }*/
+            }
 
             // Start the audio engine
             try audioEngine.start()
@@ -629,16 +629,16 @@ class ViewController: UIViewController {
         // Update the data sources, I guess
         let session = AVAudioSession.sharedInstance()
         if let inputDataSources = session.inputDataSources, !inputDataSources.isEmpty {
-            //self.polarPatternTableView.updateInputDataSources(inputDataSources)
+            self.polarPatternTableView.updateInputDataSources(inputDataSources)
         }
 
         // Set up callback when a polar pattern is selected
         polarPatternTableView.onDataSourceSelected = { [weak self] selectedDataSource in
-            //self?.updateDataSource(selectedDataSource)
+            self?.updateDataSource(selectedDataSource)
         }
 
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
-            //self?.updatePolarPattern(selectedPattern)
+            self?.updatePolarPattern(selectedPattern)
         }
     }
 
