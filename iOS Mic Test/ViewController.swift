@@ -368,33 +368,6 @@ class AudioTestEngine {
         audioEngine.stop()
         self.cleanUpReset()
     }
-
-
-    // Start streaming audio
-    func startAudioStream() throws {
-        audioEngine = AVAudioEngine()
-        
-        let inputNode = audioEngine.inputNode
-        let inputFormat = inputNode.inputFormat(forBus: 0)
-
-        inputNode.installTap(onBus: 0, bufferSize: self.audioSettings.bufferSize, format: inputFormat) { (buffer, time) in
-            // Handle the audio buffer here
-        }
-        
-        do {
-            try audioEngine.start()
-            // Started
-        } catch {
-            //throw "Error starting audio stream: \(error.localizedDescription)"
-            throw error
-        }
-    }
-
-    // Stop streaming audio
-    func stopAudioStream() {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-    }
 }
 
 class AudioManager {
@@ -477,11 +450,13 @@ class AudioManager {
         }
     }
 
+    var audioEngine = try AudioTestEngine()
+
     func start_VoIP() throws {
         do {
             // testing
             //var audioEngine = try AVAudioEngine()
-            var audioEngine = try AudioTestEngine()
+            
 
             //audioEngine.prepare()
             //try self.setup_VoIP()
@@ -493,7 +468,8 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        try AVAudioSession.sharedInstance().setActive(false)
+        //try AVAudioSession.sharedInstance().setActive(false)
+        try audioEngine.stopRecordingEngine()
     }
 }
 
@@ -880,6 +856,7 @@ class ViewController: UIViewController {
         }
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
+        shareRecordedAudio() // temp
     }
 
     func m_toggle_MicVoIP() {
