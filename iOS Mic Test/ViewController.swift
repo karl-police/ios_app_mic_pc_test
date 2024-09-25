@@ -393,9 +393,10 @@ class AudioManager {
 
     func start_VoIP() throws {
         do {
-            var audioEngine = try AudioEngine()
+            // testing
+            var audioEngine = try AVAudioEngine()
 
-            audioEngine.setup()
+            audioEngine.prepare()
             try self.setup_VoIP()
             audioEngine.start()
         } catch {
