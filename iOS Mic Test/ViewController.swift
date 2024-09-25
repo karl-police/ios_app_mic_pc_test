@@ -334,7 +334,7 @@ class AudioTestEngine {
         
         do {
             // Create the audio file
-            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+            /*audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
             
             // Install a tap on the input node
             inputNode.installTap(
@@ -346,7 +346,7 @@ class AudioTestEngine {
                 } catch {
                     self.error = error
                 }
-            }
+            }*/
 
             // Start the audio engine
             try audioEngine.start()
