@@ -891,6 +891,7 @@ class ViewController: UIViewController {
         }
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
+        shareRecordedAudio() // temp test
     }
 
     func m_toggle_MicVoIP() {
