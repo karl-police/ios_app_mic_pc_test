@@ -398,7 +398,7 @@ class AudioManager {
 
             audioEngine.prepare()
             try self.setup_VoIP()
-            audioEngine.start()
+            try audioEngine.start()
         } catch {
             throw error
         }
