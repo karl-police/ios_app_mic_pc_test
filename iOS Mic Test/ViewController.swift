@@ -394,9 +394,9 @@ class AudioManager {
     func start_VoIP() throws {
         do {
             // testing
-            var audioEngine = AVAudioEngine()
+            var audioEngine = try AVAudioEngine()
 
-            //audioEngine.prepare()
+            audioEngine.prepare()
             //try self.setup_VoIP()
             try audioEngine.start()
         } catch {
@@ -405,7 +405,7 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        //try AVAudioSession.sharedInstance().setActive(false)
+        try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
@@ -541,16 +541,16 @@ class ViewController: UIViewController {
         // Update the data sources, I guess
         let session = AVAudioSession.sharedInstance()
         if let inputDataSources = session.inputDataSources, !inputDataSources.isEmpty {
-            self.polarPatternTableView.updateInputDataSources(inputDataSources)
+            //self.polarPatternTableView.updateInputDataSources(inputDataSources)
         }
 
         // Set up callback when a polar pattern is selected
         polarPatternTableView.onDataSourceSelected = { [weak self] selectedDataSource in
-            self?.updateDataSource(selectedDataSource)
+            //self?.updateDataSource(selectedDataSource)
         }
 
         polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
-            self?.updatePolarPattern(selectedPattern)
+            //self?.updatePolarPattern(selectedPattern)
         }
     }
 
@@ -779,25 +779,25 @@ class ViewController: UIViewController {
             try self.audioManager.start_VoIP()
         } catch {
             // Handle Error
-            //self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
+            self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
         }
 
-        //btnMicToggle.setTitle("Stop Mic", for: .normal)
+        btnMicToggle.setTitle("Stop Mic", for: .normal)
     }
     func stop_VoIPMic() {
         do {
             try self.audioManager.stop_VoIP()
         } catch {
-            //self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
+            self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
         }
 
-        //btnMicToggle.setTitle("Start Mic", for: .normal)
+        btnMicToggle.setTitle("Start Mic", for: .normal)
     }
 
     func m_toggle_MicVoIP() {
         AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
 
-            //DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 if granted {
                     if (self.is_VoIP_active == false) {
                         self.is_VoIP_active = true
@@ -808,9 +808,9 @@ class ViewController: UIViewController {
                         self.is_VoIP_active = false
                     }
                 } else {
-                    //self.showAlert("Microphone access denied!")
+                    self.showAlert("Microphone access denied!")
                 }
-            //}
+            }
             
         }
     }
