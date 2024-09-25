@@ -378,6 +378,16 @@ class AudioTestEngine {
 
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
+
+    init() {
+        audioEngine = AVAudioEngine()
+    }
+
+    // It's important to call this function before starting the Engine
+    func setupInit() {
+        inputNode = audioEngine.inputNode
+        audioFormat = inputNode.inputFormat(forBus: 0)
+    }
 }
 
 
@@ -385,7 +395,7 @@ class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettings()
 
-    //var audioEngine: AVAudioEngine!
+    //var audioEngineManager = AudioEngineManager()
 
 
     func setupAudioSession() throws {
@@ -458,7 +468,7 @@ class AudioManager {
 
         do {
             //try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
+            try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             //try session.setActive(true)
         } catch {
             throw error
