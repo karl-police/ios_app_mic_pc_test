@@ -403,14 +403,14 @@ class NetworkVoiceTCPServer : TCPServer {
         case .ready:
             // If this part reaches
             // It means that we should verify whether we really want to connect or not.
-            UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
+            self.UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
             self.m_customHandshake(connection)
         case .failed(let error):
-            UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
+            self.UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
-            UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+            self.UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
         default:
             break
         }
