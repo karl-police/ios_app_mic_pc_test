@@ -400,15 +400,15 @@ class AudioEngineManager {
 
 
     init(withAudioSettings: AudioSettingsClass) {
-        audioEngine = AVAudioEngine()
-        audioSettings = withAudioSettings
+        self.audioEngine = AVAudioEngine()
+        self.audioSettings = withAudioSettings
     }
 
     // It's important to call this function before starting the Engine
     // Or anything else, e.g. installTap
     func setupInit() {
-        inputNode = audioEngine.inputNode
-        audioFormat = inputNode.inputFormat(forBus: 0)
+        self.inputNode = audioEngine.inputNode
+        self.audioFormat = inputNode.inputFormat(forBus: 0)
     }
 
 
@@ -418,7 +418,6 @@ class AudioEngineManager {
     }
 
 
-
     // For Testing
     func startRecordingEngine() throws {
         // Create a file URL to save the audio
@@ -426,7 +425,7 @@ class AudioEngineManager {
         
         do {
             // Create the audio file
-            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+            self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
             
             // Install a tap on the input node
             inputNode.installTap(
@@ -466,10 +465,12 @@ class AudioManager {
     var audioSettings = AudioSettingsClass()
 
     var audioEngineManager: AudioEngineManager!
+    var networkVoiceManager: NetworkVoiceManager!
 
     // Init function
     init() {
         self.audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
+        self.networkVoiceManager = NetworkVoiceManager()
     }
 
 
@@ -556,6 +557,8 @@ class AudioManager {
             // exist
             audioEngineManager.setupInit()
 
+            // Calling this requires setupInit to be called again when stopped
+            // Hence why the start function has setupInit again
             audioEngineManager.audioEngine.prepare()
             try self.setup_AudioSessionForVoIP()
             try audioEngineManager.startRecordingEngine()
