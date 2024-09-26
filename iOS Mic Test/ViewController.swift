@@ -367,7 +367,7 @@ class NetworkVoiceTCPServer : TCPServer {
         do {
             try super.startServer()
 
-            UI_Class_connectionLabel.setStatusConnectionText("Server Started at Port \(self.port.rawValue), Waiting...")
+            UI_Class_connectionLabel.setStatusConnectionText("Server started at Port \(self.port.rawValue)")
         } catch {
             UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
         }
