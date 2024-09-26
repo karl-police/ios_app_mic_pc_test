@@ -320,10 +320,15 @@ class TCPServer {
     var connection: NWConnection?
     var port: NWEndpoint.Port! // Different Type
 
-    init(port: UInt16) {
+    init(port: UInt16) throws {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: port)
-        startServer()
+        
+        do {
+            try startServer()
+        } catch {
+            throw error
+        }
     }
 
     func startServer() throws {
@@ -363,7 +368,7 @@ class TCPServer {
     And then there's also the protocol.
 ***/
 class NetworkVoiceManager {
-    var tcpConnection: NWConnection?
+    var tcpServer: TCPServer?
 
     init() {
         
