@@ -325,8 +325,12 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
     The next part in what format to send data as.
     And then there's also the protocol.
 ***/
-class NetworkConnectionManager {
+class NetworkVoiceManager {
+    var tcpConnection: NWConnection?
 
+    init() {
+        
+    }
 }
 
 
