@@ -379,9 +379,9 @@ class NetworkVoiceTCPServer : TCPServer {
                     content: response,
                     completion: .contentProcessed { error in 
                         if let error = error {
-                            UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
+                            self.UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
                         } else {
-                            UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
+                            self.UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
                         }
                     }
                 )
