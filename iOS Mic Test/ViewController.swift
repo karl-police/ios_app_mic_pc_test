@@ -314,6 +314,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
+// A Class to Host a Server.
 class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
@@ -324,8 +325,22 @@ class TCPServer {
         setupTCPServer()
     }
 
-    private func setupTCPServer() {
+    func startServer() throws {
+        do {
+            self.listener = try NWListener(using: .tcp, on: self.port)
 
+            listener?.newConnectionHandler = { newConnection in 
+                self.handleConnection(newConnection)
+            }
+        } catch {
+            throw error
+        }
+    }
+
+
+    func stopServer() {
+        self.listener?.cancel()
+        self.listener = nil
     }
 }
 
