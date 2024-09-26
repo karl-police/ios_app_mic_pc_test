@@ -320,22 +320,23 @@ class TCPServer {
     var connection: NWConnection?
 
     // Different Type
-    var port: NWEndpoint.Port!
+    var port: NWEndpoint.Port = NWEndpoint.Port(rawValue: 1234)
+
+    // Changeable handler for connections
+    // Methods can't be changed hence why this is a variable
+    var handleConnection: ((NWConnection) -> Void)!
+
 
     // Set a pre-defined empty handleConnection
     func defaultHandleConnection(connection: NWConnection) {
         connection.start(queue: .main)
     }
 
-    // Changeable handler for connections
-    // Methods can't be changed hence why this is a variable
-    var handleConnection: (NWConnection) -> Void = defaultHandleConnection
-
     // Init
     init(inputPort: UInt16) {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: inputPort)
-        //self.handleConnection = defaultHandleConnection
+        self.handleConnection = defaultHandleConnection
     }
     
 
