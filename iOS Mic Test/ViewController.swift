@@ -386,6 +386,14 @@ class TCPServer {
     And then there's also the protocol.
 ***/
 class NetworkVoiceServer : TCPServer {
+    override func handleConnection(_ connection: NWConnection) {
+        connection.stateUpdateHandler = { [weak self] state in
+            self?.connectionStateHandler(connection: connection, state: state)
+        }
+
+        connection.start(queue: .main)
+    }
+
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
         switch state {
         case .ready:
