@@ -319,7 +319,7 @@ class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
 
-    var port: NWEndpoint.Port! // Different Type
+    var port: NWEndpoint.Port // Different Type
 
     // Changeable handler for connections
     // Methods can't be changed hence why this is a variable
@@ -334,7 +334,7 @@ class TCPServer {
     // Init
     init(inputPort: UInt16) {
         // Port Constructor takes UInt16
-        self.port = NWEndpoint.Port(rawValue: inputPort)
+        self.port = NWEndpoint.Port(rawValue: inputPort)!
         self.handleConnection = defaultHandleConnection
     }
     
