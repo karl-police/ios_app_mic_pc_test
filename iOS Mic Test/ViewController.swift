@@ -406,7 +406,7 @@ class NetworkVoiceTCPServer : TCPServer {
             UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            self.customHandshake(connection)
+            self.m_customHandshake(connection)
         case .failed(let error):
             UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
