@@ -339,7 +339,7 @@ class TCPServer {
         self.port = NWEndpoint.Port(rawValue: port)
         
         do {
-            try startServer()
+            try self.startServer()
         } catch {
             throw error
         }
