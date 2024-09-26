@@ -320,7 +320,7 @@ class TCPServer {
     var connection: NWConnection?
 
     // Different Type
-    var port: NWEndpoint.Port = NWEndpoint.Port(rawValue: 8080)
+    var port: NWEndpoint.Port = NWEndpoint.Port(rawValue: 1234)
 
     // Changeable handler for connections
     // Methods can't be changed hence why this is a variable
