@@ -630,7 +630,7 @@ struct STR_TBL {
 
 
 class UI_NetworkStatus_SingletonClass {
-    struct StatusInfoStruct {
+    struct NetworkStatusInfoStruct {
         var connectionStatusText = "Not Connected"
         var localIP = "Not Retrieved"
     }
@@ -644,7 +644,7 @@ class UI_NetworkStatus_SingletonClass {
         return sharedInstance!
     }
 
-    var statusInfoStruct = StatusInfoStruct()
+    var statusInfoStruct = NetworkStatusInfoStruct()
     var ui_connectionLabel: UILabel!
     
     // Private static variable to hold the singleton instance
