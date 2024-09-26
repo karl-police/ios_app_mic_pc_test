@@ -323,16 +323,6 @@ class TCPServer {
     var handleConnection: (NWConnection) -> Void // Changeable handler for connections
 
 
-    // Set a pre-defined empty handleConnection
-    func handleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
-    }
-
-    // Custom behavior
-    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
-        self.handleConnection = handler
-    }
-
     // Init
     init(port: UInt16) throws {
         // Port Constructor takes UInt16
@@ -344,6 +334,17 @@ class TCPServer {
             throw error
         }
     }
+
+    // Set a pre-defined empty handleConnection
+    func handleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
+
+    // Custom behavior
+    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
+        self.handleConnection = handler
+    }
+
 
     func startServer() throws {
         do {
