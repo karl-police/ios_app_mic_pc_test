@@ -330,6 +330,10 @@ class NetworkVoiceTCPServer : TCPServer {
 
     var activeConnection: NWConnection? // Active Connection
 
+    override func handleNewConnection(_ newConnection: NWConnection) {
+        super.handleNewConnection(newConnection)
+    }
+
     override func handleConnection(_ connection: NWConnection) {
         UI_Class_connectionLabel.setStatusConnectionText("Waiting...")
 
@@ -362,6 +366,8 @@ class NetworkVoiceTCPServer : TCPServer {
 
         do {
             try super.startServer()
+
+            UI_Class_connectionLabel.setStatusConnectionText("Server Started at Port \(self.port.rawValue), Waiting...")
         } catch {
             UI_Class_connectionLabel.setStatusConnectionText("Error when starting \(error.localizedDescription)")
         }
