@@ -415,6 +415,12 @@ class NetworkVoiceTCPServer : TCPServer {
         self.activeConnection = nil
     }
 
+    override func startServer() {
+        UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
+        
+        super.startServer()
+    }
+
     override func stopServer() {
         super.stopServer()
 
@@ -432,6 +438,18 @@ class NetworkVoiceManager {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
+    }
+
+    func start() throws {
+        do {
+            try self.networkVoice_TCPServer.startServer()
+        } catch {
+            throw error
+        }
+    }
+
+    func stop() {
+        try self.networkVoice_TCPServer.stopServer()
     }
 }
 
@@ -610,14 +628,17 @@ class AudioManager {
             audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
-            try audioEngineManager.startRecordingEngine()
+
+            self.networkVoicemanager.start()
+
+            //try audioEngineManager.startRecordingEngine()
         } catch {
             throw error
         }
     }
 
     func stop_VoIP() throws {
-        audioEngineManager.stopRecordingEngine()
+        //audioEngineManager.stopRecordingEngine()
         
         // The order on when this gets called seems to be important
         try AVAudioSession.sharedInstance().setActive(false)
