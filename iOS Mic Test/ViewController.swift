@@ -400,6 +400,8 @@ class NetworkVoiceTCPServer : TCPServer {
         activeConnection = connection;
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+
+        // We can now do the streaming thing
     }
 
 
