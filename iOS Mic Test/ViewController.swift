@@ -591,6 +591,8 @@ class AudioManager {
 
     func stop_VoIP() throws {
         //audioEngineManager.stopRecordingEngine()
+
+        try self.networkVoiceManager.stop()
         
         // The order on when this gets called seems to be important
         try AVAudioSession.sharedInstance().setActive(false)
