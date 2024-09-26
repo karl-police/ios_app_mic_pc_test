@@ -326,8 +326,6 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
     And then there's also the protocol.
 ***/
 class NetworkVoiceTCPServer : TCPServer {
-    var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
-
     var activeConnection: NWConnection? // Active Connection
 
     override func handleNewConnection(_ newConnection: NWConnection) {
@@ -341,7 +339,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func handleConnection(_ connection: NWConnection) {
-        UI_Class_connectionLabel.setStatusConnectionText("Waiting...")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Waiting...")
 
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
@@ -379,16 +377,16 @@ class NetworkVoiceTCPServer : TCPServer {
                     content: response,
                     completion: .contentProcessed { error in 
                         if let error = error {
-                            self.UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
+                            G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
                         } else {
-                            self.UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
+                            G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
                         }
                     }
                 )
             }
         }
 
-        UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
     }
 
 
@@ -723,6 +721,10 @@ class UI_NetworkStatus_SingletonClass {
         self.updateStatusConnectionLabel() // Update
     }
 }
+
+
+// not global but I want to access this from anywhere
+var G_UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
 
 
 class ViewController: UIViewController {
