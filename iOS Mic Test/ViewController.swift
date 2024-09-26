@@ -342,8 +342,8 @@ class TCPServer {
         switch state {
         case .ready:
             print("Connection established with \(connection.endpoint)")
-        case .failed(let error):
-            print("Connection failed: \(error)")
+        case .failed(let nwError):
+            print("Connection failed: \(nwError)")
         case .cancelled:
             print("Connection cancelled")
         default:
