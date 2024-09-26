@@ -5,6 +5,8 @@ class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
 
+    private var connectionsArray: [NWConnection] = [] // Replace with actual connection type
+
     // Different Type
     var port: NWEndpoint.Port!
 
@@ -17,6 +19,8 @@ class TCPServer {
 
     // For new connections
     func handleNewConnection(_ newConnection: NWConnection) {
+        self.connections.append(connection)
+
         self.handleConnection(newConnection)
     }
 
@@ -63,5 +67,11 @@ class TCPServer {
     func stopServer() {
         self.listener?.cancel()
         self.listener = nil
+
+        for connection in self.connectionsArray {
+            connection.cancel() // This closes the connection
+        }
+
+        self.connectionsArray.removeAll()
     }
 }
