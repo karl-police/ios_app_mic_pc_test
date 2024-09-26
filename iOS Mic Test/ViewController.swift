@@ -634,7 +634,6 @@ class UI_NetworkStatusClass {
     }
 
     var statusInfoStruct = StatusInfoStruct()
-
     var ui_connectionLabel: UILabel!
 
     init() {
@@ -997,7 +996,7 @@ class ViewController: UIViewController {
 
     // VoIP
     func start_VoIPMic() {
-        setStatusConnectionText("Starting...")
+        UI_Class_connectionLabel.setStatusConnectionText("Starting...")
 
         do {
             try self.audioManager.start_VoIP()
@@ -1018,7 +1017,7 @@ class ViewController: UIViewController {
         btnMicToggle.setTitle("Start Mic", for: .normal)
         //shareRecordedAudio() // temp test
 
-        setStatusConnectionText("Stopped")
+        UI_Class_connectionLabel.setStatusConnectionText("Stopped")
     }
 
     func m_toggle_MicVoIP() {
