@@ -15,6 +15,11 @@ class TCPServer {
     }
     
 
+    // For new connections
+    func handleNewConnection(_ connection: NWConnection) {
+        self.handleConnection(newConnection)
+    }
+
     // Set a pre-defined empty handleConnection
     func handleConnection(_ connection: NWConnection) {
         connection.stateUpdateHandler = { [weak self] state in
@@ -45,7 +50,7 @@ class TCPServer {
             self.listener = try NWListener(using: .tcp, on: self.port)
 
             listener?.newConnectionHandler = { newConnection in 
-                self.handleConnection(newConnection)
+                self.handleNewConnection(newConnection)
             }
         } catch {
             throw error
