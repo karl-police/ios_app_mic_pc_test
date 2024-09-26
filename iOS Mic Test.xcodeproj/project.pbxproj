@@ -64,6 +64,8 @@
 				BD2161911C878A4700D57735 /* Assets.xcassets */,
 				BD2161931C878A4700D57735 /* LaunchScreen.storyboard */,
 				BD2161961C878A4700D57735 /* Info.plist */,
+
+				File_Classes_TCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classes/TCPServer.swift; sourceTree = "<group>"; };
 			);
 			path = "iOS Mic Test";
 			sourceTree = "<group>";
