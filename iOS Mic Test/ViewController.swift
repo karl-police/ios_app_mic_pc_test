@@ -324,7 +324,7 @@ class TCPServer {
 
     // Changeable handler for connections
     // Methods can't be changed hence why this is a variable
-    var handleConnection: (NWConnection) -> Void
+    var handleConnection: ((NWConnection) -> Void)!
 
 
     // Set a pre-defined empty handleConnection
