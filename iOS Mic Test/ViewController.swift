@@ -486,8 +486,8 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        try AVAudioSession.sharedInstance().setActive(false)
         try audioEngineManager.stopRecordingEngine()
+        try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
