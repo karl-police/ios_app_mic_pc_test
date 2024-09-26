@@ -325,12 +325,8 @@ class TCPServer {
     // Changeable handler for connections
     // Methods can't be changed hence why this is a variable
     var handleConnection: ((NWConnection) -> Void)!
+    var connectionStateHandler: ((NWConnection, NWConnection.State) -> Void)!
 
-
-    // Set a pre-defined empty handleConnection
-    func defaultHandleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
-    }
 
     // Init
     init(inputPort: UInt16) {
@@ -339,6 +335,11 @@ class TCPServer {
         self.handleConnection = defaultHandleConnection
     }
     
+
+    // Set a pre-defined empty handleConnection
+    func defaultHandleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
 
     // Custom behavior
     func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
@@ -384,6 +385,8 @@ class NetworkVoiceManager {
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
+
+    var activeConnection: NWConnection? // Active Connection
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
