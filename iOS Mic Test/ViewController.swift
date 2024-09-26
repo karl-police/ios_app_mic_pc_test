@@ -322,7 +322,7 @@ class TCPServer {
     var port: NWEndpoint.Port! // Different Type
 
     // Changeable handler for connections
-    // Methods can't be changed
+    // Methods can't be changed hence why this is a variable
     var handleConnection: (NWConnection) -> Void
 
 
