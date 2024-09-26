@@ -322,7 +322,7 @@ class TCPServer {
 
     init(port: UInt16) {
         // Port Constructor takes UInt16
-        self.port = NWEndpoint.Port(rawValue: port)
+        self.port = NWEndpoint.Port(rawValue: port)!
         startServer()
     }
 
@@ -338,10 +338,14 @@ class TCPServer {
         }
     }
 
-
     func stopServer() {
         self.listener?.cancel()
         self.listener = nil
+    }
+
+    // Custom behavior
+    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
+        self.connectionHandler = handler
     }
 }
 
