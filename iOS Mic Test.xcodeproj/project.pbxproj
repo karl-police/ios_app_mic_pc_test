@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		Build_Classes_TCPServer = {isa = PBXBuildFile; fileRef = File_Classes_TCPServer; };
+		Build_Include_TCPServer = {isa = PBXBuildFile; fileRef = File_Include_TCPServer; };
 
 		BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618A1C878A4700D57735 /* AppDelegate.swift */; };
 		BD21618D1C878A4700D57735 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618C1C878A4700D57735 /* ViewController.swift */; };
@@ -25,7 +25,7 @@
 		BD2161941C878A4700D57735 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BD2161961C878A4700D57735 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 
-		File_Classes_TCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classes/TCPServer.swift; sourceTree = "<group>"; };
+		File_Include_TCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Include/TCPServer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,7 @@
 		BD2161891C878A4700D57735 /* iOS Mic Test */ = {
 			isa = PBXGroup;
 			children = (
-				File_Classes_TCPServer,
+				File_Include_TCPServer,
 
 				BD21618A1C878A4700D57735 /* AppDelegate.swift */,
 				BD21618C1C878A4700D57735 /* ViewController.swift */,
@@ -141,7 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				Build_Classes_TCPServer,
+				Build_Include_TCPServer,
 
 				BD21618D1C878A4700D57735 /* ViewController.swift in Sources */,
 				BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */,
