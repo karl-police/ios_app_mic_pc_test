@@ -4,6 +4,7 @@
 
 import UIKit
 import AVFoundation
+import Foundation
 import Network
 
 
@@ -311,6 +312,22 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 }
 
 
+
+
+class TCPServer {
+    var listener: NWListener?
+    var connection: NWConnection?
+    let port: UInt16
+
+    init(port: UInt16) {
+        self.port = port
+        setupTCPServer()
+    }
+
+    private func setupTCPServer() {
+
+    }
+}
 
 
 /***
