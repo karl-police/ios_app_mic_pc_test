@@ -382,13 +382,13 @@ class TCPServer {
 class NetworkVoiceManager {
     var tcpServer: TCPServer!
 
-    var default_port: UInt16 = 8125
+    var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
-        self.tcpServer = TCPServer(inputPort: default_port)
+        self.tcpServer = TCPServer(inputPort: DEFAULT_TCP_PORT)
     }
 }
 
