@@ -353,6 +353,7 @@ class NetworkVoiceTCPServer : TCPServer {
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel when timeout
             incomingConnection.cancel()
+            G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
         }
 
         // We need to receive this
@@ -411,7 +412,7 @@ class NetworkVoiceTCPServer : TCPServer {
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
-            G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+            //G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
         default:
             break
         }
