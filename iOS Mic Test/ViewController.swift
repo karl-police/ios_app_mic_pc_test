@@ -664,7 +664,7 @@ class UI_NetworkStatus_SingletonClass {
     // Update Connection Label
     func updateStatusConnectionLabel() {
         ui_connectionLabel.text = "Status: \(self.statusInfoStruct.connectionStatusText)" + "\n" +
-                                "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
+            "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
 
         // Change Label size to fit content.
         ui_connectionLabel.sizeToFit()
