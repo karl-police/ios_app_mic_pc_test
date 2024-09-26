@@ -626,9 +626,47 @@ struct STR_TBL {
 }
 
 
-struct StatusInfoStruct {
-    var connectionStatusText = "Not Connected"
-    var localIP = "Not Retrieved"
+
+class UI_NetworkStatusClass {
+    struct StatusInfoStruct {
+        var connectionStatusText = "Not Connected"
+        var localIP = "Not Retrieved"
+    }
+
+    var statusInfoStruct = StatusInfoStruct()
+
+    var ui_connectionLabel: UILabel!
+
+    init() {
+        ui_connectionLabel = UILabel()
+        ui_connectionLabel.text = "Status"
+        ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
+        ui_connectionLabel.textAlignment = .center
+        ui_connectionLabel.numberOfLines = 0  // Allow multiple lines
+        ui_connectionLabel.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    // Update Connection Label
+    func updateStatusConnectionLabel() {
+        ui_connectionLabel.text = "Status: \(self.statusInfoStruct.connectionStatusText)" + "\n"
+            + "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
+
+        // Change Label size to fit content.
+        ui_connectionLabel.sizeToFit()
+    }
+    func updateLocalIPStatusText() {
+        if let localIP = GetLocalIPAddress() {
+            self.statusInfoStruct.localIP = localIP
+        } else {
+            self.statusInfoStruct.localIP = "N/A"
+        }
+
+        self.updateStatusConnectionLabel()
+    }
+    func setStatusConnectionText(_ text: String) {
+        statusInfoStruct.connectionStatusText = text
+        self.updateStatusConnectionLabel() // Update
+    }
 }
 
 
@@ -639,7 +677,7 @@ class ViewController: UIViewController {
     var btnMicToggle: UIButton!
     
 
-    var statusInfoStruct = StatusInfoStruct()
+    var UI_Class_connectionLabel = UI_NetworkStatusClass()
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: CombinedSettingsTableView!
@@ -651,13 +689,8 @@ class ViewController: UIViewController {
 
     func initUI() {
         // Create the info label
-        ui_connectionLabel = UILabel()
-        ui_connectionLabel.text = "Status"
-        ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
-        ui_connectionLabel.textAlignment = .center
-        ui_connectionLabel.numberOfLines = 0  // Allow multiple lines
-        ui_connectionLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(ui_connectionLabel)
+        self.ui_connectionLabel = UI_Class_connectionLabel.ui_connectionLabel
+        view.addSubview(self.ui_connectionLabel)
 
 
         // Create the button
@@ -677,9 +710,9 @@ class ViewController: UIViewController {
 
         // Set up constraints
         NSLayoutConstraint.activate([
-            ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
-            ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            self.ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
+            self.ui_connectionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            self.ui_connectionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
 
             // Center with offset
@@ -813,7 +846,7 @@ class ViewController: UIViewController {
         initUI()
         setupCombinedSettingsTableView()
 
-        updateLocalIPStatusText()
+        UI_Class_connectionLabel.updateLocalIPStatusText()
 
 
         // Register for keyboard notifications
@@ -959,30 +992,6 @@ class ViewController: UIViewController {
             }
 
         }
-    }
-
-
-
-    // Update Connection Label
-    func updateStatusConnectionLabel() {
-        ui_connectionLabel.text = "Status: \(statusInfoStruct.connectionStatusText)" + "\n"
-            + "Local IP: \(statusInfoStruct.localIP)" + "\n"
-
-        // Change Label size to fit content.
-        ui_connectionLabel.sizeToFit()
-    }
-    func updateLocalIPStatusText() {
-        if let localIP = GetLocalIPAddress() {
-            statusInfoStruct.localIP = localIP
-        } else {
-            statusInfoStruct.localIP = "N/A"
-        }
-
-        updateStatusConnectionLabel()
-    }
-    func setStatusConnectionText(_ text: String) {
-        statusInfoStruct.connectionStatusText = text
-        updateStatusConnectionLabel() // Update
     }
 
 
