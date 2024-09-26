@@ -401,14 +401,14 @@ class NetworkVoiceTCPServer : TCPServer {
         case .ready:
             // If this part reaches
             // It means that we should verify whether we really want to connect or not.
-            self.UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
             self.m_customHandshake(connection)
         case .failed(let error):
-            self.UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
-            self.UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
         default:
             break
         }
@@ -419,14 +419,14 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func startServer() throws {
-        UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
         do {
             try super.startServer()
 
-            UI_Class_connectionLabel.setStatusConnectionText("Server started at Port \(self.port.rawValue)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Server started at Port \(self.port.rawValue)")
         } catch {
-            UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
         }
     }
 
