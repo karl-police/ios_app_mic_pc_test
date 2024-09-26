@@ -320,7 +320,7 @@ class TCPServer {
     var connection: NWConnection?
 
     var port: NWEndpoint.Port! // Different Type
-    var handleConnection: (NWConnection) -> Void // Required handler for connections
+    var handleConnection: (NWConnection) -> Void // Changeable handler for connections
 
 
     // Set a pre-defined empty handleConnection
