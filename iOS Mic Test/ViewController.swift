@@ -333,6 +333,16 @@ class TCPServer {
         }
     }
 
+    // Set a pre-defined empty connectionHandler
+    func handleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
+
+    // Custom behavior
+    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
+        self.handleConnection = handler
+    }
+
     func startServer() throws {
         do {
             self.listener = try NWListener(using: .tcp, on: self.port)
@@ -348,17 +358,6 @@ class TCPServer {
     func stopServer() {
         self.listener?.cancel()
         self.listener = nil
-    }
-
-
-    // Set a pre-defined empty connectionHandler
-    func handleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
-    }
-
-    // Custom behavior
-    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
-        self.handleConnection = handler
     }
 }
 
