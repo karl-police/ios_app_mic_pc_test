@@ -385,8 +385,8 @@ class NetworkVoiceManager {
     var default_port: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
-    init(withAudioEngineManager: inputAudioEngineManager) {
-        self.audioEngineManager = inputAudioEngineManager
+    init(withAudioEngineManager: audioEngineManager) {
+        self.audioEngineManager = audioEngineManager
 
         self.tcpServer = TCPServer(inputPort: default_port)
     }
