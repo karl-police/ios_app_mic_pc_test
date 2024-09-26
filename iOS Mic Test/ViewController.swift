@@ -360,7 +360,11 @@ class NetworkVoiceTCPServer : TCPServer {
     override func startServer() throws {
         UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
-        try super.startServer()
+        do {
+            try super.startServer()
+        } catch {
+            UI_Class_connectionLabel.setStatusConnectionText("Error when starting \(error.localizedDescription)")
+        }
     }
 
     override func stopServer() {
