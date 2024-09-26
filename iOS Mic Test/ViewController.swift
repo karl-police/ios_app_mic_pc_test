@@ -319,14 +319,12 @@ class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
 
-    var port: NWEndpoint.Port // Different Type
-    var handleConnection: (NWConnection) -> Void // Changeable handler for connections
-
+    var port: NWEndpoint.Port! // Different Type
 
     // Init
     init(port: UInt16) throws {
         // Port Constructor takes UInt16
-        self.port = NWEndpoint.Port(rawValue: port)!
+        self.port = NWEndpoint.Port(rawValue: port)
         
         do {
             try self.startServer()
