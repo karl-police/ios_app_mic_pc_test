@@ -322,28 +322,33 @@ class TCPServer {
     // Different Type
     var port: NWEndpoint.Port!
 
-    // Changeable handler for connections
-    // Methods can't be changed hence why this is a variable
-    var handleConnection: ((NWConnection) -> Void)!
-    var connectionStateHandler: ((NWConnection, NWConnection.State) -> Void)!
-
-
     // Init
     init(inputPort: UInt16) {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: inputPort)
-        self.handleConnection = defaultHandleConnection
     }
     
 
     // Set a pre-defined empty handleConnection
-    func defaultHandleConnection(connection: NWConnection) {
+    func handleConnection(connection: NWConnection) {
+        connection.stateUpdateHandler = { [weak self] state in
+            self?.connectionStateHandler(connection: connection, state: state)
+        }
+
         connection.start(queue: .main)
     }
 
-    // Custom behavior
-    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
-        self.handleConnection = handler
+    func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
+        switch state {
+        case .ready:
+            print("Connection established with \(connection.endpoint)")
+        case .failed(let error):
+            print("Connection failed: \(error)")
+        case .cancelled:
+            print("Connection cancelled")
+        default:
+            break
+        }
     }
 
 
@@ -380,6 +385,21 @@ class TCPServer {
     The next part in what format to send data as.
     And then there's also the protocol.
 ***/
+class NetworkVoiceServer : TCPServer {
+    override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
+        switch state {
+        case .ready:
+            print("Connection established with \(connection.endpoint)")
+        case .failed(let error):
+            print("Connection failed: \(error)")
+        case .cancelled:
+            print("Connection cancelled")
+        default:
+            break
+        }
+    }
+}
+
 class NetworkVoiceManager {
     var tcpServer: TCPServer!
 
