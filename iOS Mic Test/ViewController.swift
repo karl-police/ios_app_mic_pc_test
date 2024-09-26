@@ -359,19 +359,44 @@ class NetworkVoiceTCPServer : TCPServer {
             connection.cancel()
         }
 
-        // We need to send this
+        // We need to receive this
+        // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         connection.receive(minimumIncompleteLength: 1, maximumLength: 64) { [weak self] data, context, isComplete, error in 
             if (isComplete && data == expectedWord) {
-                timeoutTimer.invalidate()
+                timeoutTimer.invalidate() // Erase the timeout
 
                 // We are alright!
+                // Let's tell that back
+                // Just note that... seeing how this works
+                // Perhaps whatever you try to connect, whether this is a safe way
+                // To check that it's the actual app is another question
+
+                let response = ("Accepted").data(using: .utf8)!
+
+                connection.send(
+                    content: response,
+                    completion: .contentProcessed { error in 
+                        if let error = error {
+                            UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
+                        } else {
+                            UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
+                        }
+                    }
+                )
             }
         }
 
         UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
     }
+
+
+    // Alright, we real
+    func m_makeRealConnection() {
+
+    }
+
 
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
         switch state {
