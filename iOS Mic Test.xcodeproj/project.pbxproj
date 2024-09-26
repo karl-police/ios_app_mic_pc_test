@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		Build_Classes_TCPServer = {isa = PBXBuildFile; fileRef = File_Classes_TCPServer; };
+
 		BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618A1C878A4700D57735 /* AppDelegate.swift */; };
 		BD21618D1C878A4700D57735 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618C1C878A4700D57735 /* ViewController.swift */; };
 		BD2161901C878A4700D57735 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD21618E1C878A4700D57735 /* Main.storyboard */; };
@@ -22,6 +24,8 @@
 		BD2161911C878A4700D57735 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BD2161941C878A4700D57735 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BD2161961C878A4700D57735 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+
+		File_Classes_TCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classes/TCPServer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
