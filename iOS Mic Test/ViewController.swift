@@ -383,16 +383,19 @@ class NetworkVoiceTCPServer : TCPServer {
                         }
                     }
                 )
+
+                // Accept it
+                m_acceptIncomingConnection(connection)
             }
         }
-
-        G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
     }
 
 
     // Alright, we real
-    func m_makeRealConnection() {
+    func m_acceptIncomingConnection(_ connection: NWConnection) {
+        activeConnection = connection;
 
+        G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
     }
 
 
