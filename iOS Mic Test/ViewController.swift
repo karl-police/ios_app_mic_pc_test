@@ -351,6 +351,8 @@ class NetworkVoiceManager {
 }
 
 
+// Example usage from a copy of an Apple Example
+// https://github.com/winstondu/Voice-Processing-Demo/blob/master/AVEchoTouch/ViewController.swift
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
