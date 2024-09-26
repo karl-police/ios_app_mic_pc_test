@@ -390,6 +390,12 @@ class NetworkVoiceManager {
 
         self.tcpServer = TCPServer(inputPort: DEFAULT_TCP_PORT)
     }
+
+
+    // Inheriting TCPServer might be better though
+    func customHandleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
 }
 
 
@@ -943,10 +949,16 @@ class ViewController: UIViewController {
 
         updateStatusConnectionLabel()
     }
+    func setStatusConnectionText(_ text: String) {
+        statusInfoStruct.connectionStatusText = text
+        updateStatusConnectionLabel() // Update
+    }
 
 
     // VoIP
     func start_VoIPMic() {
+        setStatusConnectionText("Starting...")
+
         do {
             try self.audioManager.start_VoIP()
         } catch {
@@ -964,7 +976,9 @@ class ViewController: UIViewController {
         }
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
-        shareRecordedAudio() // temp test
+        //shareRecordedAudio() // temp test
+
+        setStatusConnectionText("Stopped")
     }
 
     func m_toggle_MicVoIP() {
