@@ -330,11 +330,17 @@ class AudioEngineManager {
     }
 
     // It's important to call this function before starting the Engine
+    // Or anything else, e.g. installTap
     func setupInit() {
         inputNode = audioEngine.inputNode
         audioFormat = inputNode.inputFormat(forBus: 0)
     }
 
+
+
+    func setupForVoIP() {
+        
+    }
 
 
 
