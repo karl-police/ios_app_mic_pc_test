@@ -44,7 +44,7 @@ class TCPServer {
 
 
 
-    // This needs to be called to start a server
+    // This needs to be called to start the server
     func startServer() throws {
         do {
             self.listener = try NWListener(using: .tcp, on: self.port)
