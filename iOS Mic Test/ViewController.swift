@@ -347,19 +347,19 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     // Handshake
-    private func m_customHandshake(_ connection: NWConnection) {
+    private func m_customHandshake(_ incomingConnection: NWConnection) {
         let handshakeTimeout: TimeInterval = 10
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel when timeout
-            connection.cancel()
+            incomingConnection.cancel()
         }
 
         // We need to receive this
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
+        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (isComplete && data == expectedWord) {
@@ -373,19 +373,19 @@ class NetworkVoiceTCPServer : TCPServer {
 
                 let response = ("Accepted").data(using: .utf8)!
 
-                connection.send(
+                incomingConnection.send(
                     content: response,
                     completion: .contentProcessed { error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
                         } else {
-                            G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(connection.endpoint)")
+                            G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
                         }
                     }
                 )
 
                 // Accept it
-                self?.m_acceptIncomingConnection(connection)
+                self?.m_acceptIncomingConnection(incomingConnection)
             }
         }
     }
