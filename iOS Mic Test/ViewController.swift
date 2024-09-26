@@ -322,6 +322,18 @@ class TCPServer {
     var port: NWEndpoint.Port! // Different Type
     var handleConnection: (NWConnection) -> Void // Required handler for connections
 
+
+    // Set a pre-defined empty handleConnection
+    func handleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
+
+    // Custom behavior
+    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
+        self.handleConnection = handler
+    }
+
+    // Init
     init(port: UInt16) throws {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: port)
@@ -331,16 +343,6 @@ class TCPServer {
         } catch {
             throw error
         }
-    }
-
-    // Set a pre-defined empty connectionHandler
-    func handleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
-    }
-
-    // Custom behavior
-    func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
-        self.handleConnection = handler
     }
 
     func startServer() throws {
