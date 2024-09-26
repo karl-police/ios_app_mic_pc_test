@@ -385,7 +385,7 @@ class TCPServer {
     The next part in what format to send data as.
     And then there's also the protocol.
 ***/
-class NetworkVoiceServer : TCPServer {
+class NetworkVoiceTCPServer : TCPServer {
     var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
 
     var activeConnection: NWConnection? // Active Connection
@@ -423,7 +423,7 @@ class NetworkVoiceServer : TCPServer {
 }
 
 class NetworkVoiceManager {
-    var tcpServer: TCPServer!
+    var networkVoice_TCPServer: NetworkVoiceTCPServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -431,7 +431,7 @@ class NetworkVoiceManager {
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
-        self.tcpServer = TCPServer(inputPort: DEFAULT_TCP_PORT)
+        self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
     }
 }
 
