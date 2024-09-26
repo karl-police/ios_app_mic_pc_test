@@ -548,7 +548,7 @@ class AudioManager {
     }
 
     func setup_VoIP() {
-        
+
     }
 
     func start_VoIP() throws {
@@ -570,7 +570,7 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        try audioEngineManager.stopRecordingEngine()
+        audioEngineManager.stopRecordingEngine()
         
         // The order on when this gets called seems to be important
         try AVAudioSession.sharedInstance().setActive(false)
