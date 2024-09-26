@@ -386,6 +386,8 @@ class TCPServer {
     And then there's also the protocol.
 ***/
 class NetworkVoiceServer : TCPServer {
+    var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
+
     override func handleConnection(_ connection: NWConnection) {
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
@@ -627,16 +629,30 @@ struct STR_TBL {
 
 
 
-class UI_NetworkStatusClass {
+class UI_NetworkStatus_SingletonClass {
     struct StatusInfoStruct {
         var connectionStatusText = "Not Connected"
         var localIP = "Not Retrieved"
     }
 
+    
+    // Function to retrieve the singleton instance
+    static func shared() -> UI_NetworkStatus_SingletonClass {
+        if sharedInstance == nil {
+            sharedInstance = UI_NetworkStatus_SingletonClass()
+        }
+        return sharedInstance!
+    }
+
     var statusInfoStruct = StatusInfoStruct()
     var ui_connectionLabel: UILabel!
+    
+    // Private static variable to hold the singleton instance
+    private static var sharedInstance: UI_NetworkStatus_SingletonClass?
 
-    init() {
+
+    // Private initializer to prevent instantiation from outside
+    private init() {
         ui_connectionLabel = UILabel()
         ui_connectionLabel.text = "Status"
         ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
@@ -647,12 +663,13 @@ class UI_NetworkStatusClass {
 
     // Update Connection Label
     func updateStatusConnectionLabel() {
-        ui_connectionLabel.text = "Status: \(self.statusInfoStruct.connectionStatusText)" + "\n"
-            + "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
+        ui_connectionLabel.text = "Status: \(self.statusInfoStruct.connectionStatusText)" + "\n" +
+                                "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
 
         // Change Label size to fit content.
         ui_connectionLabel.sizeToFit()
     }
+
     func updateLocalIPStatusText() {
         if let localIP = GetLocalIPAddress() {
             self.statusInfoStruct.localIP = localIP
@@ -662,6 +679,7 @@ class UI_NetworkStatusClass {
 
         self.updateStatusConnectionLabel()
     }
+
     func setStatusConnectionText(_ text: String) {
         statusInfoStruct.connectionStatusText = text
         self.updateStatusConnectionLabel() // Update
@@ -676,7 +694,7 @@ class ViewController: UIViewController {
     var btnMicToggle: UIButton!
     
 
-    var UI_Class_connectionLabel = UI_NetworkStatusClass()
+    var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
     var ui_connectionLabel: UILabel!
 
     var polarPatternTableView: CombinedSettingsTableView!
@@ -996,8 +1014,6 @@ class ViewController: UIViewController {
 
     // VoIP
     func start_VoIPMic() {
-        UI_Class_connectionLabel.setStatusConnectionText("Starting...")
-
         do {
             try self.audioManager.start_VoIP()
         } catch {
@@ -1016,8 +1032,6 @@ class ViewController: UIViewController {
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
         //shareRecordedAudio() // temp test
-
-        UI_Class_connectionLabel.setStatusConnectionText("Stopped")
     }
 
     func m_toggle_MicVoIP() {
