@@ -415,10 +415,10 @@ class NetworkVoiceTCPServer : TCPServer {
         self.activeConnection = nil
     }
 
-    override func startServer() {
+    override func startServer() throws {
         UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
-        
-        super.startServer()
+
+        try super.startServer()
     }
 
     override func stopServer() {
