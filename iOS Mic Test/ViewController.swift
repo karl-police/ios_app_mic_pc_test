@@ -415,12 +415,6 @@ class AudioEngineManager {
     }
 
 
-
-    func setupForVoIP() {
-
-    }
-
-
     // For Testing
     func startRecordingEngine() throws {
         // Create a file URL to save the audio
@@ -563,6 +557,7 @@ class AudioManager {
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
             audioEngineManager.audioEngine.prepare()
+            
             try self.setup_AudioSessionForVoIP()
             try audioEngineManager.startRecordingEngine()
         } catch {
