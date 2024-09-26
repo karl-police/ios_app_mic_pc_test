@@ -36,8 +36,17 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+	</dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Local Network</string>
+	<string>Use Local Network</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>App needs Microphone access to record audio.</string>
 	<key>NSCameraUsageDescription</key>
