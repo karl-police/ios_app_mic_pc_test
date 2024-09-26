@@ -318,7 +318,9 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
+
     var port: NWEndpoint.Port! // Different Type
+    var handleConnection: (NWConnection) -> Void // Required handler for connections
 
     init(port: UInt16) throws {
         // Port Constructor takes UInt16
@@ -348,9 +350,15 @@ class TCPServer {
         self.listener = nil
     }
 
+
+    // Set a pre-defined empty connectionHandler
+    func handleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
+
     // Custom behavior
     func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
-        self.connectionHandler = handler
+        self.handleConnection = handler
     }
 }
 
@@ -369,6 +377,8 @@ class TCPServer {
 ***/
 class NetworkVoiceManager {
     var tcpServer: TCPServer?
+
+    var default_port: UInt16 = 8125
 
     init() {
         
