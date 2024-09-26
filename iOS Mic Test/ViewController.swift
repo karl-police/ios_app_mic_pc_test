@@ -351,7 +351,7 @@ class NetworkVoiceTCPServer : TCPServer {
         let handshakeTimeout: TimeInterval = 10
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
-            // Cancel
+            // Cancel when timeout
             connection.cancel()
         }
 
