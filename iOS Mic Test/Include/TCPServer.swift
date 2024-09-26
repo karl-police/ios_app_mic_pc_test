@@ -19,7 +19,7 @@ class TCPServer {
 
     // For new connections
     func handleNewConnection(_ newConnection: NWConnection) {
-        self.connections.append(connection)
+        self.connections.append(newConnection)
 
         self.handleConnection(newConnection)
     }
