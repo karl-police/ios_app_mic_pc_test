@@ -334,8 +334,8 @@ class TCPServer {
     // Init
     init(port: UInt16) {
         // Port Constructor takes UInt16
-        port = NWEndpoint.Port(rawValue: port)
-        handleConnection = defaultHandleConnection
+        self.port = NWEndpoint.Port(rawValue: port)
+        self.handleConnection = defaultHandleConnection
     }
     
 
