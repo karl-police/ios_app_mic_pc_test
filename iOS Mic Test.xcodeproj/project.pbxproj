@@ -58,13 +58,14 @@
 		BD2161891C878A4700D57735 /* iOS Mic Test */ = {
 			isa = PBXGroup;
 			children = (
+				File_Classes_TCPServer,
+
 				BD21618A1C878A4700D57735 /* AppDelegate.swift */,
 				BD21618C1C878A4700D57735 /* ViewController.swift */,
 				BD21618E1C878A4700D57735 /* Main.storyboard */,
 				BD2161911C878A4700D57735 /* Assets.xcassets */,
 				BD2161931C878A4700D57735 /* LaunchScreen.storyboard */,
 				BD2161961C878A4700D57735 /* Info.plist */,
-				File_Classes_TCPServer
 			);
 			path = "iOS Mic Test";
 			sourceTree = "<group>";
@@ -140,6 +141,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				Build_Classes_TCPServer,
+
 				BD21618D1C878A4700D57735 /* ViewController.swift in Sources */,
 				BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */,
 			);
