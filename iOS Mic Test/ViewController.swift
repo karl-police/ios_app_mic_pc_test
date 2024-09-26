@@ -353,7 +353,10 @@ class NetworkVoiceTCPServer : TCPServer {
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel when timeout
             incomingConnection.cancel()
-            G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
+            
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
+            }
         }
 
         // We need to receive this
