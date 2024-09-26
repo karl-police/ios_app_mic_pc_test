@@ -418,6 +418,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
             //G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+            break
         default:
             break
         }
