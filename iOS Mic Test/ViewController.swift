@@ -629,7 +629,7 @@ class AudioManager {
 
             try self.setup_AudioSessionForVoIP()
 
-            self.networkVoicemanager.start()
+            self.networkVoiceManager.start()
 
             //try audioEngineManager.startRecordingEngine()
         } catch {
