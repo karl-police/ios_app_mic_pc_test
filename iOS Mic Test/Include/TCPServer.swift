@@ -52,6 +52,9 @@ class TCPServer {
             listener?.newConnectionHandler = { newConnection in 
                 self.handleNewConnection(newConnection)
             }
+
+            // Start listening
+            listener?.start(queue: .main)
         } catch {
             throw error
         }
