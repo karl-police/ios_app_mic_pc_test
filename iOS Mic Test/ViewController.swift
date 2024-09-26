@@ -379,12 +379,12 @@ class TCPServer {
     And then there's also the protocol.
 ***/
 class NetworkVoiceManager {
-    var tcpServer: TCPServer?
+    var tcpServer: TCPServer!
 
     var default_port: UInt16 = 8125
 
     init() {
-        
+        self.tcpServer = TCPServer(port: default_port)
     }
 }
 
