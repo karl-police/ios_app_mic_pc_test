@@ -547,6 +547,10 @@ class AudioManager {
         }
     }
 
+    func setup_VoIP() {
+        
+    }
+
     func start_VoIP() throws {
         do {
             // Call this because .stop() used with .preare() may be removing
