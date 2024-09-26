@@ -332,9 +332,9 @@ class TCPServer {
     }
 
     // Init
-    init(port: UInt16) {
+    init(inputPort: UInt16) {
         // Port Constructor takes UInt16
-        self.port = NWEndpoint.Port(rawValue: port)
+        self.port = NWEndpoint.Port(rawValue: inputPort)
         self.handleConnection = defaultHandleConnection
     }
     
@@ -384,7 +384,7 @@ class NetworkVoiceManager {
     var default_port: UInt16 = 8125
 
     init() {
-        self.tcpServer = TCPServer(port: default_port)
+        self.tcpServer = TCPServer(inputPort: default_port)
     }
 }
 
