@@ -464,8 +464,14 @@ class NetworkVoiceManager {
 
         // Set the closure to handle connection established event
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            
+            self?.handleAcceptedConnection(connection)
         }
+    }
+
+    // When we have connection we can start streaming
+    // This will make us start streaming
+    func handleAcceptedConnection(_ connection: NWConnection) {
+
     }
 
     func start() throws {
