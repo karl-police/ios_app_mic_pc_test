@@ -331,6 +331,8 @@ class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
     override func handleConnection(_ connection: NWConnection) {
+        UI_Class_connectionLabel.setStatusConnectionText("Waiting...")
+
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
         }
