@@ -326,18 +326,18 @@ class TCPServer {
     var handleConnection: (NWConnection) -> Void
 
 
+    // Set a pre-defined empty handleConnection
+    func defaultHandleConnection(connection: NWConnection) {
+        connection.start(queue: .main)
+    }
+
     // Init
     init(port: UInt16) {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: port)
         self.handleConnection = self.defaultHandleConnection
     }
-
-
-    // Set a pre-defined empty handleConnection
-    func defaultHandleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
-    }
+    
 
     // Custom behavior
     func setConnectionHandler(_ handler: @escaping (NWConnection) -> Void) {
@@ -557,7 +557,7 @@ class AudioManager {
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
             audioEngineManager.audioEngine.prepare()
-            
+
             try self.setup_AudioSessionForVoIP()
             try audioEngineManager.startRecordingEngine()
         } catch {
