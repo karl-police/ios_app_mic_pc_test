@@ -385,7 +385,7 @@ class NetworkVoiceTCPServer : TCPServer {
                 )
 
                 // Accept it
-                self.m_acceptIncomingConnection(connection)
+                self?.m_acceptIncomingConnection(connection)
             }
         }
     }
