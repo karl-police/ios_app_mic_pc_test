@@ -353,7 +353,7 @@ class NetworkVoiceTCPServer : TCPServer {
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel when timeout
             incomingConnection.cancel()
-            
+
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
             }
@@ -366,7 +366,7 @@ class NetworkVoiceTCPServer : TCPServer {
         incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
-            if (isComplete && data == expectedWord) {
+            if (data == expectedWord) {
                 timeoutTimer.invalidate() // Erase the timeout
 
                 // We are alright!
