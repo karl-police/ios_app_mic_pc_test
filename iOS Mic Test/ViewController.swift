@@ -312,16 +312,33 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
+
+/***
+    =================================
+    So there's a couple of ways.
+    A cool way is if Laptop/PC can directly go to the IP-Address of the Phone
+    to ask it if it can connect.
+
+    But the other way around is also possible.
+    =================================
+
+    The next part in what format to send data as.
+    And especially what protocol.
+***/
+class NetworkConnectionManager {
+
+}
+
+
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
     private var audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
+    var audioFile: AVAudioFile?
 
     var audioSettings: AudioSettingsClass!
-
-    var audioFile: AVAudioFile?
 
 
     init(withAudioSettings: AudioSettingsClass) {
@@ -339,7 +356,7 @@ class AudioEngineManager {
 
 
     func setupForVoIP() {
-        
+
     }
 
 
