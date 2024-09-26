@@ -331,6 +331,12 @@ class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
     override func handleNewConnection(_ newConnection: NWConnection) {
+        if (activeConnection != nil) {
+            // Only allow one finished.
+            return
+        }
+
+
         super.handleNewConnection(newConnection)
     }
 
@@ -344,10 +350,38 @@ class NetworkVoiceTCPServer : TCPServer {
         connection.start(queue: .main)
     }
 
+    // Handshake
+    private func m_customHandshake(_ connection: NWConnection) {
+        let handshakeTimeout: TimeInterval = 10
+
+        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
+            // Cancel
+            connection.cancel()
+        }
+
+        // We need to send this
+        let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
+
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 64) { [weak self] data, context, isComplete, error in 
+            if (isComplete && data == expectedWord) {
+                timeoutTimer.invalidate()
+
+                // We are alright!
+            }
+        }
+
+        UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+    }
+
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
         switch state {
         case .ready:
-            UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+            // If this part reaches
+            // It means that we should verify whether we really want to connect or not.
+            UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
+
+            // Check for handshake
+            self.customHandshake(connection)
         case .failed(let error):
             UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
