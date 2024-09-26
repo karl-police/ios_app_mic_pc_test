@@ -458,11 +458,10 @@ class AudioManager {
 
 
     // VoIP
-    func setup_VoIP() throws {
+    func setup_AudioSessionForVoIP() throws {
         let session = AVAudioSession.sharedInstance()
 
         do {
-            //try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             try session.setActive(true)
         } catch {
@@ -478,7 +477,7 @@ class AudioManager {
             audioEngineManager.setupInit()
 
             audioEngineManager.audioEngine.prepare()
-            try self.setup_VoIP()
+            try self.setup_AudioSessionForVoIP()
             try audioEngineManager.startRecordingEngine()
         } catch {
             throw error
