@@ -388,6 +388,8 @@ class TCPServer {
 class NetworkVoiceServer : TCPServer {
     var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
 
+    var activeConnection: NWConnection? // Active Connection
+
     override func handleConnection(_ connection: NWConnection) {
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
@@ -399,14 +401,24 @@ class NetworkVoiceServer : TCPServer {
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
         switch state {
         case .ready:
-            print("Connection established with \(connection.endpoint)")
+            UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
         case .failed(let error):
-            print("Connection failed: \(error)")
+            UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
         case .cancelled:
-            print("Connection cancelled")
+            UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
         default:
             break
         }
+    }
+
+    func cleanUp() {
+        self.activeConnection = nil
+    }
+
+    override func stopServer() {
+        super.stopServer()
+
+        cleanUp()
     }
 }
 
@@ -416,18 +428,10 @@ class NetworkVoiceManager {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
-    var activeConnection: NWConnection? // Active Connection
-
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
         self.tcpServer = TCPServer(inputPort: DEFAULT_TCP_PORT)
-    }
-
-
-    // Inheriting TCPServer might be better though
-    func customHandleConnection(connection: NWConnection) {
-        connection.start(queue: .main)
     }
 }
 
