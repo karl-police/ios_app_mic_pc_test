@@ -318,11 +318,11 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
-    var port: NWEndpoint.Port // Different Type
+    var port: NWEndpoint.Port! // Different Type
 
     init(port: UInt16) {
         // Port Constructor takes UInt16
-        self.port = NWEndpoint.Port(rawValue: port)!
+        self.port = NWEndpoint.Port(rawValue: port)
         startServer()
     }
 
