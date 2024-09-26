@@ -337,7 +337,8 @@ class AudioEngineManager {
 
 
 
-    // Temp testing
+
+    // For Testing
     func startRecordingEngine() throws {
         // Create a file URL to save the audio
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
@@ -366,12 +367,10 @@ class AudioEngineManager {
             throw error
         }
     }
-
     func cleanUpReset() {
         self.audioFile = nil
         self.tempError = nil
     }
-
     func stopRecordingEngine() {
         // Remove the tap and stop the audio engine
         inputNode.removeTap(onBus: 0)
