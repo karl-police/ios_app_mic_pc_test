@@ -330,7 +330,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     override func handleNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
-            // Only allow one finished.
+            // Only allow one accepted connection.
             return
         }
 
@@ -385,7 +385,7 @@ class NetworkVoiceTCPServer : TCPServer {
                 )
 
                 // Accept it
-                m_acceptIncomingConnection(connection)
+                self.m_acceptIncomingConnection(connection)
             }
         }
     }
