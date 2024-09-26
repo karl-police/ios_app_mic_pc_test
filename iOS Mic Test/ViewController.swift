@@ -328,7 +328,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
-    var onConnectionEstablished: (() -> Void)?
+    var onConnectionEstablished: ((NWConnection) -> Void)?
 
     override func handleNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
