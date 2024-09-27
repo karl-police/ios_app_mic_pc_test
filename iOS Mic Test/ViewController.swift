@@ -445,12 +445,28 @@ class NetworkVoiceTCPServer : TCPServer {
         }
     }
 
+
+    func printOut_nwParams() {
+        var debugText = ""
+        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)"
+        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)"
+        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)"
+        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)"
+
+        G_UI_debugTextBoxOut.text = debugText
+    }
+
     func cleanUp() {
         self.activeConnection = nil
     }
 
+    // Start Server
     override func startServer() throws {
+        self.cfg_nwParameters = NWParameters.udp()
+
         G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
+
+        self.printOut_nwParams()
 
         do {
             try super.startServer()
