@@ -542,8 +542,8 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { connection in
+            self.handleAcceptedConnection(connection)
         }
     }
 
@@ -605,14 +605,14 @@ class NetworkVoiceManager {
         let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
         
         // Send audio data
-        /*connection.send(
+        connection.send(
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
                     G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
-        )*/
+        )
     }
 
 
