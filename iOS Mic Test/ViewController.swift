@@ -470,7 +470,7 @@ class NetworkVoiceTCPServer : TCPServer {
         debugText += "includePeerToPeer: \(cfg_nwParameters.includePeerToPeer)\n"
         debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)\n"
         debugText += "acceptLocalOnly: \(cfg_nwParameters.acceptLocalOnly)\n"
-        debugText += "\ndebugDescription:\(cfg_nwParameters.debugDescription)\n"
+        debugText += "\ndebugDescription: \(cfg_nwParameters.debugDescription)\n"
 
         return debugText
     }
@@ -478,10 +478,12 @@ class NetworkVoiceTCPServer : TCPServer {
     func getDump_nwListener() -> String {
         var debugText = ""
 
-        guard if let listener = self.listener {
+        guard let listener = self.listener else {
             debugText = "No Listener found."
             return debugText
         }
+
+        debugText += "\ndebugDescription: \(listener.debugDescription)"
 
         return debugText
     }
