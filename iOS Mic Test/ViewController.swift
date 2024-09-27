@@ -430,7 +430,9 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
         case .preparing:
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection preparing")
-            
+        case .setup:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection setup")
+
         default:
             break
         }
