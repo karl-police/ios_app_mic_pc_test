@@ -490,7 +490,7 @@ class NetworkVoiceManager {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioEngineManager.audioFormat
         ) { (buffer, time) in
-            //self.transmitAudio(buffer: buffer, connection)
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         
