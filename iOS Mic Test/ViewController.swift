@@ -330,7 +330,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
-    override func handleListenerNewConnection(_ newConnection: NWConnection) {
+    /*override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
             return
@@ -409,7 +409,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // We can now do the streaming thing
         // Trigger this
         self.m_onAcceptedConnectionEstablished(connection)
-    }
+    }*/
 
 
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
