@@ -486,9 +486,11 @@ class NetworkVoiceManager {
         var inputNode = audioEngine.inputNode
         inputNode.removeTap(onBus: 0)
 
+        let inputFormat = inputNode.inputFormat(forBus: 0)
+
         // Testing
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioEngineManager.audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: 
         ) { (buffer, time) in
             self.transmitAudio(buffer: buffer, connection)
         }
