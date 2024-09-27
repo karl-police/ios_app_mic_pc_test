@@ -336,7 +336,7 @@ class NetworkVoiceTCPServer : TCPServer {
             return
         }
 
-        super.handleConnection(newConnection)
+        super.handleListenerNewConnection(newConnection)
     }
 
     /*override func handleConnection(_ connection: NWConnection) {
