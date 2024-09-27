@@ -69,7 +69,6 @@ class TCPServer {
             self.listener = try NWListener(using: .tcp, on: self.port)
 
             listener?.newConnectionHandler = { newConnection in 
-                G_UI_Class_connectionLabel.setStatusConnectionText("A new connection!")
                 self.handleListenerNewConnection(newConnection)
             }
 
