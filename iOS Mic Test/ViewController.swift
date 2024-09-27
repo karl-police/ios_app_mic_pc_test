@@ -341,8 +341,8 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { [weak self] state in
-            self?.connectionStateHandler(connection: connection, state: state)
+        connection.stateUpdateHandler = { state in
+            self.connectionStateHandler(connection: connection, state: state)
         }
 
         connection.start(queue: .main)
@@ -481,8 +481,8 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { connection in
+            self.handleAcceptedConnection(connection)
         }
     }
 
