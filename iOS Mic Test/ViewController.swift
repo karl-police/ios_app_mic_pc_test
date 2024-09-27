@@ -330,7 +330,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
-    override func handleListenerNewConnection(_ newConnection: NWConnection) {
+    /*override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
             return
@@ -349,7 +349,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     // Handshake
-    /*private func m_customHandshake(_ incomingConnection: NWConnection) {
+    private func m_customHandshake(_ incomingConnection: NWConnection) {
         let handshakeTimeout: TimeInterval = 10
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
