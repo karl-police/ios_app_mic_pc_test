@@ -409,13 +409,13 @@ class NetworkVoiceTCPServer : TCPServer {
 
         
         // Check
-        guard let m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
+        guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
             G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
             return
         }
         // We can now do the streaming thing
         // Trigger this
-        m_onAcceptedConnectionEstablished(connection)
+        guard_m_onAcceptedConnectionEstablished(connection)
     }
 
 
@@ -446,7 +446,6 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     func cleanUp() {
-        self.activeConnection.cancel()
         self.activeConnection = nil
     }
 
