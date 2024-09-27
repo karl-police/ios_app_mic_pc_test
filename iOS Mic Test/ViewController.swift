@@ -475,12 +475,12 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
-
         var audioEngine = audioEngineManager.audioEngine
         let audioSettings = audioEngineManager.audioSettings
         guard let audioEngine = audioEngine else { return }
         guard let audioSettings = audioSettings else { return }
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
 
 
         var inputNode = audioEngine.inputNode
