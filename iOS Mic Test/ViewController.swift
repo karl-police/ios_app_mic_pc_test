@@ -365,7 +365,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { data, context, isComplete, error in
+        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
@@ -374,24 +374,25 @@ class NetworkVoiceTCPServer : TCPServer {
                 // We are alright!
                 // Let's tell that back
                 // Just note that... seeing how this works
-                // Perhaps whatever one tries to connect with, whether this is a safe way
+                // Perhaps whatever you try to connect, whether this is a safe way
                 // To check that it's the actual app is another question
 
                 let response = ("Accepted").data(using: .utf8)!
-
                 incomingConnection.send(
                     content: response,
-                    completion: .contentProcessed({ error in 
+                    completion: .contentProcessed { error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
                         } else {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
+
+                            // Accept it
+                            // After we sent
+                            self?.m_acceptIncomingConnection(incomingConnection)
                         }
-                    })
+                    }
                 )
 
-                // Accept it
-                self.m_acceptIncomingConnection(incomingConnection)
             }
         }
     }
@@ -463,14 +464,16 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Set the closure to handle connection established event
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { connection in
-            self.handleAcceptedConnection(connection)
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
+            self?.handleAcceptedConnection(connection)
         }
     }
 
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+
         var audioEngine = audioEngineManager.audioEngine
 
         if (audioEngine == nil) {
@@ -493,8 +496,6 @@ class NetworkVoiceManager {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
         }*/
-
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
