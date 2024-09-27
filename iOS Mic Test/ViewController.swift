@@ -407,14 +407,14 @@ class NetworkVoiceTCPServer : TCPServer {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
 
-        // We can now do the streaming thing
-        // Trigger this
-        if self.m_onAcceptedConnectionEstablished != nil {
-            self.m_onAcceptedConnectionEstablished(connection)
-        } else {
+        // Check
+        guard let m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
             G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
             return
         }
+        // We can now do the streaming thing
+        // Trigger this
+        guard_m_onAcceptedConnectionEstablished(connection)
     }
 
 
