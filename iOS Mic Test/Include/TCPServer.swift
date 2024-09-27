@@ -50,8 +50,8 @@ class TCPServer {
     // Use this instead to close connections...
     // ...
     func cancelConnection(_ connection: NWConnection) {
-        if let index = self.connections.firstIndex(of: connection) {
-            self.connections.remove(at: index)
+        if let index = self.connectionsArray.firstIndex(of: connection) {
+            self.connectionsArray.remove(at: index)
         }
         connection.cancel()
     }
