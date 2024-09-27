@@ -82,6 +82,9 @@ class TCPServer {
         self.connectionsArray.removeAll()
 
         self.listener?.cancel()
+
+        //listener.stateUpdateHandler = nil
+        //listener.newConnectionHandler = nil
         //self.listener = nil
     }
 }
