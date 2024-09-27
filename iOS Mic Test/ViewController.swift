@@ -449,8 +449,8 @@ class NetworkVoiceTCPServer : TCPServer {
     func printOut_nwParams() {
         var debugText = ""
         debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
-        debugText += "\t \(fg_nwParameters.defaultProtocolStack.transportProtocol)\n"
-        debugText += "\t \(fg_nwParameters.defaultProtocolStack.internetProtocol)\n"
+        debugText += "\t \(cfg_nwParameters.defaultProtocolStack.transportProtocol)\n"
+        debugText += "\t \(cfg_nwParameters.defaultProtocolStack.internetProtocol)\n"
 
         debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
         debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
