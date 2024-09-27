@@ -501,8 +501,7 @@ class NetworkVoiceManager {
 
 
         let inputNode = audioEngine.inputNode
-        //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
-
+        inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
         // TEMP
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
