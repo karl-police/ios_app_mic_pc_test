@@ -417,7 +417,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
         // We can now do the streaming thing
         // Trigger this
-        //guard_m_onAcceptedConnectionEstablished(connection)
+        guard_m_onAcceptedConnectionEstablished(connection)
     }
 
 
@@ -543,7 +543,7 @@ class NetworkVoiceManager {
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
+            //self?.handleAcceptedConnection(connection)
         }
     }
 
