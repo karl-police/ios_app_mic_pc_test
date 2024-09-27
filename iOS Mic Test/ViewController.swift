@@ -330,7 +330,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
-    /*override func handleListenerNewConnection(_ newConnection: NWConnection) {
+    override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
             return
@@ -410,7 +410,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // We can now do the streaming thing
         // Trigger this
         self.m_onAcceptedConnectionEstablished(connection)
-    }*/
+    }
 
 
     override func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
@@ -421,7 +421,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            //self.m_customHandshake(connection)
+            self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
@@ -447,6 +447,9 @@ class NetworkVoiceTCPServer : TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
         do {
+            // just a test
+            self.stopServer()
+
             try super.startServer()
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
