@@ -497,11 +497,19 @@ class NetworkVoiceManager {
 
         let inputFormat = inputNode.inputFormat(forBus: 0)
 
+        self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings()) // temp
+
         // Testing
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: inputFormat
         ) { buffer, when in
-            self.transmitAudio(buffer: buffer, connection)
+            //self.transmitAudio(buffer: buffer, connection)
+
+            do { // temp
+                try self.audioFile?.write(from: buffer)
+            } catch {
+                self.tempError = error
+            }
         }
 
         audioEngine.prepare()
