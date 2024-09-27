@@ -70,12 +70,12 @@ class TCPServer {
         do {
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
-            listener?.newConnectionHandler = { newConnection in 
+            self.listener?.newConnectionHandler = { newConnection in 
                 self.handleListenerNewConnection(newConnection)
             }
 
             // Start listening
-            listener?.start(queue: .main)
+            self.listener?.start(queue: .main)
         } catch {
             throw error
         }
