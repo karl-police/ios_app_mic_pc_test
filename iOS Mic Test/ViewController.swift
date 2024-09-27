@@ -484,7 +484,6 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         debugText += "newConnectionLimit: \(listener.newConnectionLimit)\n"
-        debugText += "InfiniteConnectionLimit: \(listener.InfiniteConnectionLimit)\n"
         debugText += "\ndebugDescription: \(listener.debugDescription)"
 
         return debugText
