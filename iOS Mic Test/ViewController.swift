@@ -500,10 +500,14 @@ class NetworkVoiceTCPServer : TCPServer {
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
-            self.cfg_nwParameters.allowLocalEndpointReuse = true
+            
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
+
+        // Force this on both
+        self.cfg_nwParameters.acceptLocalOnly = true
+
 
         do {
             try super.startServer()
