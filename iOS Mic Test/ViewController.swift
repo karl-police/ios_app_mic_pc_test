@@ -478,11 +478,10 @@ class NetworkVoiceManager {
         G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
 
         var audioEngine = audioEngineManager.audioEngine
+        let audioSettings = audioEngineManager.audioSettings
 
-        guard let audioEngine = audioEngine else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("is nil")
-            return
-        }
+        guard let audioEngine = audioEngine else { return }
+        guard let audioSettings = audioEngine else { return }
 
         var inputNode = audioEngine.inputNode
         let audioSettings = audioEngineManager.audioSettings
