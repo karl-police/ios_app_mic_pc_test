@@ -395,7 +395,7 @@ class NetworkVoiceTCPServer : TCPServer {
                             // Accept it
                             // After we sent
                             DispatchQueue.main.async {
-                                self?.m_acceptIncomingConnection(incomingConnection)
+                                //self?.m_acceptIncomingConnection(incomingConnection)
                             }
                         }
                     })
