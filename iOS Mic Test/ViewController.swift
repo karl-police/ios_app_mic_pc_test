@@ -509,10 +509,10 @@ class NetworkVoiceManager {
             return
         }
 
-        // Create a Data object from the audio buffer
+        // Data
         let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
         
-        // Send audio data to the connected client
+        // Send audio data
         connection.send(
             content: audioBytes,
             completion: .contentProcessed({ error in
