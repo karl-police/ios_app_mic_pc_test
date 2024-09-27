@@ -391,7 +391,7 @@ class NetworkVoiceTCPServer : TCPServer {
                 )
 
                 // Accept it
-                //self?.m_acceptIncomingConnection(incomingConnection)
+                self?.m_acceptIncomingConnection(incomingConnection)
             }
         }
     }
@@ -406,7 +406,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // We can now do the streaming thing
 
         // Trigger this
-        self.m_onAcceptedConnectionEstablished(connection)
+        //self.m_onAcceptedConnectionEstablished(connection)
     }
 
 
