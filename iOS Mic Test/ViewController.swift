@@ -350,7 +350,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Handshake
     private func m_customHandshake(_ incomingConnection: NWConnection) {
-        let handshakeTimeout: TimeInterval = 10
+        let handshakeTimeout: TimeInterval = 10.0
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel on timeout
@@ -386,6 +386,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     completion: .contentProcessed({ error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
+                            //self.cancelConnection(incomingConnection)
                         } else {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
 
@@ -395,9 +396,9 @@ class NetworkVoiceTCPServer : TCPServer {
                         }
                     })
                 )
-
             }
         }
+
     }
 
 
@@ -499,6 +500,17 @@ class NetworkVoiceManager {
         guard let audioFormat = audioFormat else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
+
+
+        let streamDescription = format.streamDescription.pointee
+
+        var debugText = ""
+        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
+        debugText += "Channels: \(audioFormat.channelCount)\n"
+        debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
+        debugText += "Format ID: \(streamDescription.mFormatID)\n"
+        G_UI_debugTextBoxOut.text = debugText
+
 
         // Testing
         inputNode.installTap(
@@ -827,11 +839,12 @@ class UI_NetworkStatus_SingletonClass {
 
 // not global but I want to access this from anywhere
 var G_UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
+var G_UI_debugTextBoxOut = UITextView()
 
 
 class ViewController: UIViewController {
     var tableView: UITableView!
-    var debugTextBoxOut: UITextView!
+    var debugTextBoxOut = G_UI_debugTextBoxOut
     var btnRecordTestToggle: UIButton!
     var btnMicToggle: UIButton!
     
@@ -895,7 +908,7 @@ class ViewController: UIViewController {
 
 
         // Create UITextView without setting a frame
-        debugTextBoxOut = UITextView()
+        //debugTextBoxOut = UITextView()
         debugTextBoxOut.translatesAutoresizingMaskIntoConstraints = false // Enable Auto Layout
 
         // Customize the appearance of the UITextView
