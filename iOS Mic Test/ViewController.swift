@@ -312,6 +312,8 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 }
 
 
+var G_cfg_b_DoUDP = false // Something changeable
+
 
 /***
     =================================
@@ -446,7 +448,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
 
-    func printOut_nwParams() {
+    func getDump_nwParams() -> String {
         var debugText = ""
         debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
             + "\t \(cfg_nwParameters.defaultProtocolStack.transportProtocol)\n"
@@ -470,7 +472,18 @@ class NetworkVoiceTCPServer : TCPServer {
         debugText += "acceptLocalOnly: \(cfg_nwParameters.acceptLocalOnly)\n"
         debugText += "\ndebugDescription:\(cfg_nwParameters.debugDescription)\n"
 
-        G_UI_debugTextBoxOut.text = debugText
+        return debugText
+    }
+
+    func getDump_nwListener() -> String {
+        var debugText = ""
+
+        guard if let listener = self.listener {
+            debugText = "No Listener found."
+            return debugText
+        }
+
+        return debugText
     }
 
     func cleanUp() {
@@ -479,11 +492,14 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Start Server
     override func startServer() throws {
-        //self.cfg_nwParameters = NWParameters.udp
+        if (G_cfg_b_DoUDP == true) {
+            self.cfg_nwParameters = NWParameters.udp
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
+        } else {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
-        self.printOut_nwParams()
+        }
 
         do {
             try super.startServer()
@@ -492,6 +508,8 @@ class NetworkVoiceTCPServer : TCPServer {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
         }
+
+        G_UI_debugTextBoxOut.text = self.getDump_nwParams()
     }
 
     override func stopServer() {
