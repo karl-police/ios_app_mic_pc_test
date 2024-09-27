@@ -463,7 +463,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Start Server
     override func startServer() throws {
-        self.cfg_nwParameters = NWParameters.udp()
+        self.cfg_nwParameters = NWParameters.udp
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
