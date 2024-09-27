@@ -446,6 +446,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     func cleanUp() {
+        self.activeConnection.cancel()
         self.activeConnection = nil
     }
 
