@@ -761,8 +761,10 @@ class AudioManager {
 
         try self.networkVoiceManager.stop()
 
-        if (audioEngineManager.audioEngine.isRunning) {
-            audioEngineManager.audioEngine.stop()
+        self.audioEngine.inputNode.removeTap(onBus: 0)
+
+        if (self.audioEngine.isRunning) {
+            self.audioEngine.stop()
         }
         
         // The order on when this gets called seems to be important
