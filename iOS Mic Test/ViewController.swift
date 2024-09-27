@@ -495,6 +495,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }
 
+        //audioEngine.preprare()
         
         /*do {
             try audioEngine.start()
@@ -714,12 +715,12 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            audioEngineManager.audioEngine.prepare()
+            //audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
-            // audioEngine start function appears somewhere else for network
+            // audioEngine prepare and start function appears somewhere else for network
 
 
             //try audioEngineManager.startRecordingEngine()
