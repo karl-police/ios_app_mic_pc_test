@@ -328,7 +328,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
-    /*ar m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
+    ar m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
     override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
@@ -336,10 +336,10 @@ class NetworkVoiceTCPServer : TCPServer {
             return
         }
 
-        super.handleListenerNewConnection(newConnection)
+        super.handleConnection(newConnection)
     }
 
-    override func handleConnection(_ connection: NWConnection) {
+    /*override func handleConnection(_ connection: NWConnection) {
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
         }
