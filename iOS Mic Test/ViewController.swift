@@ -506,11 +506,11 @@ class NetworkVoiceManager {
 
         audioEngine.prepare()
         
-        /*do {
+        do {
             try audioEngine.start()
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
-        }*/
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
