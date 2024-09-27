@@ -463,8 +463,8 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Set the closure to handle connection established event
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { connection in
+            self.handleAcceptedConnection(connection)
         }
     }
 
