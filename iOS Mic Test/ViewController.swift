@@ -473,8 +473,14 @@ class NetworkVoiceManager {
     func handleAcceptedConnection(_ connection: NWConnection) {
         G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
 
-        /*var audioEngine = audioEngineManager.audioEngine! // Force Unwrap
-        var inputNode = audioEngine.inputNode
+        var audioEngine = audioEngineManager.AudioEngine
+
+        if (audioEngine == nil) {
+            G_UI_Class_connectionLabel.setStatusConnectionText("It's nil for some reason")
+            return
+        }
+
+        /*var inputNode = audioEngine.inputNode
 
         // Testing
         let outputFormat = inputNode.outputFormat(forBus: 0)
