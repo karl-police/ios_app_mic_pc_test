@@ -333,7 +333,6 @@ class NetworkVoiceTCPServer : TCPServer {
     override func handleNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
-            G_UI_Class_connectionLabel.setStatusConnectionText("NOOO")
             return
         }
 
@@ -439,7 +438,7 @@ class NetworkVoiceTCPServer : TCPServer {
         do {
             try super.startServer()
 
-            G_UI_Class_connectionLabel.setStatusConnectionText("Server started at Port \(self.port.rawValue)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
         }
@@ -491,9 +490,8 @@ class NetworkVoiceManager {
             //self.transmitAudio(buffer: buffer, connection)
         }
 
-        /*audioEngine.prepare()
-
-        do {
+        
+        /*do {
             try audioEngine.start()
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
@@ -709,12 +707,12 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            //audioEngineManager.audioEngine.prepare()
+            audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
-            // prepare and start appear somewhere else for network
+            // audioEngine start function appears somewhere else for network
 
 
             //try audioEngineManager.startRecordingEngine()
