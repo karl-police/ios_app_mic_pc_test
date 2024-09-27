@@ -572,7 +572,6 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        audioEngine.prepare()
 
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
@@ -606,14 +605,14 @@ class NetworkVoiceManager {
         let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
         
         // Send audio data
-        connection.send(
+        /*connection.send(
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
                     G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
-        )
+        )*/
     }
 
 
