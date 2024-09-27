@@ -484,16 +484,13 @@ class NetworkVoiceManager {
 
 
         var inputNode = audioEngine.inputNode
+        inputNode.removeTap(onBus: 0)
 
         // Testing
-        do {
-            inputNode.installTap(
-                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioEngineManager.audioFormat
-            ) { (buffer, time) in
-                //self.transmitAudio(buffer: buffer, connection)
-            }
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("yep: \(error.localizedDescription)")
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioEngineManager.audioFormat
+        ) { (buffer, time) in
+            //self.transmitAudio(buffer: buffer, connection)
         }
 
         
