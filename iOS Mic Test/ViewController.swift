@@ -503,7 +503,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        audioEngine.preprare()
+        //audioEngine.prepare()
         
         /*do {
             try audioEngine.start()
