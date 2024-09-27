@@ -489,7 +489,7 @@ class NetworkVoiceManager {
         guard let audioEngine = audioEngine else { return }
         guard let audioSettings = audioSettings else { return }
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
         var inputNode = audioEngine.inputNode
@@ -511,6 +511,8 @@ class NetworkVoiceManager {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
         }
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
