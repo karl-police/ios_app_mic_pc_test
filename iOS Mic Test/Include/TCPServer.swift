@@ -18,7 +18,7 @@ class TCPServer {
     
 
     // For new connections
-    func handleNewConnection(_ newConnection: NWConnection) {
+    func handleListenerNewConnection(_ newConnection: NWConnection) {
         self.connectionsArray.append(newConnection)
 
         self.handleConnection(newConnection)
@@ -64,7 +64,7 @@ class TCPServer {
             self.listener = try NWListener(using: .tcp, on: self.port)
 
             listener?.newConnectionHandler = { newConnection in 
-                self.handleNewConnection(newConnection)
+                self.handleListenerNewConnection(newConnection)
             }
 
             // Start listening
