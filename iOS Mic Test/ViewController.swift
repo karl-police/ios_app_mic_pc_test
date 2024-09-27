@@ -514,13 +514,13 @@ class NetworkVoiceManager {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
-            //self.transmitAudio(buffer: buffer, connection)
+            self.transmitAudio(buffer: buffer, connection)
 
-            do { // temp
+            /*do { // temp
                 try audioFile?.write(from: buffer)
             } catch {
                 print("OK")
-            }
+            }*/
         }
 
         audioEngine.prepare()
@@ -535,7 +535,7 @@ class NetworkVoiceManager {
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
-        /*let audioData = buffer.audioBufferList.pointee.mBuffers
+        let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
         // Check if data is available
@@ -555,7 +555,7 @@ class NetworkVoiceManager {
                     G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
-        )*/
+        )
     }
 
 
