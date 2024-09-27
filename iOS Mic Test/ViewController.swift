@@ -455,12 +455,12 @@ class NetworkVoiceTCPServer : TCPServer {
             + "\t \(cfg_nwParameters.defaultProtocolStack.internetProtocol)\n"
 
         debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
-        debugText += "requiredInterface: \(cfg_nwParameters.requiredInterface?)\n"
-        debugText += "requiredLocalEndpoint: \(cfg_nwParameters.requiredLocalEndpoint?)\n"
+        debugText += "requiredInterface: \(cfg_nwParameters.requiredInterface)\n"
+        debugText += "requiredLocalEndpoint: \(cfg_nwParameters.requiredLocalEndpoint)\n"
         debugText += "prohibitConstraintedPaths: \(cfg_nwParameters.prohibitConstraintedPaths)\n"
         debugText += "prohibitExpensivePaths: \(cfg_nwParameters.prohibitExpensivePaths)\n"
-        debugText += "prohibitedInterfaceTypes: \(cfg_nwParameters.prohibitedInterfaceTypes?)\n"
-        debugText += "prohibitedInterfaces: \(cfg_nwParameters.prohibitedInterfaces?)\n"
+        debugText += "prohibitedInterfaceTypes: \(cfg_nwParameters.prohibitedInterfaceTypes)\n"
+        debugText += "prohibitedInterfaces: \(cfg_nwParameters.prohibitedInterfaces)\n"
         debugText += "\n"
 
         debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
