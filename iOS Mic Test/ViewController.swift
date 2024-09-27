@@ -374,7 +374,7 @@ class NetworkVoiceTCPServer : TCPServer {
                 // We are alright!
                 // Let's tell that back
                 // Just note that... seeing how this works
-                // Perhaps whatever you try to connect, whether this is a safe way
+                // Perhaps whatever one tries to connect with, whether this is a safe way
                 // To check that it's the actual app is another question
 
                 let response = ("Accepted").data(using: .utf8)!
