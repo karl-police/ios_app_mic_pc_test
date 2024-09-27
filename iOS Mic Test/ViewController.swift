@@ -330,13 +330,13 @@ class NetworkVoiceTCPServer : TCPServer {
 
     var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
-    override func handleNewConnection(_ newConnection: NWConnection) {
+    override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
             return
         }
 
-        super.handleNewConnection(newConnection)
+        super.handleListenerNewConnection(newConnection)
     }
 
     override func handleConnection(_ connection: NWConnection) {
