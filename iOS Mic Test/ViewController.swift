@@ -492,7 +492,7 @@ class NetworkVoiceManager {
 
 
         var inputNode = audioEngine.inputNode
-        inputNode.removeTap(onBus: 0)
+        inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
         let inputFormat = inputNode.inputFormat(forBus: 0)
 
