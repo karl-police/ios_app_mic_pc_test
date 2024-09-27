@@ -464,6 +464,7 @@ class NetworkVoiceManager {
 
         // Set the closure to handle connection established event
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
+        G_UI_Class_connectionLabel.setStatusConnectionText("bruh")
             self?.handleAcceptedConnection(connection)
         }
     }
