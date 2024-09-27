@@ -53,7 +53,6 @@ class TCPServer {
         if let index = self.connections.firstIndex(of: connection) {
             self.connections.remove(at: index)
         }
-        
         connection.cancel()
     }
 
