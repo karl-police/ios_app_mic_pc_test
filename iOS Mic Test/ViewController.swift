@@ -512,7 +512,7 @@ class NetworkVoiceManager {
             do { // temp
                 try audioFile.write(from: buffer)
             } catch {
-                self.tempError = error
+                print("OK")
             }
         }
 
