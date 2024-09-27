@@ -335,7 +335,6 @@ class NetworkVoiceTCPServer : TCPServer {
             // Only allow one accepted connection.
             return
         }
-        G_UI_Class_connectionLabel.setStatusConnectionText("Incoming...")
 
         super.handleNewConnection(newConnection)
     }
@@ -361,6 +360,9 @@ class NetworkVoiceTCPServer : TCPServer {
             }
         }
 
+        /***
+            IMPORTANT
+        ***/
         // We need to receive this
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
