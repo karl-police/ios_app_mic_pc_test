@@ -448,10 +448,11 @@ class NetworkVoiceTCPServer : TCPServer {
 
     func printOut_nwParams() {
         var debugText = ""
-        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)"
-        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)"
-        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)"
-        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)"
+        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
+        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
+        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
+        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)\n"
+        debugText += "\ndebugDescription:\(cfg_nwParameters.debugDescription)\n"
 
         G_UI_debugTextBoxOut.text = debugText
     }
