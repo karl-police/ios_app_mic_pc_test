@@ -333,6 +333,7 @@ class NetworkVoiceTCPServer : TCPServer {
     override func handleNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
+            G_UI_Class_connectionLabel.setStatusConnectionText("NOOO")
             return
         }
 
@@ -485,12 +486,12 @@ class NetworkVoiceManager {
         var inputNode = audioEngine.inputNode
 
         // Testing
-        /*let audioFormat = audioEngineManager.audioFormat
+        let audioFormat = audioEngineManager.audioFormat
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) { (buffer, when) in
             //self.transmitAudio(buffer: buffer, connection)
         }
 
-        audioEngine.prepare()
+        /*audioEngine.prepare()
 
         do {
             try audioEngine.start()
