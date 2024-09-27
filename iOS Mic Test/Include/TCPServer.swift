@@ -65,13 +65,13 @@ class TCPServer {
     }
 
     func stopServer() {
-        self.listener?.cancel()
-        self.listener = nil
-
         for connection in self.connectionsArray {
             connection.cancel() // This closes the connection
         }
 
         self.connectionsArray.removeAll()
+
+        self.listener?.cancel()
+        //self.listener = nil
     }
 }
