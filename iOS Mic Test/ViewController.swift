@@ -335,7 +335,7 @@ class NetworkVoiceTCPServer : TCPServer {
             // Only allow one accepted connection.
             return
         }
-
+        G_UI_Class_connectionLabel.setStatusConnectionText("Incoming...")
 
         super.handleNewConnection(newConnection)
     }
