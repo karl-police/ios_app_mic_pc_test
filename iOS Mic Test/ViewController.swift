@@ -490,7 +490,7 @@ class NetworkVoiceManager {
 
         // Testing
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: 
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: inputFormat
         ) { buffer, when in
             self.transmitAudio(buffer: buffer, connection)
         }
