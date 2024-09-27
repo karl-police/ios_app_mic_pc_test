@@ -475,9 +475,9 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
-        }
+        ///////////////////////self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
+        ///////////////////////    self?.handleAcceptedConnection(connection)
+        ///////////////////////}
     }
 
     // When we have connection we can start streaming
