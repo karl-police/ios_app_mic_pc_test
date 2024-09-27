@@ -516,7 +516,7 @@ class NetworkVoiceManager {
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
-        let audioData = buffer.audioBufferList.pointee.mBuffers
+        /*let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
         // Check if data is available
@@ -536,7 +536,7 @@ class NetworkVoiceManager {
                     G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
-        )
+        )*/
     }
 
 
