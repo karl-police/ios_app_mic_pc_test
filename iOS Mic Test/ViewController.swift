@@ -500,10 +500,6 @@ class NetworkVoiceManager {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
-
-
-        //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
-
         // TEMP
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         var audioFile: AVAudioFile?
