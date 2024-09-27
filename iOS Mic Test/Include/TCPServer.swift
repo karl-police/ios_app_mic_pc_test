@@ -5,7 +5,7 @@ class TCPServer {
     var listener: NWListener?
     var connection: NWConnection?
 
-    private var connectionsArray: [NWConnection] = [] // Replace with actual connection type
+    private var connectionsArray: [NWConnection] = []
 
     // Different Type
     var port: NWEndpoint.Port!
