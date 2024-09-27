@@ -385,7 +385,7 @@ class NetworkVoiceTCPServer : TCPServer {
                 let response = ("Accepted").data(using: .utf8)!
                 incomingConnection.send(
                     content: response,
-                    completion: .contentProcessed({ [weak self] error in 
+                    completion: .contentProcessed({ error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
                             //self.cancelConnection(incomingConnection)
@@ -394,7 +394,9 @@ class NetworkVoiceTCPServer : TCPServer {
 
                             // Accept it
                             // After we sent
-                            self?.m_acceptIncomingConnection(incomingConnection)
+                            DispatchQueue.main.async {
+                                self?.m_acceptIncomingConnection(incomingConnection)
+                            }
                         }
                     })
                 )
