@@ -489,53 +489,55 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        var audioEngine = audioEngineManager.audioEngine
-        let inputNode = audioEngineManager.inputNode
-        let audioSettings = audioEngineManager.audioSettings
-        let audioFormat = audioEngineManager.audioFormat
-        guard let audioEngine = audioEngine else { return }
-        guard let inputNode = inputNode else { return }
-        guard let audioSettings = audioSettings else { return }
-        guard let audioFormat = audioFormat else { return }
+        DispatchQueue.main.async {
+            var audioEngine = audioEngineManager.audioEngine
+            let inputNode = audioEngineManager.inputNode
+            let audioSettings = audioEngineManager.audioSettings
+            let audioFormat = audioEngineManager.audioFormat
+            guard let audioEngine = audioEngine else { return }
+            guard let inputNode = inputNode else { return }
+            guard let audioSettings = audioSettings else { return }
+            guard let audioFormat = audioFormat else { return }
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
 
-        inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
+            inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
-        // TEMP
-        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        var audioFile: AVAudioFile?
+            // TEMP
+            let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
+            var audioFile: AVAudioFile?
 
-        do {
-            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
-        }
-
-        // Testing
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { buffer, when in
-            //self.transmitAudio(buffer: buffer, connection)
-
-            do { // temp
-                try audioFile?.write(from: buffer)
+            do {
+                audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
             } catch {
-                print("OK")
+                G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
             }
-        }
 
-        audioEngine.prepare()
-        
-        do {
-            try audioEngine.start()
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
-        }
+            // Testing
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            ) { buffer, when in
+                //self.transmitAudio(buffer: buffer, connection)
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+                do { // temp
+                    try audioFile?.write(from: buffer)
+                } catch {
+                    print("OK")
+                }
+            }
+
+            audioEngine.prepare()
+            
+            do {
+                try audioEngine.start()
+            } catch {
+                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
+            }
+
+            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
