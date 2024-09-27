@@ -488,12 +488,15 @@ class NetworkVoiceManager {
         let audioSettings = audioEngineManager.audioSettings
 
         // Testing
-        let audioFormat = audioEngineManager.audioFormat
-        /*inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { (buffer, when) in
-            //self.transmitAudio(buffer: buffer, connection)
-        }*/
+        do {
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioEngineManager.audioFormat
+            ) { (buffer, time) in
+                //self.transmitAudio(buffer: buffer, connection)
+            }
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("yep: \(error.localizedDescription)")
+        }
 
         
         /*do {
