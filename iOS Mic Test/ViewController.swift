@@ -501,7 +501,11 @@ class NetworkVoiceManager {
 
         // TEMP
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        let audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+        do {
+            let audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
+        }
 
         // Testing
         inputNode.installTap(
