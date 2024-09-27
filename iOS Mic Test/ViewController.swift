@@ -757,18 +757,21 @@ class AudioManager {
     }
 
     func stop_VoIP() throws {
-        //audioEngineManager.stopRecordingEngine()
+        do {
+            //audioEngineManager.stopRecordingEngine()
 
-        try self.networkVoiceManager.stop()
+            try self.networkVoiceManager.stop()
 
-        self.audioEngine.inputNode.removeTap(onBus: 0)
-
-        if (self.audioEngine.isRunning) {
-            self.audioEngine.stop()
+            self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
+            if (self.audioEngineManager.audioEngine.isRunning) {
+                self.audioEngineManager.audioEngine.stop()
+            }
+            
+            // The order on when this gets called seems to be important
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch {
+            throw error
         }
-        
-        // The order on when this gets called seems to be important
-        try AVAudioSession.sharedInstance().setActive(false)
     }
 }
 
