@@ -53,8 +53,9 @@
 	<string>App needs Camera access to eventually evaluate more microphones.</string>
 	<key>UIBackgroundModes</key>
     <array>
-      <string>audio</string>
-      <string>voip</string>
+		<string>audio</string>
+		<string>voip</string>
+		<string>fetch</string>
     </array>
 </dict>
 </plist>
