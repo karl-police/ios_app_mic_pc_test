@@ -501,7 +501,7 @@ class NetworkVoiceManager {
 
         // TEMP
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+        let audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
 
         // Testing
         inputNode.installTap(
@@ -510,7 +510,7 @@ class NetworkVoiceManager {
             //self.transmitAudio(buffer: buffer, connection)
 
             do { // temp
-                try self.audioFile?.write(from: buffer)
+                try audioFile?.write(from: buffer)
             } catch {
                 self.tempError = error
             }
