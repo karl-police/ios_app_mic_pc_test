@@ -489,55 +489,53 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        DispatchQueue.main.async {
-            var audioEngine = self.audioEngineManager.audioEngine
-            let inputNode = self.audioEngineManager.inputNode
-            let audioSettings = self.audioEngineManager.audioSettings
-            let audioFormat = self.audioEngineManager.audioFormat
-            guard let audioEngine = audioEngine else { return }
-            guard let inputNode = inputNode else { return }
-            guard let audioSettings = audioSettings else { return }
-            guard let audioFormat = audioFormat else { return }
+        var audioEngine = self.audioEngineManager.audioEngine
+        let inputNode = self.audioEngineManager.inputNode
+        let audioSettings = self.audioEngineManager.audioSettings
+        let audioFormat = self.audioEngineManager.audioFormat
+        guard let audioEngine = audioEngine else { return }
+        guard let inputNode = inputNode else { return }
+        guard let audioSettings = audioSettings else { return }
+        guard let audioFormat = audioFormat else { return }
 
-            G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
-
+        G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-            //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
-            // TEMP
-            let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-            var audioFile: AVAudioFile?
+        //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
-            do {
-                audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-            } catch {
-                G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
-            }
+        // TEMP
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
+        var audioFile: AVAudioFile?
 
-            // Testing
-            inputNode.installTap(
-                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-            ) { buffer, when in
-                //self.transmitAudio(buffer: buffer, connection)
-
-                do { // temp
-                    try audioFile?.write(from: buffer)
-                } catch {
-                    print("OK")
-                }
-            }
-
-            /*audioEngine.prepare()
-            
-            do {
-                try audioEngine.start()
-            } catch {
-                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
-            }
-
-            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")*/
+        do {
+            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
         }
+
+        // Testing
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { buffer, when in
+            //self.transmitAudio(buffer: buffer, connection)
+
+            do { // temp
+                try audioFile?.write(from: buffer)
+            } catch {
+                print("OK")
+            }
+        }
+
+        /*audioEngine.prepare()
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
+        }
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")*/
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
@@ -751,7 +749,7 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            //audioEngineManager.audioEngine.prepare()
+            audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
