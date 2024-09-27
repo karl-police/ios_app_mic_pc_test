@@ -394,9 +394,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
                             // Accept it
                             // After we sent
-                            DispatchQueue.main.async {
-                                //self?.m_acceptIncomingConnection(incomingConnection)
-                            }
+                            self?.m_acceptIncomingConnection(incomingConnection)
                         }
                     })
                 )
@@ -410,7 +408,7 @@ class NetworkVoiceTCPServer : TCPServer {
     func m_acceptIncomingConnection(_ connection: NWConnection) {
         activeConnection = connection;
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+        /*G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
 
         // Check
         guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
@@ -419,7 +417,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
         // We can now do the streaming thing
         // Trigger this
-        guard_m_onAcceptedConnectionEstablished(connection)
+        guard_m_onAcceptedConnectionEstablished(connection)*/
     }
 
 
