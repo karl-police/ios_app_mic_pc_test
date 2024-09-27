@@ -527,7 +527,7 @@ class NetworkVoiceManager {
             }
         }
 
-        /*audioEngine.prepare()
+        audioEngine.prepare()
         
         do {
             try audioEngine.start()
@@ -535,7 +535,7 @@ class NetworkVoiceManager {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
         }
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")*/
+        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
