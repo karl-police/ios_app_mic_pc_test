@@ -349,7 +349,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     // Handshake
-    private func m_customHandshake(_ incomingConnection: NWConnection) {
+    /*private func m_customHandshake(_ incomingConnection: NWConnection) {
         let handshakeTimeout: TimeInterval = 10
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
@@ -391,7 +391,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
                             // Accept it
                             // After we sent
-                            ///self?.m_acceptIncomingConnection(incomingConnection)
+                            self?.m_acceptIncomingConnection(incomingConnection)
                         }
                     })
                 )
@@ -402,7 +402,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
 
     // Alright, we real
-    /*func m_acceptIncomingConnection(_ connection: NWConnection) {
+    func m_acceptIncomingConnection(_ connection: NWConnection) {
         activeConnection = connection;
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
@@ -421,7 +421,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            self.m_customHandshake(connection)
+            //self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
