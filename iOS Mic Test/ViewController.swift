@@ -502,7 +502,7 @@ class NetworkVoiceManager {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        let inputNode = audioEngineManager.inputNode
+        let inputNode = audioEngine.inputNode
         //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
 
