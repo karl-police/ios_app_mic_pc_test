@@ -497,11 +497,12 @@ class NetworkVoiceTCPServer : TCPServer {
     override func startServer() throws {
         if (G_cfg_b_DoUDP == true) {
             self.cfg_nwParameters = NWParameters.udp
+
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
+            self.cfg_nwParameters.allowLocalEndpointReuse = true
+
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
-
-
         }
 
         do {
