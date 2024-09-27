@@ -405,7 +405,6 @@ class NetworkVoiceTCPServer : TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
 
         // We can now do the streaming thing
-
         // Trigger this
         self.m_onAcceptedConnectionEstablished(connection)
     }
@@ -463,7 +462,7 @@ class NetworkVoiceManager {
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
-        // Set the closure to handle connection established event
+        // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
             self?.handleAcceptedConnection(connection)
         }
