@@ -12,7 +12,7 @@ class TCPServer {
 
     private var connectionsArray: [NWConnection] = []
 
-    var cfg_nwParameters = NWParameters.tcp()
+    var cfg_nwParameters = NWParameters.tcp
 
     // Different Type
     var port: NWEndpoint.Port!
