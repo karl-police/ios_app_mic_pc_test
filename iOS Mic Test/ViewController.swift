@@ -484,7 +484,6 @@ class NetworkVoiceManager {
 
 
         var inputNode = audioEngine.inputNode
-        let audioSettings = audioEngineManager.audioSettings
 
         // Testing
         do {
