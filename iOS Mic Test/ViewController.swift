@@ -406,7 +406,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // We can now do the streaming thing
 
         // Trigger this
-        //self.m_onAcceptedConnectionEstablished(connection)
+        self.m_onAcceptedConnectionEstablished(connection)
     }
 
 
@@ -471,7 +471,9 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        var audioEngine = audioEngineManager.audioEngine! // Force Unwrap
+        
+
+        /*var audioEngine = audioEngineManager.audioEngine! // Force Unwrap
         var inputNode = audioEngine.inputNode
 
         // Testing
@@ -486,7 +488,7 @@ class NetworkVoiceManager {
             try audioEngine.start()
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
-        }
+        }*/
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
