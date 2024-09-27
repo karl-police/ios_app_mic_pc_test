@@ -420,7 +420,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            self.m_customHandshake(connection)
+            ///////////////////////////////self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
