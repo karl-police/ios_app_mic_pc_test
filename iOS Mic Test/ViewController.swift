@@ -340,7 +340,7 @@ class NetworkVoiceTCPServer : TCPServer {
         super.handleListenerNewConnection(newConnection)
     }
 
-    /*override func handleConnection(_ connection: NWConnection) {
+    override func handleConnection(_ connection: NWConnection) {
         connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
         }
@@ -402,7 +402,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
 
     // Alright, we real
-    func m_acceptIncomingConnection(_ connection: NWConnection) {
+    /*func m_acceptIncomingConnection(_ connection: NWConnection) {
         activeConnection = connection;
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
@@ -421,7 +421,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            ///////////////////////////////self.m_customHandshake(connection)
+            self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
