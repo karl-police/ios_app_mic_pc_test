@@ -85,6 +85,6 @@ class TCPServer {
 
         //listener.stateUpdateHandler = nil
         //listener.newConnectionHandler = nil
-        //self.listener = nil
+        self.listener = nil
     }
 }
