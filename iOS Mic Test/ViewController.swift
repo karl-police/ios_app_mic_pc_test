@@ -328,9 +328,9 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
-    var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
+    /*ar m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
 
-    /*override func handleListenerNewConnection(_ newConnection: NWConnection) {
+    override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
             // Only allow one accepted connection.
             return
