@@ -500,27 +500,12 @@ class NetworkVoiceManager {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
-        // TEMP
-        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        var audioFile: AVAudioFile?
-
-        do {
-            audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("TEMP: Audiofile error")
-        }
-
         // Testing
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
+            // Transmit
             self.transmitAudio(buffer: buffer, connection)
-
-            /*do { // temp
-                try audioFile?.write(from: buffer)
-            } catch {
-                print("OK")
-            }*/
         }
 
         audioEngine.prepare()
