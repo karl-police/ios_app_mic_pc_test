@@ -490,10 +490,10 @@ class NetworkVoiceManager {
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
         DispatchQueue.main.async {
-            var audioEngine = audioEngineManager.audioEngine
-            let inputNode = audioEngineManager.inputNode
-            let audioSettings = audioEngineManager.audioSettings
-            let audioFormat = audioEngineManager.audioFormat
+            var audioEngine = self.audioEngineManager.audioEngine
+            let inputNode = self.audioEngineManager.inputNode
+            let audioSettings = self.audioEngineManager.audioSettings
+            let audioFormat = self.audioEngineManager.audioFormat
             guard let audioEngine = audioEngine else { return }
             guard let inputNode = inputNode else { return }
             guard let audioSettings = audioSettings else { return }
@@ -528,7 +528,7 @@ class NetworkVoiceManager {
                 }
             }
 
-            audioEngine.prepare()
+            /*audioEngine.prepare()
             
             do {
                 try audioEngine.start()
@@ -536,7 +536,7 @@ class NetworkVoiceManager {
                 G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
             }
 
-            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")*/
         }
     }
 
