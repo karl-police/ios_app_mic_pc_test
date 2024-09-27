@@ -475,8 +475,8 @@ class NetworkVoiceManager {
 
         var audioEngine = audioEngineManager.audioEngine
 
-        if (audioEngine == nil) {
-            G_UI_Class_connectionLabel.setStatusConnectionText("It's nil for some reason")
+        guard let audioEngine = audioEngine else {
+            G_UI_Class_connectionLabel.setStatusConnectionText("is nil")
             return
         }
 
