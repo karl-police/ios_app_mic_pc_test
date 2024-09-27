@@ -716,6 +716,10 @@ class AudioManager {
         //audioEngineManager.stopRecordingEngine()
 
         try self.networkVoiceManager.stop()
+
+        if (audioEngineManager.audioEngine.isRunning) {
+            audioEngineManager.audioEngine.stop()
+        }
         
         // The order on when this gets called seems to be important
         try AVAudioSession.sharedInstance().setActive(false)
