@@ -485,16 +485,17 @@ class NetworkVoiceManager {
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
         var audioEngine = audioEngineManager.audioEngine
+        let inputNode = audioEngineManager.inputNode
         let audioSettings = audioEngineManager.audioSettings
         let audioFormat = audioEngineManager.audioFormat
         guard let audioEngine = audioEngine else { return }
+        guard let inputNode = inputNode else { return }
         guard let audioSettings = audioSettings else { return }
         guard let audioFormat = audioFormat else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        var inputNode = audioEngine.inputNode
         //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
 
 
