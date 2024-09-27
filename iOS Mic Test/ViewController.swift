@@ -513,6 +513,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         G_UI_debugTextBoxOut.text = self.getDump_nwParams()
+            + "\n" + self.getDump_nwListener()
     }
 
     override func stopServer() {
