@@ -488,9 +488,9 @@ class NetworkVoiceManager {
             //self.transmitAudio(buffer: buffer, connection)
         }
 
-        /*audioEngine.prepare()
+        audioEngine.prepare()
 
-        do {
+        /*do {
             try audioEngine.start()
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
