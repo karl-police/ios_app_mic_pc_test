@@ -486,16 +486,16 @@ class NetworkVoiceManager {
     func handleAcceptedConnection(_ connection: NWConnection) {
         var audioEngine = audioEngineManager.audioEngine
         let audioSettings = audioEngineManager.audioSettings
+        let audioFormat = audioEngineManager.audioFormat
         guard let audioEngine = audioEngine else { return }
         guard let audioSettings = audioSettings else { return }
+        guard let audioFormat = audioFormat else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
         var inputNode = audioEngine.inputNode
         //inputNode.removeTap(onBus: 0) // not sure if not doing this will crash app
-
-        let inputFormat = inputNode.inputFormat(forBus: 0)
 
 
 
@@ -511,7 +511,7 @@ class NetworkVoiceManager {
 
         // Testing
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: inputFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
             //self.transmitAudio(buffer: buffer, connection)
 
