@@ -1,5 +1,10 @@
 import Network
 
+
+// Store all connections into a global-like variable for AppDelegate to clear them?
+
+
+
 // A Class to Host a Server.
 class TCPServer {
     var listener: NWListener?
