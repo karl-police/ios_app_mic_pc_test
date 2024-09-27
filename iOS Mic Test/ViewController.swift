@@ -497,7 +497,11 @@ class NetworkVoiceManager {
 
         let inputFormat = inputNode.inputFormat(forBus: 0)
 
-        self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings()) // temp
+
+
+        // TEMP
+        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
+        self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
 
         // Testing
         inputNode.installTap(
