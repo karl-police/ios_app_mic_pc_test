@@ -471,7 +471,44 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
+        var audioEngine = audioEngineManager.audioEngine! // Force Unwrap
+        var inputNode = audioEngine.inputNode
 
+        // Testing
+        let outputFormat = inputNode.outputFormat(forBus: 0)
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: outputFormat) { (buffer, when) in
+            self.transmitAudio(buffer: buffer, connection)
+        }
+
+        do {
+            try audioEngine.start()
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
+        }
+    }
+
+    func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
+        let audioData = buffer.audioBufferList.pointee.mBuffers
+        let dataSize = audioData.mDataByteSize
+        
+        // Check if data is available
+        guard let dataPointer = audioData.mData else {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+            return
+        }
+
+        // Create a Data object from the audio buffer
+        let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
+        
+        // Send audio data to the connected client
+        connection.send(
+            content: audioBytes,
+            completion: .contentProcessed({ error in
+                if let error = error {
+                    G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+                }
+            })
+        )
     }
 
     func start() throws {
@@ -483,7 +520,7 @@ class NetworkVoiceManager {
     }
 
     func stop() {
-        try self.networkVoice_TCPServer.stopServer()
+        self.networkVoice_TCPServer.stopServer()
     }
 }
 
@@ -493,7 +530,7 @@ class NetworkVoiceManager {
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
-    private var audioFormat: AVAudioFormat!
+    var audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
     var audioFile: AVAudioFile?
@@ -664,6 +701,8 @@ class AudioManager {
             try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
+            // prepare and start appear somewhere else for network
+
 
             //try audioEngineManager.startRecordingEngine()
         } catch {
