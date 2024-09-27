@@ -447,9 +447,6 @@ class NetworkVoiceTCPServer : TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Starting Server...")
 
         do {
-            // just a test
-            self.stopServer()
-
             try super.startServer()
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
