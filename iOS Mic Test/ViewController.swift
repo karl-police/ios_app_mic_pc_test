@@ -422,9 +422,15 @@ class NetworkVoiceTCPServer : TCPServer {
             // Check for handshake
             self.m_customHandshake(connection)
         case .failed(let error):
-            G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+
+        case .waiting(let error):
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
+        case .preparing:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection preparing")
+            
         default:
             break
         }
