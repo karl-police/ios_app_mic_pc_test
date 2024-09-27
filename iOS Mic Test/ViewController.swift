@@ -408,10 +408,10 @@ class NetworkVoiceTCPServer : TCPServer {
     func m_acceptIncomingConnection(_ connection: NWConnection) {
         activeConnection = connection;
 
-        /*G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
 
         // Check
-        guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
+        /*guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
             G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
             return
         }
