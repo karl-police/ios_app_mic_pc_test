@@ -485,12 +485,15 @@ class NetworkVoiceManager {
         }
 
         var inputNode = audioEngine.inputNode
+        let audioSettings = audioEngineManager.audioSettings
 
         // Testing
         let audioFormat = audioEngineManager.audioFormat
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) { (buffer, when) in
+        /*inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, when) in
             //self.transmitAudio(buffer: buffer, connection)
-        }
+        }*/
 
         
         /*do {
