@@ -47,6 +47,17 @@ class TCPServer {
     }
 
 
+    // Use this instead to close connections...
+    // ...
+    func closeConnection(_ connection: NWConnection) {
+        if let index = self.connections.firstIndex(of: connection) {
+            self.connections.remove(at: index)
+        }
+        
+        connection.cancel()
+    }
+
+
 
     // This needs to be called to start the server
     func startServer() throws {
