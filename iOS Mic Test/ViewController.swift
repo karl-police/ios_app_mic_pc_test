@@ -479,9 +479,9 @@ class NetworkVoiceManager {
 
         var audioEngine = audioEngineManager.audioEngine
         let audioSettings = audioEngineManager.audioSettings
-
         guard let audioEngine = audioEngine else { return }
         guard let audioSettings = audioEngine else { return }
+
 
         var inputNode = audioEngine.inputNode
         let audioSettings = audioEngineManager.audioSettings
