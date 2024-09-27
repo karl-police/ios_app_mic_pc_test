@@ -448,6 +448,8 @@ class NetworkVoiceTCPServer : TCPServer {
         super.stopServer()
 
         cleanUp()
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Server stopped")
     }
 }
 
@@ -483,14 +485,14 @@ class NetworkVoiceManager {
         var inputNode = audioEngine.inputNode
 
         // Testing
-        let audioFormat = audioEngineManager.audioFormat
+        /*let audioFormat = audioEngineManager.audioFormat
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: audioFormat) { (buffer, when) in
             //self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
 
-        /*do {
+        do {
             try audioEngine.start()
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
