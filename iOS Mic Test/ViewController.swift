@@ -328,7 +328,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
-    var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)!
+    var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)?
 
     override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
@@ -476,9 +476,9 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        ///////////////////////self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-        ///////////////////////    self?.handleAcceptedConnection(connection)
-        ///////////////////////}
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
+            self?.handleAcceptedConnection(connection)
+        }
     }
 
     // When we have connection we can start streaming
