@@ -510,7 +510,7 @@ class NetworkVoiceManager {
             //self.transmitAudio(buffer: buffer, connection)
 
             do { // temp
-                try audioFile?.write(from: buffer)
+                try audioFile.write(from: buffer)
             } catch {
                 self.tempError = error
             }
