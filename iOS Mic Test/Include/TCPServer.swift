@@ -69,7 +69,7 @@ class TCPServer {
             self.listener = try NWListener(using: .tcp, on: self.port)
 
             listener?.newConnectionHandler = { newConnection in 
-                self.handleListenerNewConnection(newConnection)
+                handleListenerNewConnection(newConnection)
             }
 
             // Start listening
