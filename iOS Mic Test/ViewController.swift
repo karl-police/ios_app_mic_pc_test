@@ -551,7 +551,7 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        guard var audioEngine = self.audioEngineManager.audioEngine else { return }
+        guard var audioEngine = audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
@@ -799,7 +799,7 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            audioEngineManager.audioEngine.prepare()
+            //audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
