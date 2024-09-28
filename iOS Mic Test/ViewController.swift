@@ -570,6 +570,8 @@ class NetworkVoiceManager {
 
 
 
+        inputNode.removeTap(fromBus: 0)
+
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
@@ -798,7 +800,7 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            //audioEngineManager.audioEngine.prepare()
+            audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
