@@ -578,14 +578,17 @@ class NetworkVoiceManager {
         }
 
         audioEngine.prepare()
-        
-        do {
-            try audioEngine.start()
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-        }
+        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
 
-        G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+        // Test in 3 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            do {
+                try audioEngine.start()
+                G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+            } catch {
+                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            }
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
