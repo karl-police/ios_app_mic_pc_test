@@ -569,6 +569,8 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
+        audioEngine.prepare()
+
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
         do {
             var audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
