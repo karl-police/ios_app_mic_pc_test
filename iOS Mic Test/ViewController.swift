@@ -569,26 +569,11 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        audioEngine.prepare()
-
-        let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        do {
-            var audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-            inputNode.installTap(
-                onBus: 0, bufferSize: audioSettings.bufferSize
-            ) { (buffer, when) in
-                // Transmit
-                //self.transmitAudio(buffer: buffer, connection)
-
-                do {
-                    // Write the buffer to the audio file
-                    try audioFile.write(from: buffer)
-                } catch {
-                    print("error")
-                }
-            }
-        } catch {
-            G_UI_debugTextBoxOut.text = error.localizedDescription
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, when) in
+            // Transmit
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
