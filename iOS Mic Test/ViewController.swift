@@ -581,7 +581,7 @@ class NetworkVoiceManager {
         do {
             try audioEngine.start()
         } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
         }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
