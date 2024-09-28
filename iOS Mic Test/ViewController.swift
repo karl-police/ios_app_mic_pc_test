@@ -605,7 +605,7 @@ class NetworkVoiceManager {
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
-                    G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+                    //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
         )
