@@ -579,7 +579,7 @@ class NetworkVoiceManager {
 
             do {
                 // Write the buffer to the audio file
-                try audioFile?.write(from: buffer)
+                try audioFile.write(from: buffer)
             } catch {
                 print("error")
             }
