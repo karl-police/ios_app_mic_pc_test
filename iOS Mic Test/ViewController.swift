@@ -577,7 +577,29 @@ class NetworkVoiceManager {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
             // Transmit
-            self.transmitAudio(buffer: buffer, connection)
+            //self.transmitAudio(buffer: buffer, connection)
+
+            let audioData = buffer.audioBufferList.pointee.mBuffers
+            let dataSize = audioData.mDataByteSize
+            
+            // Check if data is available
+            guard let dataPointer = audioData.mData else {
+                //G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+                return
+            }
+
+            // Data
+            let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
+            
+            // Send audio data
+            connection.send(
+                content: audioBytes,
+                completion: .contentProcessed({ error in
+                    if let error = error {
+                        //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+                    }
+                })
+            )
         }
 
         audioEngine.prepare()
@@ -592,7 +614,7 @@ class NetworkVoiceManager {
         } // DISPATCH
     }
 
-    func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
+    /*func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
         let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
@@ -614,7 +636,7 @@ class NetworkVoiceManager {
                 }
             })
         )
-    }
+    }*/
 
 
 
