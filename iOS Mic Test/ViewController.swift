@@ -588,28 +588,26 @@ class NetworkVoiceManager {
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
-        let audioData = buffer.audioBufferList.pointee.mBuffers
-        let dataSize = audioData.mDataByteSize
+    let bufferList = buffer.audioBufferList.pointee
+    
+    for i in 0 ..< Int(bufferList.mNumberBuffers) {
+        let audioBuffer = bufferList.mBuffers[i]
+        let dataSize = audioBuffer.mDataByteSize
         
-        // Check if data is available
-        guard let dataPointer = audioData.mData else {
-            //G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+        guard let dataPointer = audioBuffer.mData else {
+            //G_UI_Class_connectionLabel.setStatusConnectionText("Problem: No audio data")
             return
         }
-
-        // Data
-        let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
         
-        // Send audio data
-        connection.send(
-            content: audioBytes,
-            completion: .contentProcessed({ error in
-                if let error = error {
-                    //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
-                }
-            })
-        )
+        let audioBytes = Data(bytesNoCopy: dataPointer, count: Int(dataSize), deallocator: .none)
+        
+        connection.send(content: audioBytes, completion: .contentProcessed({ error in
+            if let error = error {
+                //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+            }
+        }))
     }
+}
 
 
 
