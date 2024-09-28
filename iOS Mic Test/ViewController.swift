@@ -574,12 +574,12 @@ class NetworkVoiceManager {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
             // Transmit
-            self.transmitAudio(buffer: buffer, connection)
+            DispatchQueue.main.asnyc {
+                self.transmitAudio(buffer: buffer, connection)
+            }
         }
 
         audioEngine.prepare()
-        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
-
         
         do {
             try audioEngine.start()
