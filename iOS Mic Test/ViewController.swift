@@ -569,40 +569,17 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        // Test in 3 seconds
-        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
 
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
             // Transmit
-            //self.transmitAudio(buffer: buffer, connection)
-
-            let audioData = buffer.audioBufferList.pointee.mBuffers
-            let dataSize = audioData.mDataByteSize
-            
-            // Check if data is available
-            guard let dataPointer = audioData.mData else {
-                //G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
-                return
-            }
-
-            // Data
-            let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
-            
-            // Send audio data
-            connection.send(
-                content: audioBytes,
-                completion: .contentProcessed({ error in
-                    if let error = error {
-                        //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
-                    }
-                })
-            )
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
+        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
+
         
         do {
             try audioEngine.start()
@@ -610,11 +587,9 @@ class NetworkVoiceManager {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
         }
-
-        } // DISPATCH
     }
 
-    /*func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
+    func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
         let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
@@ -636,7 +611,7 @@ class NetworkVoiceManager {
                 }
             })
         )
-    }*/
+    }
 
 
 
