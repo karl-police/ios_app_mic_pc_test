@@ -616,8 +616,6 @@ class NetworkVoiceManager {
     func start() throws {
         do {
             try self.networkVoice_TCPServer.startServer()
-            self.networkVoice_TCPServer.stopServer()
-            try self.networkVoice_TCPServer.startServer()
         } catch {
             throw error
         }
