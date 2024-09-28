@@ -1085,6 +1085,13 @@ class ViewController: UIViewController {
         // Register for keyboard notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    
+    
+        // TESTING
+        NSSetUncaughtExceptionHandler { exception in 
+            G_UI_debugTextBoxOut.text = "\(exception)"
+                + "Stack Trace: \(exception.callStackSymbols)"
+        }
     }
 
     // Deinit
