@@ -572,11 +572,9 @@ class NetworkVoiceManager {
 
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { buffer, when in
-            DispatchQueue.main.async {
-                // Transmit
-                self.transmitAudio(buffer: buffer, connection)
-            }
+        ) { (buffer, when) in
+            // Transmit
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
