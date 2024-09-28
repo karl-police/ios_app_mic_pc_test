@@ -570,7 +570,7 @@ class NetworkVoiceManager {
 
 
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+        var audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
@@ -579,7 +579,7 @@ class NetworkVoiceManager {
 
             do {
                 // Write the buffer to the audio file
-                try self.audioFile?.write(from: buffer)
+                try audioFile?.write(from: buffer)
             } catch {
                 print("error")
             }
