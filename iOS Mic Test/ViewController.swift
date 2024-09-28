@@ -574,9 +574,7 @@ class NetworkVoiceManager {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
             // Transmit
-            DispatchQueue.main.asnyc {
-                self.transmitAudio(buffer: buffer, connection)
-            }
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
