@@ -593,7 +593,7 @@ class NetworkVoiceManager {
         
         // Check if data is available
         guard let dataPointer = audioData.mData else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+            //G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
             return
         }
 
