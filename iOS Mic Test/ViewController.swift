@@ -570,8 +570,6 @@ class NetworkVoiceManager {
 
 
 
-        inputNode.removeTap(onBus: 0)
-
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
