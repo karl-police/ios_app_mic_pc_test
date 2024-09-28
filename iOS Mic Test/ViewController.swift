@@ -543,21 +543,17 @@ class NetworkVoiceManager {
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            //self?.handleAcceptedConnection(connection)
+            self?.handleAcceptedConnection(connection)
         }
     }
 
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        var audioEngine = self.audioEngineManager.audioEngine
-        let inputNode = self.audioEngineManager.inputNode
-        let audioSettings = self.audioEngineManager.audioSettings
-        let audioFormat = self.audioEngineManager.audioFormat
-        guard let audioEngine = audioEngine else { return }
-        guard let inputNode = inputNode else { return }
-        guard let audioSettings = audioSettings else { return }
-        guard let audioFormat = audioFormat else { return }
+        guard var audioEngine = self.audioEngineManager.audioEngine else { return }
+        guard let inputNode = self.audioEngineManager.inputNode else { return }
+        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+        guard let audioFormat = self.audioEngineManager.audioFormat else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
