@@ -544,13 +544,17 @@ class NetworkVoiceManager {
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
+            do {
+                try self?.handleAcceptedConnection(connection)
+            } catch {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Err: \(error.localizedDescription)")
+            }
         }
     }
 
     // When we have connection we can start streaming
     // This will make us start streaming
-    func handleAcceptedConnection(_ connection: NWConnection) {
+    func handleAcceptedConnection(_ connection: NWConnection) throws {
         guard var audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
