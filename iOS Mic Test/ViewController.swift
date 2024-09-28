@@ -816,7 +816,7 @@ class AudioManager {
         do {
             //audioEngineManager.stopRecordingEngine()
 
-            try self.networkVoiceManager.stop()
+            self.networkVoiceManager.stop()
 
             self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
             if (self.audioEngineManager.audioEngine.isRunning) {
