@@ -570,19 +570,23 @@ class NetworkVoiceManager {
 
 
         let audioFilename = GetDocumentsDirectory().appendingPathComponent("recording.m4a")
-        var audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { (buffer, when) in
-            // Transmit
-            //self.transmitAudio(buffer: buffer, connection)
+        do {
+            var audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            ) { (buffer, when) in
+                // Transmit
+                //self.transmitAudio(buffer: buffer, connection)
 
-            do {
-                // Write the buffer to the audio file
-                try audioFile.write(from: buffer)
-            } catch {
-                print("error")
+                do {
+                    // Write the buffer to the audio file
+                    try audioFile.write(from: buffer)
+                } catch {
+                    print("error")
+                }
             }
+        } catch {
+            G_UI_debugTextBoxOut.text = error.localizedDescription
         }
 
         audioEngine.prepare()
