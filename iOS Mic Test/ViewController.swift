@@ -569,6 +569,9 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
+        // Test in 3 seconds
+        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
 
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
@@ -578,17 +581,15 @@ class NetworkVoiceManager {
         }
 
         audioEngine.prepare()
-        G_UI_Class_connectionLabel.setStatusConnectionText("TESTING")
-
-        // Test in 3 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            do {
-                try audioEngine.start()
-                G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
-            } catch {
-                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-            }
+        
+        do {
+            try audioEngine.start()
+            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
         }
+
+        } // DISPATCH
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
