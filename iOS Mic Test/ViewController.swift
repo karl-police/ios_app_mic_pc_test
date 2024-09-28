@@ -573,13 +573,9 @@ class NetworkVoiceManager {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { buffer, when in
-            do {
+            DispatchQueue.main.async {
                 // Transmit
-                try self.transmitAudio(buffer: buffer, connection)
-            } catch {
-                DispatchQueue.main.async {
-                    G_UI_Class_connectionLabel.setStatusConnectionText("Err: \(error.localizedDescription)")
-                }
+                self.transmitAudio(buffer: buffer, connection)
             }
         }
 
