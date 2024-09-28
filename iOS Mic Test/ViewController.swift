@@ -312,8 +312,9 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 }
 
 
-var G_cfg_b_DoUDP = false // Something changeable
 
+
+var G_cfg_b_DoUDP = false // Something changeable
 
 /***
     =================================
