@@ -788,7 +788,7 @@ class AudioManager {
 
         do {
             //try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
-            try session.setCategory(.multiRoute, mode: .default, options: [.mixWithOthers])
+            try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker])
             try session.setActive(true)
         } catch {
             throw error
