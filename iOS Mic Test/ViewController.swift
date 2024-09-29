@@ -787,8 +787,9 @@ class AudioManager {
         let session = AVAudioSession.sharedInstance()
 
         do {
-            try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
-            //try session.setActive(true)
+            //try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
+            try session.setCategory(.multiRoute, mode: .default, options: [.mixWithOthers])
+            try session.setActive(true)
         } catch {
             throw error
         }
