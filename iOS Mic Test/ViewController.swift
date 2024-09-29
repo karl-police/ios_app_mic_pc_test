@@ -569,15 +569,6 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        inputNode.isVoiceProcessingBypassed = true
-
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { (buffer, when) in
-            // Transmit
-            self.transmitAudio(buffer: buffer, connection)
-        }
-
         /*inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
@@ -585,7 +576,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }*/
 
-        audioEngine.prepare()
+        /*audioEngine.prepare()
         
         do {
             try audioEngine.start()
@@ -593,7 +584,7 @@ class NetworkVoiceManager {
             G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-        }
+        }*/
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
