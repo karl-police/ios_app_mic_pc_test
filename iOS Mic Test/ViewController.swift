@@ -788,6 +788,10 @@ class AudioManager {
         do {
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             try session.setActive(true)
+
+            // Test
+            try session.setActive(false)
+            try session.setActive(true)
         } catch {
             throw error
         }
@@ -808,12 +812,11 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            //try self.setup_AudioSessionForVoIP()
+            try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network
 
-            try self.setup_AudioSessionForVoIP()
 
             //try audioEngineManager.startRecordingEngine()
         } catch {
