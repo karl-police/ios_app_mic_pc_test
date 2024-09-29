@@ -537,6 +537,8 @@ class NetworkVoiceManager {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
+    var mixerNode: AVAudioMixerNode! // Mixer Node
+
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
@@ -546,6 +548,9 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
             self?.handleAcceptedConnection(connection)
         }
+
+
+        self.mixerNode = AVAudioMixerNode()
     }
 
     // When we have connection we can start streaming
@@ -568,6 +573,9 @@ class NetworkVoiceManager {
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
 
+
+        audioEngine.attach(self.mixerNode)
+        audioEngine.connect(inputNode, to: mixerNode, format: audioFormat)
 
         /*inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
