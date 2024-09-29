@@ -569,12 +569,21 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
+
+
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
+
+        /*inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, when) in
+            // Transmit
+            self.transmitAudio(buffer: buffer, connection)
+        }*/
 
         audioEngine.prepare()
         
@@ -800,7 +809,7 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            try self.setup_AudioSessionForVoIP()
+            //try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network
