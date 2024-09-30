@@ -157,7 +157,7 @@ class TCPServer {
 
 
         // Current Parameters
-        let cur_nwParameters = listener.parameters
+        let cur_nwParameters = self.cfg_nwParameters //listener.parameters
         // e.g. TCP Options
         let transportProtocolOptions = cur_nwParameters.defaultProtocolStack.transportProtocol
         // NWProtocolIPOptions
