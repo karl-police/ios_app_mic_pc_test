@@ -449,47 +449,6 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
 
-    func getDump_nwParams() -> String {
-        var debugText = ""
-        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
-            + "\t \(cfg_nwParameters.defaultProtocolStack.transportProtocol)\n"
-            + "\t \(cfg_nwParameters.defaultProtocolStack.internetProtocol)\n"
-
-        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
-        debugText += "requiredInterface: \(cfg_nwParameters.requiredInterface)\n"
-        debugText += "requiredLocalEndpoint: \(cfg_nwParameters.requiredLocalEndpoint)\n"
-        debugText += "prohibitConstrainedPaths: \(cfg_nwParameters.prohibitConstrainedPaths)\n"
-        debugText += "prohibitExpensivePaths: \(cfg_nwParameters.prohibitExpensivePaths)\n"
-        debugText += "prohibitedInterfaceTypes: \(cfg_nwParameters.prohibitedInterfaceTypes)\n"
-        debugText += "prohibitedInterfaces: \(cfg_nwParameters.prohibitedInterfaces)\n"
-        debugText += "\n"
-
-        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
-        debugText += "serviceClass: \(cfg_nwParameters.serviceClass)\n"
-        debugText += "allowFastOpen: \(cfg_nwParameters.allowFastOpen)\n"
-        debugText += "expiredDNSBehavior: \(cfg_nwParameters.expiredDNSBehavior)\n"
-        debugText += "includePeerToPeer: \(cfg_nwParameters.includePeerToPeer)\n"
-        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)\n"
-        debugText += "acceptLocalOnly: \(cfg_nwParameters.acceptLocalOnly)\n"
-        debugText += "\ndebugDescription: \(cfg_nwParameters.debugDescription)\n"
-
-        return debugText
-    }
-
-    func getDump_nwListener() -> String {
-        var debugText = "Listener:\n"
-
-        guard let listener = self.listener else {
-            debugText = "No Listener found."
-            return debugText
-        }
-
-        debugText += "newConnectionLimit: \(listener.newConnectionLimit)\n"
-        debugText += "\ndebugDescription: \(listener.debugDescription)"
-
-        return debugText
-    }
-
     func cleanUp() {
         self.activeConnection = nil
     }
@@ -523,7 +482,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func stopServer() {
-        super.stopServer()
+        super.stopServer() // should remove all connections as well
 
         cleanUp()
 
@@ -805,7 +764,7 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            try self.setup_AudioSessionForVoIP()
+            //try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network

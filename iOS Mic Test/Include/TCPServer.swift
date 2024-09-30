@@ -5,6 +5,57 @@ import Network
 
 
 
+struct Utils_NWDump {
+    static func getStringDump_forNWProtocolOptions(_ OPT_NwProtocolOptions: NWProtocolOptions?) -> String {
+        var debugText = ""
+
+        guard let nwProtocolOptions = OPT_NwProtocolOptions else {
+            debugText += "Protocol was not available."
+            return debugText
+        }
+
+        switch nwProtocolOptions {
+            case let options as NWProtocolTCP.Options:
+                debugText += "enableFastOpen: \(options.enableFastOpen)\n"
+                    + "maximumSegmentSize: \(options.maximumSegmentSize)\n"
+                    + "noDelay: \(options.noDelay)\n"
+                    + "noOptions: \(options.noOptions)\n"
+                    + "noPush: \(options.noPush)\n"
+                    + "retransmitFinDrop: \(options.retransmitFinDrop)\n"
+                    + "disableAckStretching: \(options.disableAckStretching)\n"
+                    + "disableECN: \(options.disableECN)\n"
+                    + "\n"
+                    + "enableKeepalive: \(options.enableKeepalive)\n"
+                    + "keepaliveIdle: \(options.keepaliveIdle)\n"
+                    + "keepaliveCount: \(options.keepaliveCount)\n"
+                    + "keepaliveInterval: \(options.keepaliveInterval)\n"
+                    + "\n"
+                    + "connectionTimeout: \(options.connectionTimeout)\n"
+                    + "connectionDropTime: \(options.connectionDropTime)\n"
+                    + "persistTimeout: \(options.persistTimeout)\n"
+
+            case let options as NWProtocolUDP.Options:
+                debugText += "preferNoChecksum: \(options.preferNoChecksum)\n"
+
+            case let options as NWProtocolIP.Options:
+                debugText += "version: \(options.version)\n"
+                    + "shouldCalculateReceiveTime: \(options.shouldCalculateReceiveTime)\n"
+                    + "hopLimit: \(options.hopLimit)\n"
+                    + "useMinimumMTU: \(options.useMinimumMTU)\n"
+                    + "disableFragmentation: \(options.disableFragmentation)\n"
+                    + "disableMulticastLoopback: \(options.disableMulticastLoopback)\n"
+                    + "localAddressPreference: \(options.localAddressPreference)\n"
+
+            default:
+                debugText = "NOT DEFINED\n"
+        }
+
+        return debugText
+    }
+}
+
+
+
 // A Class to Host a Server.
 class TCPServer {
     var listener: NWListener?
@@ -62,6 +113,67 @@ class TCPServer {
         }
         connection.cancel()
     }
+
+
+
+    func getDump_nwParams() -> String {
+        var debugText = ""
+        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
+            + "\t \(cfg_nwParameters.defaultProtocolStack.transportProtocol)\n"
+            + "\t \(cfg_nwParameters.defaultProtocolStack.internetProtocol)\n"
+
+        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
+        debugText += "requiredInterface: \(cfg_nwParameters.requiredInterface)\n"
+        debugText += "requiredLocalEndpoint: \(cfg_nwParameters.requiredLocalEndpoint)\n"
+        debugText += "prohibitConstrainedPaths: \(cfg_nwParameters.prohibitConstrainedPaths)\n"
+        debugText += "prohibitExpensivePaths: \(cfg_nwParameters.prohibitExpensivePaths)\n"
+        debugText += "prohibitedInterfaceTypes: \(cfg_nwParameters.prohibitedInterfaceTypes)\n"
+        debugText += "prohibitedInterfaces: \(cfg_nwParameters.prohibitedInterfaces)\n"
+        debugText += "\n"
+
+        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
+        debugText += "serviceClass: \(cfg_nwParameters.serviceClass)\n"
+        debugText += "allowFastOpen: \(cfg_nwParameters.allowFastOpen)\n"
+        debugText += "expiredDNSBehavior: \(cfg_nwParameters.expiredDNSBehavior)\n"
+        debugText += "includePeerToPeer: \(cfg_nwParameters.includePeerToPeer)\n"
+        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)\n"
+        debugText += "acceptLocalOnly: \(cfg_nwParameters.acceptLocalOnly)\n"
+        debugText += "\ndebugDescription: \(cfg_nwParameters.debugDescription)\n"
+
+        return debugText
+    }
+
+
+    func getDump_nwListener() -> String {
+        var debugText = "Listener:\n"
+
+        guard let listener = self.listener else {
+            debugText = "No Listener found."
+            return debugText
+        }
+
+        debugText += "newConnectionLimit: \(listener.newConnectionLimit)\n"
+        debugText += "\ndebugDescription: \(listener.debugDescription)"
+
+
+
+        // Current Parameters
+        let cur_nwParameters = listener.parameters
+        // e.g. TCP Options
+        let transportProtocolOptions = cur_nwParameters.defaultProtocolStack.transportProtocol
+        // NWProtocolIPOptions
+        let internetProtocolOptions = cur_nwParameters.defaultProtocolStack.internetProtocol
+
+        // NWProtocol
+        debugText += "\n" + "Transport Options:\n"
+        debugText += Utils_NWDump.getStringDump_forNWProtocolOptions(transportProtocolOptions)
+
+        debugText += "\n" + "Internet Protocol:\n"
+        debugText += Utils_NWDump.getStringDump_forNWProtocolOptions(internetProtocolOptions)
+
+        return debugText
+    }
+
 
 
 
