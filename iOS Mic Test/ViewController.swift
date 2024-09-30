@@ -556,7 +556,7 @@ class NetworkVoiceManager {
     // When we have connection we can start streaming
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
-        guard var audioEngine = self.audioEngineManager.audioEngine else { return }
+        guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
@@ -574,10 +574,6 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        audioEngine.prepare()
-        inputNode.removeTap(onBus: 0)
-
-
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
@@ -585,7 +581,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        //audioEngine.prepare()
+        audioEngine.prepare()
         
         do {
             try audioEngine.start()
