@@ -389,7 +389,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     completion: .contentProcessed({ error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
-                            self.cancelConnection(incomingConnection) // Ensure
+                            self?.cancelConnection(incomingConnection) // Ensure
                         } else {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
 
@@ -895,6 +895,8 @@ var G_UI_debugTextBoxOut = UITextView()
 class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut = G_UI_debugTextBoxOut
+
+    var btnProtocolToggle: UIButton!
     var btnRecordTestToggle: UIButton!
     var btnMicToggle: UIButton!
     
