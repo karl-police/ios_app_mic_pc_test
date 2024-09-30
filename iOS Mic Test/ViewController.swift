@@ -462,14 +462,18 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
+            var customNWParams = NWParameters.tcp
+
             // Configuration
-            if var tcpOptions = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
+            if var tcpOptions = customNWParams.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
                 tcpOptions.noDelay = true
                 tcpOptions.enableKeepalive = true
             } else {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Wrong")
                 return
             }
+
+            self.cfg_nwParameters = customNWParams // TCP
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
@@ -779,6 +783,7 @@ class AudioManager {
             // audioEngine prepare and start function appears somewhere else for network
 
 
+            try self.setup_AudioSessionForVoIP()
             //try audioEngineManager.startRecordingEngine()
         } catch {
             throw error
@@ -789,9 +794,6 @@ class AudioManager {
         do {
             //audioEngineManager.stopRecordingEngine()
 
-            // The order on when this gets called seems to be important
-            try AVAudioSession.sharedInstance().setActive(false)
-
             self.networkVoiceManager.stop()
 
             self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
@@ -800,7 +802,7 @@ class AudioManager {
             }
             
             // The order on when this gets called seems to be important
-            //try AVAudioSession.sharedInstance().setActive(false)
+            try AVAudioSession.sharedInstance().setActive(false)
         } catch {
             throw error
         }
