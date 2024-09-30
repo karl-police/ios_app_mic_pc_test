@@ -559,17 +559,9 @@ class NetworkVoiceManager {
         guard var audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
-
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
-        guard let outputNode = self.audioEngineManager.outputNode else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
-
-
-        guard connection.state == .ready else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Connection not ready!!!")
-            return
-        }
 
 
         let streamDescription = audioFormat.streamDescription.pointee
@@ -582,14 +574,14 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        /*inputNode.installTap(
+        inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        audioEngine.prepare()
+        /*audioEngine.prepare()
         
         do {
             try audioEngine.start()
@@ -667,6 +659,8 @@ class AudioEngineManager {
 
         // Output Node
         self.outputNode = audioEngine.outputNode
+        let inputOutputAudioFormat = self.inputNode.outputFormat(forBus: 0)
+        let outputAudioFormat = self.outputNode.outputFormat(forBus: 0)
     }
 
 
