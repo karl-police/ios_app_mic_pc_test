@@ -465,6 +465,7 @@ class NetworkVoiceTCPServer : TCPServer {
             // Configuration
             if var tcpOptions = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
                 tcpOptions.noDelay = true
+                tcpOptions.enableKeepalive = true
             } else {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Wrong")
                 return
