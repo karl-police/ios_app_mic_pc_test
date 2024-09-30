@@ -469,7 +469,10 @@ class NetworkVoiceTCPServer : TCPServer {
             tcpOptions.noDelay = true
             tcpOptions.enableKeepalive = true
 
-            self.cfg_nwParameters = NWParameters(tls: NWProtocolTLS.Options(), tcp: tcpOptions)
+            self.cfg_nwParameters = NWParameters(
+                tls: NWProtocolTLS.Options(),
+                tcp: NWProtocolTCP.Options = tcpOptions
+            )
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
