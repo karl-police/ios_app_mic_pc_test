@@ -28,7 +28,7 @@ class TCPServer {
     func handleListenerNewConnection(_ newConnection: NWConnection) {
         self.connectionsArray.append(newConnection)
 
-        self.handleConnection(newConnection)
+        handleConnection(newConnection)
     }
 
     // Set a pre-defined empty handleConnection
