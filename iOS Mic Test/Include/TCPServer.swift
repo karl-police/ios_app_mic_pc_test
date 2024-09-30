@@ -57,8 +57,6 @@ struct Utils_NWDump {
 // A Class to Host a Server.
 class TCPServer {
     var listener: NWListener?
-    var connection: NWConnection?
-
     private var connectionsArray: [NWConnection] = []
 
     var cfg_nwParameters = NWParameters.tcp
