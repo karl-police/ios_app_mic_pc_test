@@ -82,8 +82,8 @@ class TCPServer {
 
     // Set a pre-defined empty handleConnection
     func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { state in
-            self.connectionStateHandler(connection: connection, state: state)
+        connection.stateUpdateHandler = { [weak self] state in
+            self?.connectionStateHandler(connection: connection, state: state)
         }
 
         connection.start(queue: .main)
@@ -157,7 +157,7 @@ class TCPServer {
 
 
         // Current Parameters
-        let cur_nwParameters = listener.parameters
+        let cur_nwParameters = self.cfg_nwParameters //listener.parameters
         // e.g. TCP Options
         let transportProtocolOptions = cur_nwParameters.defaultProtocolStack.transportProtocol
         // NWProtocolIPOptions

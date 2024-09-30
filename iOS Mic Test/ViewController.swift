@@ -344,8 +344,8 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { state in
-            self.connectionStateHandler(connection: connection, state: state)
+        connection.stateUpdateHandler = { [weak self] state in
+            self?.connectionStateHandler(connection: connection, state: state)
         }
 
         connection.start(queue: .main)
@@ -355,9 +355,9 @@ class NetworkVoiceTCPServer : TCPServer {
     private func m_customHandshake(_ incomingConnection: NWConnection) {
         let handshakeTimeout: TimeInterval = 10.0
 
-        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { _ in
+        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel on timeout
-            self.cancelConnection(incomingConnection)
+            self?.cancelConnection(incomingConnection)
 
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
@@ -371,7 +371,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { data, context, isComplete, error in
+        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
@@ -395,7 +395,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
                             // Accept it
                             // After we sent
-                            self.m_acceptIncomingConnection(incomingConnection)
+                            self?.m_acceptIncomingConnection(incomingConnection)
                         }
                     })
                 )
@@ -522,8 +522,8 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { connection in
-            self.handleAcceptedConnection(connection)
+        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
+            self?.handleAcceptedConnection(connection)
         }
 
 
@@ -1002,12 +1002,12 @@ class ViewController: UIViewController {
         }
 
         // Set up callback when a polar pattern is selected
-        polarPatternTableView.onDataSourceSelected = { selectedDataSource in
-            self.updateDataSource(selectedDataSource)
+        polarPatternTableView.onDataSourceSelected = { [weak self] selectedDataSource in
+            self?.updateDataSource(selectedDataSource)
         }
 
-        polarPatternTableView.onPatternSelected = { selectedPattern in
-            self.updatePolarPattern(selectedPattern)
+        polarPatternTableView.onPatternSelected = { [weak self] selectedPattern in
+            self?.updatePolarPattern(selectedPattern)
         }
     }
 
