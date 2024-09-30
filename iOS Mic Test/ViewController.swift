@@ -481,7 +481,7 @@ class NetworkVoiceTCPServer : TCPServer {
             // TCP
             // Configuration
 
-            var tcpOptions: NWProtocolTCP.Options() = {
+            var tcpOptions: NWProtocolTCP.Options()
             tcpOptions.enableKeepalive = true
 
             self.cfg_nwParameters = NWParameters(
