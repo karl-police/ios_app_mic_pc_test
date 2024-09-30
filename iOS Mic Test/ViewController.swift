@@ -658,6 +658,9 @@ class AudioEngineManager {
     func setupInit() {
         self.inputNode = audioEngine.inputNode
         self.audioFormat = inputNode.inputFormat(forBus: 0)
+
+        // TEST
+        let outputNode = audioEngine.outputNode
     }
 
 
