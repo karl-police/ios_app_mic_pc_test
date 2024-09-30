@@ -131,6 +131,8 @@ class TCPServer {
     func getDump_nwParams() -> String {
         //let nwParameters = self.cfg_nwParameters
 
+        var debugText = ""
+
         guard let listener = self.listener else {
             debugText = "No Listener found."
             return debugText
@@ -139,7 +141,6 @@ class TCPServer {
         // Current Parameters
         let nwParameters = listener.parameters
 
-        var debugText = ""
         debugText += "defaultProtocolStack: \(nwParameters.defaultProtocolStack)\n"
             + "\t \(nwParameters.defaultProtocolStack.transportProtocol)\n"
             + "\t \(nwParameters.defaultProtocolStack.internetProtocol)\n"
