@@ -576,17 +576,17 @@ class NetworkVoiceManager {
 
 
         inputNode.removeTap(fromBus: 0)
-        do {
-            inputNode.installTap(
-                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-            ) { (buffer, time) in
-                // Transmit
-                self.transmitAudio(buffer: buffer, connection)
-            }
 
-            audioEngine.prepare()
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, time) in
+            // Transmit
+            self.transmitAudio(buffer: buffer, connection)
+        }
+
+        audioEngine.prepare()
         
-        
+        do {
             try audioEngine.start()
             
             G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
