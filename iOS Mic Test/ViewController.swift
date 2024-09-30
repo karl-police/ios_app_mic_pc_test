@@ -500,13 +500,13 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         // Force this on both
-        //self.cfg_nwParameters.acceptLocalOnly = true
+        self.cfg_nwParameters.acceptLocalOnly = true
 
 
         do {
             try super.startServer()
 
-            //G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
+            // The log that the server started is located at the listener state update function.
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
         }
