@@ -574,8 +574,16 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
+
+        var testAudioFormat = AVAudioFormat(
+            commonFormat: .pcmFormatFloat32,
+            sampleRate: audioSettings.sampleRate,
+            channels: audioSettings.channelCount,
+            interleaved: true
+        )
+
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: testAudioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
