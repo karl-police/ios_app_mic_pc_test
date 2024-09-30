@@ -498,6 +498,11 @@ class NetworkVoiceTCPServer : TCPServer {
         self.cfg_nwParameters.acceptLocalOnly = true
 
 
+        let socketDescriptor = socket(AF_INET, SOCK_STREAM, 8125)
+        var reuse: Int32 = 1
+        setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
+
+
         do {
             try super.startServer()
 
