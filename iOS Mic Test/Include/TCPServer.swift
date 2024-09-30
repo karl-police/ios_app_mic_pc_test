@@ -175,15 +175,17 @@ class TCPServer {
             return debugText
         }
 
+        // Current Parameters
+        let cur_nwParameters = listener.parameters
+
         debugText += "newConnectionLimit: \(listener.newConnectionLimit)\n"
         debugText += "\ndebugDescription: \(listener.debugDescription)"
 
 
-
         // e.g. TCP Options
-        let transportProtocolOptions = nwParameters.defaultProtocolStack.transportProtocol
+        let transportProtocolOptions = cur_nwParameters.defaultProtocolStack.transportProtocol
         // NWProtocolIPOptions
-        let internetProtocolOptions = nwParameters.defaultProtocolStack.internetProtocol
+        let internetProtocolOptions = cur_nwParameters.defaultProtocolStack.internetProtocol
 
         // NWProtocol
         debugText += "\n" + "Transport Options:\n"
