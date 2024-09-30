@@ -561,6 +561,7 @@ class NetworkVoice_SocketTCPServer : SocketTCPServer {
 
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
+    var socketTCPServer = NetworkVoice_SocketTCPServer! // Test
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -570,6 +571,9 @@ class NetworkVoiceManager {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
+        
+        // Test
+        self.socketTCPServer = NetworkVoice_SocketTCPServer(inputPort: 8125)
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
