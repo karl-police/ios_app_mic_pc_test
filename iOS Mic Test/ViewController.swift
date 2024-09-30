@@ -576,10 +576,7 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        //audioEngine.attach(self.mixerNode)
-        //audioEngine.connect(inputNode, to: mixerNode, format: audioFormat)
-
-        outputNode.installTap(
+        inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
             // Transmit
