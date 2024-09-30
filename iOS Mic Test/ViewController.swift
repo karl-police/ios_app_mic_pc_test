@@ -513,6 +513,11 @@ class NetworkVoiceTCPServer : TCPServer {
 
         G_UI_debugTextBoxOut.text = self.getDump_nwParams()
             + "\n" + self.getDump_nwListener()
+
+
+        if let options = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
+            G_UI_debugTextBoxOut.text = "Test enableKeepalive: \(options.enableKeepalive)\n"
+        }
     }
 
     override func stopServer() {
