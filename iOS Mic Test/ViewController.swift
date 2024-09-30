@@ -460,7 +460,8 @@ class NetworkVoiceTCPServer : TCPServer {
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
-            
+            let tcpOptions = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as NWProtocolTCP.Options
+            tcpOptions.noDelay = true // Test
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
