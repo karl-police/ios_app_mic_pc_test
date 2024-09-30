@@ -519,11 +519,11 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func stopServer() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
+
         super.stopServer() // should remove all connections as well
 
         cleanUp()
-
-        G_UI_Class_connectionLabel.setStatusConnectionText("Server stopped")
     }
 }
 
