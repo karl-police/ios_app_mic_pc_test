@@ -118,7 +118,7 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
 
 class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
-    var sampleRate: Double = 44100.0
+    var sampleRate: Double = 48000.0 //44100.0
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
     var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
