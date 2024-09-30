@@ -566,6 +566,12 @@ class NetworkVoiceManager {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
+        guard connection.state == .ready else {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection not ready!!!")
+            return
+        }
+
+
         let streamDescription = audioFormat.streamDescription.pointee
 
         var debugText = ""
@@ -576,14 +582,14 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        inputNode.installTap(
+        /*inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        /*audioEngine.prepare()
+        audioEngine.prepare()
         
         do {
             try audioEngine.start()
