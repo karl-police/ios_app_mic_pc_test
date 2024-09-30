@@ -788,6 +788,9 @@ class AudioManager {
         do {
             //audioEngineManager.stopRecordingEngine()
 
+            // The order on when this gets called seems to be important
+            try AVAudioSession.sharedInstance().setActive(false)
+
             self.networkVoiceManager.stop()
 
             self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
@@ -796,7 +799,7 @@ class AudioManager {
             }
             
             // The order on when this gets called seems to be important
-            try AVAudioSession.sharedInstance().setActive(false)
+            //try AVAudioSession.sharedInstance().setActive(false)
         } catch {
             throw error
         }
