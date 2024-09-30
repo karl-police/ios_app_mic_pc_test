@@ -574,8 +574,9 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
+        audioEngine.prepare()
+        inputNode.removeTap(onBus: 0)
 
-        inputNode.removeTap(fromBus: 0)
 
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
