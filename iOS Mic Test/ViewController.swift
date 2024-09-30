@@ -583,7 +583,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        audioEngine.prepare()
+        /*audioEngine.prepare()
         
         do {
             try audioEngine.start()
@@ -591,7 +591,7 @@ class NetworkVoiceManager {
             G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-        }
+        }*/
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
