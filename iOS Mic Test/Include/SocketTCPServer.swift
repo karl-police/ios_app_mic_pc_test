@@ -20,6 +20,20 @@ struct SocketNetworkUtils {
             (a == 192 && b == 168) ||
             (ip == "127.0.0.1") // localhost
     }
+
+    static func GetClientSocketIP(for clientSocket: Int32) -> String {
+        var addr = sockaddr_in()
+        var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
+
+        if getpeername(clientSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
+            let ip = inet_ntoa(addr.sin_addr)
+            let port = Int(ntohs(addr.sin_port))
+
+            return "\(ip):\(port)"
+        } else {
+            return "Error getting client IP: \(String(cString: strerror(errno)))"
+        }
+    }
 }
 
 
@@ -213,7 +227,7 @@ class SocketUDPServer : SocketServer {
         setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int>.size))
     
         // Bind socket to IP and Port
-        var addr = sockaddr_in(
+        var serverAddr = sockaddr_in(
             sin_len: UInt8(MemoryLayout<sockaddr_in>.size),
             sin_family: sa_family_t(AF_INET),
             sin_port: in_port_t(port.bigEndian),
@@ -221,7 +235,7 @@ class SocketUDPServer : SocketServer {
             sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
         )
 
-        guard bind(socketFD, UnsafePointer<sockaddr>(&serverAddr), socklen_t(MemoryLayout<sockaddr_in>.size)) >= 0 else {
+        guard bind(serverSocket, UnsafePointer<sockaddr>(&serverAddr), socklen_t(MemoryLayout<sockaddr_in>.size)) >= 0 else {
             throw NSError(domain: "Error binding socket", code: 1)
 
             self.cleanUpServer()
@@ -238,7 +252,7 @@ class SocketUDPServer : SocketServer {
                 // Receive data
                 let bytesReceived = withUnsafeMutablePointer(to: &clientAddr) {
                     $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                        recvfrom(socketFD, &buffer, buffer.count, 0, $0, &clientAddrLen)
+                        recvfrom(serverSocket, &buffer, buffer.count, 0, $0, &clientAddrLen)
                     }
                 }
 

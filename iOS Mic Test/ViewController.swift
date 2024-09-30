@@ -6,6 +6,7 @@ import UIKit
 import AVFoundation
 import Foundation
 import Network
+import Darwin
 
 
 
@@ -521,6 +522,16 @@ class NetworkVoiceTCPServer : TCPServer {
 
 class NetworkVoice_SocketTCPServer : SocketTCPServer {
     var activeClientSocket: Int32? // Active Connection
+
+
+    override func OnClientConnectionAccepted(_ clientSocket: Int32) {
+        let clientIP = SocketNetworkUtils.GetClientSocketIP(clientSocket)
+        G_UI_Class_connectionLabel.setStatusConnectionText("Incoming Request from \(clientIP)")
+
+
+        self.closeClientSocket()        
+    }
+
 
     override func startServer() throws {
         if (G_cfg_b_DoUDP == true) {
