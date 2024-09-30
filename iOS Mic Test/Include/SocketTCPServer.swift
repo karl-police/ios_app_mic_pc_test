@@ -32,9 +32,12 @@ class SocketServerConfig {
 
 
 
-class SocketTCPServer {
+class SocketServer {
     private var connectionsArray: [Int32] = []
+}
 
+
+class SocketTCPServer : SocketServer {
     var serverSocket: Int32 = -1
     var port: Int32
 
@@ -84,6 +87,8 @@ class SocketTCPServer {
     func startServer() throws {
         // Create socket (IPv4, Stream, TCP)
         self.serverSocket = socket(AF_INET, SOCK_STREAM, 0)
+
+
         guard serverSocket >= 0 else {
             throw NSError(domain: "Error creating socket", code: 1)
             return
@@ -164,6 +169,89 @@ class SocketTCPServer {
 
             self.cleanUpServer()
             return
+        }
+    }
+
+    func stopServer() {
+        if serverSocket >= 0 {
+            self.cleanUpServer()
+        }
+    }
+
+    private func cleanUpServer() {
+        close(serverSocket)
+    }
+}
+
+
+class SocketUDPServer : SocketServer {
+    var serverSocket: Int32 = -1
+    var port: Int32
+
+    var ServerConfig = SocketServerConfig() // Config
+
+
+    init(inputPort: Int32) {
+        self.port = inputPort
+    }
+
+
+    // Start Server
+    func startServer() throws {
+        // UDP
+        self.serverSocket = socket(AF_INET, SOCK_DGRAM, 0)
+
+
+        guard serverSocket >= 0 else {
+            throw NSError(domain: "Error creating socket", code: 1)
+            return
+        }
+
+
+        // Socket Options
+        var reuse = 1
+        setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int>.size))
+    
+        // Bind socket to IP and Port
+        var addr = sockaddr_in(
+            sin_len: UInt8(MemoryLayout<sockaddr_in>.size),
+            sin_family: sa_family_t(AF_INET),
+            sin_port: in_port_t(port.bigEndian),
+            sin_addr: in_addr(s_addr: INADDR_ANY.bigEndian),
+            sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
+        )
+
+        guard bind(socketFD, UnsafePointer<sockaddr>(&serverAddr), socklen_t(MemoryLayout<sockaddr_in>.size)) >= 0 else {
+            throw NSError(domain: "Error binding socket", code: 1)
+
+            self.cleanUpServer()
+            return
+        }
+
+        // Listen
+        DispatchQueue.global(qos: .background).async {
+            while true {
+                var clientAddr = sockaddr_in()
+                var clientAddrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
+                var buffer = [UInt8](repeating: 0, count: 1024)
+
+                // Receive data
+                let bytesReceived = withUnsafeMutablePointer(to: &clientAddr) {
+                    $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                        recvfrom(socketFD, &buffer, buffer.count, 0, $0, &clientAddrLen)
+                    }
+                }
+
+                if bytesReceived < 0 {
+                    // revfrom error
+                    continue
+                }
+
+                // Convert to String
+                if let message = String(bytes: buffer[0..<bytesReceived], encoding: .utf8) {
+                    print("Received message: \(message)")
+                }
+            }
         }
     }
 
