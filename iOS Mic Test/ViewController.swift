@@ -500,6 +500,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         // Force this on both
+        self.cfg_nwParameters.allowLocalEndpointReuse = true // SO_REUSEADDR
         self.cfg_nwParameters.acceptLocalOnly = true
 
 
