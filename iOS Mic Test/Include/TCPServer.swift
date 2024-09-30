@@ -112,6 +112,21 @@ class TCPServer {
     }
 
 
+    // Whenever the state updates
+    func OnListenerStateUpdated(listener: NWListener, state: NWListener.State) {
+        switch state {
+        case .ready:
+            print("Listener is ready")
+        case .failed(let nwError):
+            print("Listener failed: \(nwError)")
+        case .cancelled:
+            print("Listener cancelled")
+        default:
+            break
+        }
+    }
+
+
 
     func getDump_nwParams() -> String {
         let nwParameters = self.cfg_nwParameters
@@ -181,8 +196,13 @@ class TCPServer {
         do {
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
-            self.listener?.newConnectionHandler = { newConnection in 
-                self.handleListenerNewConnection(newConnection)
+            // weak self test
+            self.listener?.newConnectionHandler = { [weak self] newConnection in 
+                self?.handleListenerNewConnection(newConnection)
+            }
+
+            self.listener?.stateUpdateHandler = { state in
+                self.OnListenerStateUpdated(listener: listener, state: state)
             }
 
             // Start listening

@@ -448,6 +448,23 @@ class NetworkVoiceTCPServer : TCPServer {
         }
     }
 
+    override func OnListenerStateUpdated(listener: NWListener, state: NWListener.State) {
+        switch state {
+        case .ready:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
+        case .failed(let nwError):
+            G_UI_Class_connectionLabel.setStatusConnectionText("Listener failed: \(nwError)")
+        case .cancelled:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Listener cancelled")
+        case .waiting:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Listener waiting state")
+        case .setup:
+            G_UI_Class_connectionLabel.setStatusConnectionText("Listener setup state")
+        default:
+            break
+        }
+    }
+
 
     func cleanUp() {
         self.activeConnection = nil
@@ -490,9 +507,9 @@ class NetworkVoiceTCPServer : TCPServer {
         do {
             try super.startServer()
 
-            G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
+            //G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.port.rawValue)")
         } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Error when starting: \(error.localizedDescription)")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
         }
 
         G_UI_debugTextBoxOut.text = self.getDump_nwParams()
