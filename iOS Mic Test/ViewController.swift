@@ -411,6 +411,13 @@ class NetworkVoiceTCPServer : TCPServer {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Connection established with \(connection.endpoint)")
 
+        // Debug test
+        G_UI_debugTextBoxOut.text = "Connection:\n"
+            + Utils_NWDump.getStringDump_forNWProtocolOptions(connection.parameters.defaultProtocolStack.transportProtocol)
+            + "\n\n"
+            + G_UI_debugTextBoxOut.text
+
+
         // Check
         guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
             G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
@@ -433,8 +440,10 @@ class NetworkVoiceTCPServer : TCPServer {
             self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
+            self.cancelConnection(connection) // Ensure
         case .cancelled:
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled with \(connection.endpoint)")
+            self.cancelConnection(connection) // Ensure
 
         case .waiting(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
@@ -499,13 +508,6 @@ class NetworkVoiceTCPServer : TCPServer {
 
         G_UI_debugTextBoxOut.text = self.getDump_nwParams()
             + "\n" + self.getDump_nwListener()
-
-
-        if let options = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
-            G_UI_debugTextBoxOut.text += "\n\nTest enableKeepalive: \(options.enableKeepalive)\n"
-        }
-
-        G_UI_debugTextBoxOut.text += "\n\nTest: \(self.cfg_nwParameters.defaultProtocolStack.applicationProtocols)\n"
     }
 
     override func stopServer() {
@@ -523,7 +525,6 @@ class NetworkVoiceManager {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
-    //var mixerNode: AVAudioMixerNode! // Mixer Node
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
@@ -534,9 +535,6 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
             self?.handleAcceptedConnection(connection)
         }
-
-
-        //self.mixerNode = AVAudioMixerNode()
     }
 
     // When we have connection we can start streaming
@@ -767,6 +765,8 @@ class AudioManager {
     // VoIP
     func setup_AudioSessionForVoIP() throws {
         let session = AVAudioSession.sharedInstance()
+
+        session.setPrefersInterruptionOnRouteDisconnect(false) // Test
 
         do {
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
