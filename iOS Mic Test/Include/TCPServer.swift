@@ -128,7 +128,6 @@ class TCPServer {
 
     func getDump_nwParams() -> String {
         //let nwParameters = self.cfg_nwParameters
-
         var debugText = ""
 
         guard let listener = self.listener else {
