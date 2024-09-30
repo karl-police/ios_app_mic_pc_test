@@ -519,6 +519,13 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
+class NetworkVoice_SocketTCPServer : SocketTCPServer {
+    var activeClientSocket: Int32? // Active Connection
+
+    
+}
+
+
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
 

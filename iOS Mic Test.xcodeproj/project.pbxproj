@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		Build_Include_TCPServer = {isa = PBXBuildFile; fileRef = File_Include_TCPServer; };
+		Build_Include_SocketTCPServer = {isa = PBXBuildFile; fileRef = File_Include_SocketTCPServer; };
 
 		BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618A1C878A4700D57735 /* AppDelegate.swift */; };
 		BD21618D1C878A4700D57735 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD21618C1C878A4700D57735 /* ViewController.swift */; };
@@ -26,6 +27,7 @@
 		BD2161961C878A4700D57735 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 
 		File_Include_TCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Include/TCPServer.swift; sourceTree = "<group>"; };
+		File_Include_SocketTCPServer = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Include/SocketTCPServer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				File_Include_TCPServer,
+				File_Include_SocketTCPServer,
 
 				BD21618A1C878A4700D57735 /* AppDelegate.swift */,
 				BD21618C1C878A4700D57735 /* ViewController.swift */,
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				Build_Include_TCPServer,
+				Build_Include_SocketTCPServer,
 
 				BD21618D1C878A4700D57735 /* ViewController.swift in Sources */,
 				BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */,
