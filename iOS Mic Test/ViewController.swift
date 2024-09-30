@@ -124,6 +124,8 @@ class AudioSettingsClass {
 
     var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
 
+    var bufferSize: AVAudioFrameCount = 1024
+
     func getForSettings() -> [String: Any] {
         return [
             AVFormatIDKey: formatIDKey,
@@ -135,8 +137,6 @@ class AudioSettingsClass {
     func getForFormat() -> AVAudioFormat? {
         return AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channelCount)
     }
-
-    var bufferSize: AVAudioFrameCount = 1024
 }
 
 
