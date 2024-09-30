@@ -483,9 +483,6 @@ class NetworkVoiceTCPServer : TCPServer {
 
             var tcpOptions: NWProtocolTCP.Options = {
                 let options = NWProtocolTCP.Options()
-                options.connectionTimeout = 5 // connection timed out
-
-                options.noDelay = true
                 options.enableKeepalive = true
 
                 return options
