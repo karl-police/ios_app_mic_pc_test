@@ -585,7 +585,7 @@ class NetworkVoiceManager {
             self.transmitAudio(buffer: buffer, connection)
         }
 
-        audioEngine.prepare()
+        //audioEngine.prepare()
         
         do {
             try audioEngine.start()
