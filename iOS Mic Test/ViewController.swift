@@ -463,12 +463,13 @@ class NetworkVoiceTCPServer : TCPServer {
         } else {
             // TCP
 
+
             // Configuration
             var tcpOptions = NWProtocolTCP.Options()
             tcpOptions.noDelay = true
             tcpOptions.enableKeepalive = true
 
-            self.cfg_nwParameters.defaultProtocolStack.transportProtocol = tcpOptions // TCP
+            self.cfg_nwParameters = NWParameters(tcp: tcpOptions)
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }

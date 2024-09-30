@@ -116,28 +116,30 @@ class TCPServer {
 
 
     func getDump_nwParams() -> String {
-        var debugText = ""
-        debugText += "defaultProtocolStack: \(cfg_nwParameters.defaultProtocolStack)\n"
-            + "\t \(cfg_nwParameters.defaultProtocolStack.transportProtocol)\n"
-            + "\t \(cfg_nwParameters.defaultProtocolStack.internetProtocol)\n"
+        let nwParameters = self.cfg_nwParameters
 
-        debugText += "requiredInterfaceType: \(cfg_nwParameters.requiredInterfaceType)\n"
-        debugText += "requiredInterface: \(cfg_nwParameters.requiredInterface)\n"
-        debugText += "requiredLocalEndpoint: \(cfg_nwParameters.requiredLocalEndpoint)\n"
-        debugText += "prohibitConstrainedPaths: \(cfg_nwParameters.prohibitConstrainedPaths)\n"
-        debugText += "prohibitExpensivePaths: \(cfg_nwParameters.prohibitExpensivePaths)\n"
-        debugText += "prohibitedInterfaceTypes: \(cfg_nwParameters.prohibitedInterfaceTypes)\n"
-        debugText += "prohibitedInterfaces: \(cfg_nwParameters.prohibitedInterfaces)\n"
+        var debugText = ""
+        debugText += "defaultProtocolStack: \(nwParameters.defaultProtocolStack)\n"
+            + "\t \(nwParameters.defaultProtocolStack.transportProtocol)\n"
+            + "\t \(nwParameters.defaultProtocolStack.internetProtocol)\n"
+
+        debugText += "requiredInterfaceType: \(nwParameters.requiredInterfaceType)\n"
+        debugText += "requiredInterface: \(nwParameters.requiredInterface)\n"
+        debugText += "requiredLocalEndpoint: \(nwParameters.requiredLocalEndpoint)\n"
+        debugText += "prohibitConstrainedPaths: \(nwParameters.prohibitConstrainedPaths)\n"
+        debugText += "prohibitExpensivePaths: \(nwParameters.prohibitExpensivePaths)\n"
+        debugText += "prohibitedInterfaceTypes: \(nwParameters.prohibitedInterfaceTypes)\n"
+        debugText += "prohibitedInterfaces: \(nwParameters.prohibitedInterfaces)\n"
         debugText += "\n"
 
-        debugText += "multipathServiceType: \(cfg_nwParameters.multipathServiceType)\n"
-        debugText += "serviceClass: \(cfg_nwParameters.serviceClass)\n"
-        debugText += "allowFastOpen: \(cfg_nwParameters.allowFastOpen)\n"
-        debugText += "expiredDNSBehavior: \(cfg_nwParameters.expiredDNSBehavior)\n"
-        debugText += "includePeerToPeer: \(cfg_nwParameters.includePeerToPeer)\n"
-        debugText += "allowLocalEndpointReuse: \(cfg_nwParameters.allowLocalEndpointReuse)\n"
-        debugText += "acceptLocalOnly: \(cfg_nwParameters.acceptLocalOnly)\n"
-        debugText += "\ndebugDescription: \(cfg_nwParameters.debugDescription)\n"
+        debugText += "multipathServiceType: \(nwParameters.multipathServiceType)\n"
+        debugText += "serviceClass: \(nwParameters.serviceClass)\n"
+        debugText += "allowFastOpen: \(nwParameters.allowFastOpen)\n"
+        debugText += "expiredDNSBehavior: \(nwParameters.expiredDNSBehavior)\n"
+        debugText += "includePeerToPeer: \(nwParameters.includePeerToPeer)\n"
+        debugText += "allowLocalEndpointReuse: \(nwParameters.allowLocalEndpointReuse)\n"
+        debugText += "acceptLocalOnly: \(nwParameters.acceptLocalOnly)\n"
+        debugText += "\ndebugDescription: \(nwParameters.debugDescription)\n"
 
         return debugText
     }
