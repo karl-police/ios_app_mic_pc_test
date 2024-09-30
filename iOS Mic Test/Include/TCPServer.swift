@@ -1,5 +1,5 @@
-import Foundation
 import Network
+import Darwin
 
 
 // Store all connections into a global-like variable for AppDelegate to clear them?
