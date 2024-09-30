@@ -470,7 +470,7 @@ class NetworkVoiceTCPServer : TCPServer {
             tcpOptions.enableKeepalive = true
 
             self.cfg_nwParameters = NWParameters(
-                tls: NWProtocolTLS.Options(),
+                tls: nil,
                 tcp: NWProtocolTCP.Options = tcpOptions
             )
 
