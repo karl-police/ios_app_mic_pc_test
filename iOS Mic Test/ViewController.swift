@@ -481,12 +481,8 @@ class NetworkVoiceTCPServer : TCPServer {
             // TCP
             // Configuration
 
-            var tcpOptions: NWProtocolTCP.Options = {
-                let options = NWProtocolTCP.Options()
-                options.enableKeepalive = true
-
-                return options
-            }()
+            var tcpOptions: NWProtocolTCP.Options() = {
+            tcpOptions.enableKeepalive = true
 
             self.cfg_nwParameters = NWParameters(
                 tls: nil,
@@ -514,7 +510,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
 
         if let options = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
-            G_UI_debugTextBoxOut.text = "Test enableKeepalive: \(options.enableKeepalive)\n"
+            G_UI_debugTextBoxOut.text += "\n\nTest enableKeepalive: \(options.enableKeepalive)\n"
         }
     }
 
