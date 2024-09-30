@@ -455,7 +455,8 @@ class NetworkVoiceTCPServer : TCPServer {
         case .failed(let nwError):
             G_UI_Class_connectionLabel.setStatusConnectionText("Listener failed: \(nwError)")
         case .cancelled:
-            G_UI_Class_connectionLabel.setStatusConnectionText("Listener cancelled")
+            G_UI_debugTextBoxOut.text = "!! Listener cancelled !!\n\n" + G_UI_debugTextBoxOut.text
+            //G_UI_Class_connectionLabel.setStatusConnectionText("Listener cancelled")
         case .waiting:
             G_UI_Class_connectionLabel.setStatusConnectionText("Listener waiting state")
         case .setup:
