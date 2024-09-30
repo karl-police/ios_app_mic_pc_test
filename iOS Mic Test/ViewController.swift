@@ -456,10 +456,12 @@ class NetworkVoiceTCPServer : TCPServer {
     // Start Server
     override func startServer() throws {
         if (G_cfg_b_DoUDP == true) {
+            // UDP
             self.cfg_nwParameters = NWParameters.udp
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
+            // TCP
             // Configuration
             if let tcpOptions = self.cfg_nwParameters.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
                 tcpOptions.noDelay = true
