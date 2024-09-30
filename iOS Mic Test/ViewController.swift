@@ -577,21 +577,22 @@ class NetworkVoiceManager {
 
         inputNode.removeTap(onBus: 0)
         do {
-            inputNode.installTap(
-                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-            ) { (buffer, time) in
-                // Transmit
-                self.transmitAudio(buffer: buffer, connection)
-            }
+                inputNode.installTap(
+                    onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+                ) { (buffer, time) in
+                    // Transmit
+                    self.transmitAudio(buffer: buffer, connection)
+                }
 
-            audioEngine.prepare()
-        
-        
-            try audioEngine.start()
+                audioEngine.prepare()
             
-            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            
+                try audioEngine.start()
+                
+                G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+            } catch {
+                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            }
         }
     }
 
