@@ -522,7 +522,29 @@ class NetworkVoiceTCPServer : TCPServer {
 class NetworkVoice_SocketTCPServer : SocketTCPServer {
     var activeClientSocket: Int32? // Active Connection
 
-    
+    override func startServer() throws {
+        if (G_cfg_b_DoUDP == true) {
+            // UDP
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
+        } else {
+            // TCP
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
+        }
+
+        do {
+            try super.startServer()
+
+            // The log that the server started is located at the listener state update function.
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
+        }
+    }
+
+    override func stopServer() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
+
+        super.stopServer()
+    }
 }
 
 
