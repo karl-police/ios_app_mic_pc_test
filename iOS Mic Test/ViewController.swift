@@ -637,7 +637,6 @@ class NetworkVoiceManager {
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
-    var outputNode: AVAudioOutputNode! // temp?
     var audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
@@ -656,11 +655,6 @@ class AudioEngineManager {
     func setupInit() {
         self.inputNode = audioEngine.inputNode
         self.audioFormat = inputNode.inputFormat(forBus: 0)
-
-        // Output Node
-        self.outputNode = audioEngine.outputNode
-        let inputOutputAudioFormat = self.inputNode.outputFormat(forBus: 0)
-        let outputAudioFormat = self.outputNode.outputFormat(forBus: 0)
     }
 
 
@@ -790,10 +784,6 @@ class AudioManager {
 
         do {
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
-            try session.setActive(true)
-
-            // Test
-            try session.setActive(false)
             try session.setActive(true)
         } catch {
             throw error
