@@ -389,7 +389,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     completion: .contentProcessed({ error in 
                         if let error = error {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
-                            //self.cancelConnection(incomingConnection)
+                            self.cancelConnection(incomingConnection) // Ensure
                         } else {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
 
