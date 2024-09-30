@@ -14,7 +14,39 @@ struct Utils_NWDump {
             return debugText
         }
 
-        switch nwProtocolOptions {
+        if let options = nwProtocolOptions as? NWProtocolTCP.Options {
+            debugText += "enableFastOpen: \(options.enableFastOpen)\n"
+                    + "maximumSegmentSize: \(options.maximumSegmentSize)\n"
+                    + "noDelay: \(options.noDelay)\n"
+                    + "noOptions: \(options.noOptions)\n"
+                    + "noPush: \(options.noPush)\n"
+                    + "retransmitFinDrop: \(options.retransmitFinDrop)\n"
+                    + "disableAckStretching: \(options.disableAckStretching)\n"
+                    + "disableECN: \(options.disableECN)\n"
+                    + "\n"
+                    + "enableKeepalive: \(options.enableKeepalive)\n"
+                    + "keepaliveIdle: \(options.keepaliveIdle)\n"
+                    + "keepaliveCount: \(options.keepaliveCount)\n"
+                    + "keepaliveInterval: \(options.keepaliveInterval)\n"
+                    + "\n"
+                    + "connectionTimeout: \(options.connectionTimeout)\n"
+                    + "connectionDropTime: \(options.connectionDropTime)\n"
+                    + "persistTimeout: \(options.persistTimeout)\n"
+
+        } else if let options = nwProtocolOptions as? NWProtocolUDP.Options {
+            debugText += "preferNoChecksum: \(options.preferNoChecksum)\n"
+
+        } else if let options = nwProtocolOptions as? NWProtocolIP.Options {
+            debugText += "version: \(options.version)\n"
+                    + "shouldCalculateReceiveTime: \(options.shouldCalculateReceiveTime)\n"
+                    + "hopLimit: \(options.hopLimit)\n"
+                    + "useMinimumMTU: \(options.useMinimumMTU)\n"
+                    + "disableFragmentation: \(options.disableFragmentation)\n"
+                    + "disableMulticastLoopback: \(options.disableMulticastLoopback)\n"
+                    + "localAddressPreference: \(options.localAddressPreference)\n"
+        }
+
+        /*switch nwProtocolOptions {
             case let options = nwProtocolOptions as? NWProtocolTCP.Options:
                 debugText += "enableFastOpen: \(options.enableFastOpen)\n"
                     + "maximumSegmentSize: \(options.maximumSegmentSize)\n"
@@ -48,7 +80,7 @@ struct Utils_NWDump {
 
             default:
                 debugText = "NOT DEFINED\n"
-        }
+        }*/
 
         return debugText
     }
