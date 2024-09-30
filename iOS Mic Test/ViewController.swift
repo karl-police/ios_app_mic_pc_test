@@ -462,18 +462,13 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
-            var customNWParams = NWParameters.tcp
 
             // Configuration
-            if var tcpOptions = customNWParams.defaultProtocolStack.transportProtocol as? NWProtocolTCP.Options {
-                tcpOptions.noDelay = true
-                tcpOptions.enableKeepalive = true
-            } else {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Wrong")
-                return
-            }
+            var tcpOptions = NWProtocolTCP.Options()
+            tcpOptions.noDelay = true
+            tcpOptions.enableKeepalive = true
 
-            self.cfg_nwParameters = customNWParams // TCP
+            self.cfg_nwParameters.defaultProtocolStack.transportProtocol = tcpOptions // TCP
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
@@ -777,13 +772,12 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            //try self.setup_AudioSessionForVoIP()
+            try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network
 
 
-            try self.setup_AudioSessionForVoIP()
             //try audioEngineManager.startRecordingEngine()
         } catch {
             throw error
