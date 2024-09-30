@@ -434,7 +434,7 @@ class NetworkVoiceTCPServer : TCPServer {
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
-            G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled with \(connection.endpoint)")
 
         case .waiting(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
