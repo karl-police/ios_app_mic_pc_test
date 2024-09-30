@@ -131,6 +131,11 @@ class TCPServer {
     func getDump_nwParams() -> String {
         //let nwParameters = self.cfg_nwParameters
 
+        guard let listener = self.listener else {
+            debugText = "No Listener found."
+            return debugText
+        }
+
         // Current Parameters
         let nwParameters = listener.parameters
 
@@ -163,11 +168,6 @@ class TCPServer {
 
     func getDump_nwListener() -> String {
         var debugText = "Listener:\n"
-
-        guard let listener = self.listener else {
-            debugText = "No Listener found."
-            return debugText
-        }
 
         debugText += "newConnectionLimit: \(listener.newConnectionLimit)\n"
         debugText += "\ndebugDescription: \(listener.debugDescription)"
