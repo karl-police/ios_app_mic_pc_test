@@ -203,8 +203,8 @@ class TCPServer {
 
         self.listener?.cancel()
 
-        //listener.stateUpdateHandler = nil
-        //listener.newConnectionHandler = nil
+        listener.stateUpdateHandler = nil
+        listener.newConnectionHandler = nil
         self.listener = nil
     }
 }
