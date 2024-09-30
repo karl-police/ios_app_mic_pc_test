@@ -480,7 +480,6 @@ class NetworkVoiceTCPServer : TCPServer {
         } else {
             // TCP
             // Configuration
-            //lazy var tcpOptions: NWProtocolOptions.Options = NWProtocolTCP.Options()
 
             lazy var tcpOptions: NWProtocolTCP.Options = {
                 let options = NWProtocolTCP.Options()
@@ -501,7 +500,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         // Force this on both
-        self.cfg_nwParameters.acceptLocalOnly = true
+        //self.cfg_nwParameters.acceptLocalOnly = true
 
 
         do {
