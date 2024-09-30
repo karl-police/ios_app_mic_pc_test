@@ -203,8 +203,7 @@ class TCPServer {
 
             self.listener?.stateUpdateHandler = { state in
                 guard let listener = self.listener else {
-                    // if nil
-                    //fatalError("There's no Listener")
+                    //fatalError("There's no Listener") // if nil
                     return
                 }
 
