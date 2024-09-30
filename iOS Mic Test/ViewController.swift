@@ -349,8 +349,6 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         connection.start(queue: .main)
-
-        self.m_customHandshake(connection) // Test
     }
 
     // Handshake
@@ -432,7 +430,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
 
             // Check for handshake
-            //self.m_customHandshake(connection)
+            self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
         case .cancelled:
@@ -455,15 +453,17 @@ class NetworkVoiceTCPServer : TCPServer {
         self.activeConnection = nil
     }
 
-
-    // Configures NWParameters
-    override func setup_NWParameters() {
+    // Start Server
+    override func startServer() throws {
         if (G_cfg_b_DoUDP == true) {
             // UDP
             self.cfg_nwParameters = NWParameters.udp
+
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
             // Configuration
+            //lazy var tcpOptions: NWProtocolOptions.Options = NWProtocolTCP.Options()
 
             lazy var tcpOptions: NWProtocolTCP.Options = {
                 let options = NWProtocolTCP.Options()
@@ -479,19 +479,12 @@ class NetworkVoiceTCPServer : TCPServer {
                 tls: nil,
                 tcp: tcpOptions
             )
+
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 
         // Force this on both
         self.cfg_nwParameters.acceptLocalOnly = true
-    }
-
-    // Start Server
-    override func startServer() throws {
-        if (G_cfg_b_DoUDP == true) {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
-        } else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
-        }
 
 
         do {

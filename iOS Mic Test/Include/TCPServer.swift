@@ -61,7 +61,7 @@ class TCPServer {
 
     private var connectionsArray: [NWConnection] = []
 
-    var cfg_nwParameters: NWParameters!
+    var cfg_nwParameters = NWParameters.tcp
 
     // Different Type
     var port: NWEndpoint.Port!
@@ -70,17 +70,8 @@ class TCPServer {
     init(inputPort: UInt16) {
         // Port Constructor takes UInt16
         self.port = NWEndpoint.Port(rawValue: inputPort)
-
-        self.setup_NWParameters()
     }
     
-
-    // A function that sets up NWParameters and is overrideable to configure
-    func setup_NWParameters() {
-        self.cfg_nwParameters = NWParameters.tcp
-    }
-
-
 
     // For new connections
     func handleListenerNewConnection(_ newConnection: NWConnection) {
@@ -123,14 +114,9 @@ class TCPServer {
 
 
     func getDump_nwParams() -> String {
-        var debugText = ""
+        let nwParameters = self.cfg_nwParameters
 
-        guard let nwParameters = self.cfg_nwParameters else {
-            debugText = "NO NWParameters"
-            return debugText
-        }
-        
-        
+        var debugText = ""
         debugText += "defaultProtocolStack: \(nwParameters.defaultProtocolStack)\n"
             + "\t \(nwParameters.defaultProtocolStack.transportProtocol)\n"
             + "\t \(nwParameters.defaultProtocolStack.internetProtocol)\n"
