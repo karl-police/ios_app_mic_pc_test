@@ -204,8 +204,8 @@ class TCPServer {
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
             // weak self test
-            self.listener?.newConnectionHandler = { [weak self] newConnection in 
-                self?.handleListenerNewConnection(newConnection)
+            self.listener?.newConnectionHandler = { newConnection in 
+                self.handleListenerNewConnection(newConnection)
             }
 
             self.listener?.stateUpdateHandler = { state in
