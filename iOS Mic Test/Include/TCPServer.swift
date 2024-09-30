@@ -82,7 +82,7 @@ class TCPServer {
 
     // Set a pre-defined empty handleConnection
     func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { /*[weak self]*/ state in
+        connection.stateUpdateHandler = { [weak self] state in
             self?.connectionStateHandler(connection: connection, state: state)
         }
 
