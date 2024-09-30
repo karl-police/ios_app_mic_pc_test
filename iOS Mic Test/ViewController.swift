@@ -558,8 +558,10 @@ class NetworkVoiceManager {
     func handleAcceptedConnection(_ connection: NWConnection) {
         guard var audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
-        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
+
+        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+        guard let outputNode = self.audioEngineManager.outputNode else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
@@ -577,7 +579,7 @@ class NetworkVoiceManager {
         //audioEngine.attach(self.mixerNode)
         //audioEngine.connect(inputNode, to: mixerNode, format: audioFormat)
 
-        inputNode.installTap(
+        outputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
             // Transmit
@@ -640,6 +642,7 @@ class NetworkVoiceManager {
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
+    var outputNode: AVAudioOutputNode! // temp?
     var audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
@@ -659,8 +662,8 @@ class AudioEngineManager {
         self.inputNode = audioEngine.inputNode
         self.audioFormat = inputNode.inputFormat(forBus: 0)
 
-        // TEST
-        let outputNode = audioEngine.outputNode
+        // Output Node
+        self.outputNode = audioEngine.outputNode
     }
 
 
