@@ -580,7 +580,7 @@ class NetworkVoiceManager {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
-            self.transmitAudio(buffer: buffer)
+            self.transmitAudio(buffer: buffer, connection)
         }
 
         audioEngine.prepare()
@@ -594,9 +594,8 @@ class NetworkVoiceManager {
         }
     }
 
-    func transmitAudio(buffer: AVAudioPCMBuffer) {
-        print(buffer)
-        /*let audioData = buffer.audioBufferList.pointee.mBuffers
+    func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
+        let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
         // Check if data is available
@@ -616,7 +615,7 @@ class NetworkVoiceManager {
                     //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
-        )*/
+        )
     }
 
 
