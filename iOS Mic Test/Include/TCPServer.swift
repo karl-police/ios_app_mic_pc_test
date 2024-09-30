@@ -94,7 +94,7 @@ class TCPServer {
         case .failed(let nwError):
             print("Connection failed: \(nwError)")
         case .cancelled:
-            print("Connection cancelled")
+            print("Connection cancelled with \(connection.endpoint)")
         default:
             break
         }
