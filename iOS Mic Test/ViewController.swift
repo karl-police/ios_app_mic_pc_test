@@ -481,7 +481,7 @@ class NetworkVoiceTCPServer : TCPServer {
             // TCP
             // Configuration
 
-            lazy var tcpOptions: NWProtocolTCP.Options = {
+            var tcpOptions: NWProtocolTCP.Options = {
                 let options = NWProtocolTCP.Options()
                 options.connectionTimeout = 5 // connection timed out
 
