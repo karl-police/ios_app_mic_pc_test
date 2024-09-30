@@ -202,7 +202,7 @@ class TCPServer {
             }
 
             self.listener?.stateUpdateHandler = { state in
-                self.OnListenerStateUpdated(listener: listener, state: state)
+                self.OnListenerStateUpdated(listener: self.listener?, state: state)
             }
 
             // Start listening
