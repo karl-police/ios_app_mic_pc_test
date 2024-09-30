@@ -15,7 +15,7 @@ struct Utils_NWDump {
         }
 
         switch nwProtocolOptions {
-            case let options as NWProtocolTCP.Options:
+            case let options as? NWProtocolTCP.Options:
                 debugText += "enableFastOpen: \(options.enableFastOpen)\n"
                     + "maximumSegmentSize: \(options.maximumSegmentSize)\n"
                     + "noDelay: \(options.noDelay)\n"
@@ -34,10 +34,10 @@ struct Utils_NWDump {
                     + "connectionDropTime: \(options.connectionDropTime)\n"
                     + "persistTimeout: \(options.persistTimeout)\n"
 
-            case let options as NWProtocolUDP.Options:
+            case let options as? NWProtocolUDP.Options:
                 debugText += "preferNoChecksum: \(options.preferNoChecksum)\n"
 
-            case let options as NWProtocolIP.Options:
+            case let options as? NWProtocolIP.Options:
                 debugText += "version: \(options.version)\n"
                     + "shouldCalculateReceiveTime: \(options.shouldCalculateReceiveTime)\n"
                     + "hopLimit: \(options.hopLimit)\n"
