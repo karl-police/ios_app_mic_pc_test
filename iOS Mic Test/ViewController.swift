@@ -766,8 +766,6 @@ class AudioManager {
     func setup_AudioSessionForVoIP() throws {
         let session = AVAudioSession.sharedInstance()
 
-        session.setPrefersInterruptionOnRouteDisconnect(false) // Test
-
         do {
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             try session.setActive(true)
