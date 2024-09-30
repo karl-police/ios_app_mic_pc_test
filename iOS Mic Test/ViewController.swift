@@ -537,7 +537,7 @@ class NetworkVoiceManager {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
-    var mixerNode: AVAudioMixerNode! // Mixer Node
+    //var mixerNode: AVAudioMixerNode! // Mixer Node
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
@@ -550,7 +550,7 @@ class NetworkVoiceManager {
         }
 
 
-        self.mixerNode = AVAudioMixerNode()
+        //self.mixerNode = AVAudioMixerNode()
     }
 
     // When we have connection we can start streaming
@@ -574,17 +574,17 @@ class NetworkVoiceManager {
         G_UI_debugTextBoxOut.text = debugText
 
 
-        audioEngine.attach(self.mixerNode)
-        audioEngine.connect(inputNode, to: mixerNode, format: audioFormat)
+        //audioEngine.attach(self.mixerNode)
+        //audioEngine.connect(inputNode, to: mixerNode, format: audioFormat)
 
-        /*inputNode.installTap(
+        inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, when) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
-        }*/
+        }
 
-        /*audioEngine.prepare()
+        audioEngine.prepare()
         
         do {
             try audioEngine.start()
@@ -592,7 +592,7 @@ class NetworkVoiceManager {
             G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-        }*/
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
