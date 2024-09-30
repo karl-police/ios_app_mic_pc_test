@@ -200,6 +200,7 @@ class TCPServer {
     // This needs to be called to start the server
     func startServer() throws {
         do {
+            self.cfg_nwParameters.allowLocalEndpointReuse = true // temp
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
             // weak self test
