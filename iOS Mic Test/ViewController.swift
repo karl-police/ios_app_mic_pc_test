@@ -455,17 +455,15 @@ class NetworkVoiceTCPServer : TCPServer {
         self.activeConnection = nil
     }
 
-    // Start Server
-    override func startServer() throws {
+
+    // Configures NWParameters
+    override func setup_NWParameters() {
         if (G_cfg_b_DoUDP == true) {
             // UDP
             self.cfg_nwParameters = NWParameters.udp
-
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
             // Configuration
-            //lazy var tcpOptions: NWProtocolOptions.Options = NWProtocolTCP.Options()
 
             lazy var tcpOptions: NWProtocolTCP.Options = {
                 let options = NWProtocolTCP.Options()
@@ -481,12 +479,19 @@ class NetworkVoiceTCPServer : TCPServer {
                 tls: nil,
                 tcp: tcpOptions
             )
-
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 
         // Force this on both
         self.cfg_nwParameters.acceptLocalOnly = true
+    }
+
+    // Start Server
+    override func startServer() throws {
+        if (G_cfg_b_DoUDP == true) {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
+        } else {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
+        }
 
 
         do {

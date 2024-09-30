@@ -75,7 +75,7 @@ class TCPServer {
     }
     
 
-    // A function that sets up NWParameters
+    // A function that sets up NWParameters and is overrideable to configure
     func setup_NWParameters() {
         self.cfg_nwParameters = NWParameters.tcp
     }
@@ -123,9 +123,14 @@ class TCPServer {
 
 
     func getDump_nwParams() -> String {
-        let nwParameters = self.cfg_nwParameters
-
         var debugText = ""
+
+        guard let nwParameters = self.cfg_nwParameters else {
+            debugText = "NO NWParameters"
+            return debugText
+        }
+        
+        
         debugText += "defaultProtocolStack: \(nwParameters.defaultProtocolStack)\n"
             + "\t \(nwParameters.defaultProtocolStack.transportProtocol)\n"
             + "\t \(nwParameters.defaultProtocolStack.internetProtocol)\n"
