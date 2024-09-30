@@ -350,7 +350,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
         connection.start(queue: .main)
 
-        self.m_customHandshake(connection)
+        self.m_customHandshake(connection) // Test
     }
 
     // Handshake
