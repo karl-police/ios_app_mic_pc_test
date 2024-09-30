@@ -480,21 +480,12 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
-            // Configuration
-
-            var tcpOptions = NWProtocolTCP.Options()
-            tcpOptions.enableKeepalive = true
-
-            self.cfg_nwParameters = NWParameters(
-                tls: nil,
-                tcp: tcpOptions
-            )
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 
         // Force this on both
-        self.cfg_nwParameters.allowLocalEndpointReuse = true // SO_REUSEADDR?
+        //self.cfg_nwParameters.allowLocalEndpointReuse = true // SO_REUSEADDR?
         self.cfg_nwParameters.includePeerToPeer = true
         self.cfg_nwParameters.acceptLocalOnly = true
 
@@ -523,6 +514,41 @@ class NetworkVoiceTCPServer : TCPServer {
         super.stopServer() // should remove all connections as well
 
         cleanUp()
+
+
+
+        // Test
+        let socketDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+        if socketDescriptor < 0 {
+            G_UI_debugTextBoxOut.text = "Failed to create socket: \(String(cString: strerror(errno)))"
+            return
+        }
+
+        var reuse: Int32 = 1
+        if setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size)) < 0 {
+            G_UI_debugTextBoxOut.text = "Failed to set socket options: \(String(cString: strerror(errno)))"
+            close(socketDescriptor)
+            return
+        }
+
+        var addr = sockaddr_in()
+        addr.sin_family = sa_family_t(AF_INET)
+        addr.sin_port = in_port_t(8125).bigEndian
+        addr.sin_addr.s_addr = inet_addr("127.0.0.1")
+
+        let bindResult = withUnsafePointer(to: &addr) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                bind(socketDescriptor, $0, socklen_t(MemoryLayout<sockaddr_in>.size))
+            }
+        }
+
+        if bindResult < 0 {
+            G_UI_debugTextBoxOut.text = "Failed to bind socket: \(String(cString: strerror(errno)))"
+            close(socketDescriptor) // Clean up
+            return
+        }
+
+        close(socketDescriptor)
     }
 }
 
