@@ -204,7 +204,7 @@ class TCPServer {
             self.listener?.stateUpdateHandler = { state in
                 guard let listener = self?.listener else {
                     // if nil
-                    throw "There's no Listener"
+                    //fatalError("There's no Listener")
                 }
 
                 self.OnListenerStateUpdated(listener: listener, state: state)
