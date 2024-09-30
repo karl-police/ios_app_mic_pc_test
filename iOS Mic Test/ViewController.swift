@@ -575,29 +575,24 @@ class NetworkVoiceManager {
 
 
 
-        var testAudioFormat = AVAudioFormat(
-            commonFormat: .pcmFormatFloat32,
-            sampleRate: audioSettings.sampleRate,
-            channels: audioSettings.channelCount,
-            interleaved: true
-        )
-
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: testAudioFormat
-        ) { (buffer, time) in
-            // Transmit
-            self.transmitAudio(buffer: buffer, connection)
-        }
-
-        /*audioEngine.prepare()
-        
+        inputNode.removeTap(fromBus: 0)
         do {
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            ) { (buffer, time) in
+                // Transmit
+                self.transmitAudio(buffer: buffer, connection)
+            }
+
+            audioEngine.prepare()
+        
+        
             try audioEngine.start()
             
             G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
-        }*/
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
