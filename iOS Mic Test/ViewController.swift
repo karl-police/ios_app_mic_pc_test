@@ -462,16 +462,22 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
-
-
             // Configuration
-            var tcpOptions = NWProtocolTCP.Options()
-            tcpOptions.noDelay = true
-            tcpOptions.enableKeepalive = true
+            //lazy var tcpOptions: NWProtocolOptions.Options = NWProtocolTCP.Options()
+
+            lazy var tcpOptions: NWProtocolTCP.Options = {
+                let options = NWProtocolTCP.Options()
+                options.connectionTimeout = 5 // connection timed out
+
+                options.noDelay = true
+                options.enableKeepalive = true
+
+                return options
+            }()
 
             self.cfg_nwParameters = NWParameters(
                 tls: nil,
-                tcp: NWProtocolTCP.Options = tcpOptions
+                tcp: tcpOptions
             )
 
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
