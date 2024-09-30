@@ -194,10 +194,10 @@ class TCPServer {
 
     func stopServer() {
         for connection in self.connectionsArray {
-            connection.cancel() // This closes the connection
+            self.cancelConnection(connection) // This closes the connection
         }
 
-        self.connectionsArray.removeAll()
+        self.connectionsArray.removeAll() // Ensure removal of all
 
         self.listener?.cancel()
 
