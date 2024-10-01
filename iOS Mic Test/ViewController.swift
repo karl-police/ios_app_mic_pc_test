@@ -792,7 +792,7 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            //try self.setup_AudioSessionForVoIP()
+            try self.setup_AudioSessionForVoIP()
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network
