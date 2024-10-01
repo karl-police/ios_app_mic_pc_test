@@ -72,30 +72,11 @@
 		};
 /* End PBXGroup section */
 
-
-/* */
-BuildScript_Folder_Include = {
-	isa = PBXShellScriptBuildPhase;
-	inputPaths = (
-		"${SRCROOT}/TestInclude",
-	);
-	outputPaths = (
-		"${BUILT_PRODUCTS_DIR}",
-	);
-	runOnlyForDeploymentPostprocessing = 0;
-	shellPath = /bin/sh;
-	shellScript = "for file in \$(find ${SRCROOT}/TestInclude -name '*.swift'); do cp \"\$file\" \"${BUILT_PRODUCTS_DIR}/\"; done";
-};
-/* */
-
-
 /* Begin PBXNativeTarget section */
 		BD2161861C878A4700D57735 /* iOS Mic Test */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BD2161991C878A4700D57735 /* Build configuration list for PBXNativeTarget "iOS Mic Test" */;
 			buildPhases = (
-				BuildScript_Folder_Include,
-
 				BD2161831C878A4700D57735 /* Sources */,
 				BD2161841C878A4700D57735 /* Frameworks */,
 				BD2161851C878A4700D57735 /* Resources */,
