@@ -520,50 +520,8 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
-class NetworkVoice_SocketTCPServer : SocketTCPServer {
-    var activeClientSocket: Int32? // Active Connection
-
-
-    override func OnClientConnectionAccepted(_ clientSocket: Int32) {
-        DispatchQueue.main.async {
-            let clientIP = SocketNetworkUtils.GetClientSocketIP(clientSocket)
-            G_UI_Class_connectionLabel.setStatusConnectionText("Incoming Request from \(clientIP)")
-
-
-            self.closeClientSocket(clientSocket)
-        }    
-    }
-
-
-    override func startServer() throws {
-        if (G_cfg_b_DoUDP == true) {
-            // UDP
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
-        } else {
-            // TCP
-            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
-        }
-
-        do {
-            try super.startServer()
-
-            // The log that the server started is located at the listener state update function.
-        } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
-        }
-    }
-
-    override func stopServer() {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
-
-        super.stopServer()
-    }
-}
-
-
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
-    var socketTCPServer: NetworkVoice_SocketTCPServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -573,7 +531,6 @@ class NetworkVoiceManager {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
-        self.socketTCPServer = NetworkVoice_SocketTCPServer(inputPort: 8125)
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
@@ -648,16 +605,14 @@ class NetworkVoiceManager {
 
     func start() throws {
         do {
-            //try self.networkVoice_TCPServer.startServer()
-            try self.socketTCPServer.startServer()
+            try self.networkVoice_TCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        //self.networkVoice_TCPServer.stopServer()
-        self.socketTCPServer.stopServer()
+        self.networkVoice_TCPServer.stopServer()
     }
 }
 
