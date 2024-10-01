@@ -55,7 +55,7 @@ jobs:
             -destination "generic/platform=iOS" \
             -sdk iphoneos \
             clean archive \
-            LIBRARY_SEARCH_PATHS="$PWD/${IOS_PROJECT_NAME}/Include/" \
+            LIBRARY_SEARCH_PATHS="$PWD/${IOS_PROJECT_NAME}/Include" \
             CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
       
       #- name: Test
