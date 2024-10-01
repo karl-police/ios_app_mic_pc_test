@@ -558,6 +558,7 @@ class NetworkVoiceManager {
         debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
+            + "\n\n" + G_UI_debugTextBoxOut.text
 
 
         inputNode.installTap(
