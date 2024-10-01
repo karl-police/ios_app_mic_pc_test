@@ -529,7 +529,7 @@ class NetworkVoice_SocketTCPServer : SocketTCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Incoming Request from \(clientIP)")
 
 
-        self.closeClientSocket()        
+        self.closeClientSocket(clientSocket)        
     }
 
 
