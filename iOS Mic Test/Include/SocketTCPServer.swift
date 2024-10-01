@@ -35,7 +35,7 @@ struct SocketNetworkUtils {
 
 
             var output = "\(ip)"
-            if port {
+            if (port != nil) {
                 output += ":\(port)"
             }
             return output
