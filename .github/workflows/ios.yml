@@ -54,8 +54,8 @@ jobs:
             -archivePath "$PWD/build/${IOS_PROJECT_NAME}.xcarchive" \
             -destination "generic/platform=iOS" \
             -sdk iphoneos \
-            -xcconfig $PWD/test.xcconfig \
             clean archive \
+            LD_RUNPATH_SEARCH_PATHS="$PWD/build/${IOS_PROJECT_NAME}/Include" \
             CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
       
       #- name: Test
