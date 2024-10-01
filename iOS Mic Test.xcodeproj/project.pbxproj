@@ -84,7 +84,7 @@ BuildScript_Folder_Include = {
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 	shellPath = /bin/sh;
-	shellScript = "for file in $(find ${SRCROOT}/TestInclude -name '*.swift'); do cp $file ${BUILT_PRODUCTS_DIR}/; done";
+	shellScript = "for file in \$(find ${SRCROOT}/TestInclude -name '*.swift'); do cp \"\$file\" \"${BUILT_PRODUCTS_DIR}/\"; done";
 };
 /* */
 
