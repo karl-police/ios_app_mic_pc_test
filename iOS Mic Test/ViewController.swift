@@ -770,7 +770,10 @@ class AudioManager {
         let session = AVAudioSession.sharedInstance()
 
         do {
+            // Removing this prevents a direct crash for some reason
+            // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
+            
             try session.setActive(true)
         } catch {
             throw error
@@ -792,7 +795,9 @@ class AudioManager {
             // Hence why the start function has setupInit again
             //audioEngineManager.audioEngine.prepare()
 
-            try self.setup_AudioSessionForVoIP()
+            //try self.setup_AudioSessionForVoIP()
+            let session = AVAudioSession.sharedInstance()
+            session.setPreferredSampleRate(48000)
 
             try self.networkVoiceManager.start()
             // audioEngine prepare and start function appears somewhere else for network
