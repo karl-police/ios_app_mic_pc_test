@@ -561,7 +561,7 @@ class NetworkVoice_SocketTCPServer : SocketTCPServer {
 
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
-    var socketTCPServer = NetworkVoice_SocketTCPServer! // Test
+    var socketTCPServer: NetworkVoice_SocketTCPServer! // Test
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
