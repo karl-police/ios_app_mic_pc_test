@@ -21,7 +21,7 @@ struct SocketNetworkUtils {
             (ip == "127.0.0.1") // localhost
     }
 
-    static func GetClientSocketIP(for clientSocket: Int32) -> String {
+    static func GetClientSocketIP(_ clientSocket: Int32) -> String {
         var addr = sockaddr_in()
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
