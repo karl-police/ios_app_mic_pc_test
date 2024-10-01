@@ -563,6 +563,7 @@ class NetworkVoice_SocketTCPServer : SocketTCPServer {
 
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
+    var socketTCPServer: NetworkVoice_SocketTCPServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -572,6 +573,7 @@ class NetworkVoiceManager {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
+        self.socketTCPServer = NetworkVoice_SocketTCPServer(inputPort: 8125)
 
         // Event when we actually got a real connection going
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
@@ -646,14 +648,16 @@ class NetworkVoiceManager {
 
     func start() throws {
         do {
-            try self.networkVoice_TCPServer.startServer()
+            //try self.networkVoice_TCPServer.startServer()
+            try self.socketTCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        self.networkVoice_TCPServer.stopServer()
+        //self.networkVoice_TCPServer.stopServer()
+        self.socketTCPServer.stopServer()
     }
 }
 
