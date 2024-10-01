@@ -76,7 +76,6 @@
 /* */
 BuildScript_Folder_Include = {
 	isa = PBXShellScriptBuildPhase;
-	shellScript = "for file in $(find ${SRCROOT}/Include -name '*.swift'); do cp $file ${BUILT_PRODUCTS_DIR}/; done";
 	inputPaths = (
 		"${SRCROOT}/Include",
 	);
@@ -84,6 +83,8 @@ BuildScript_Folder_Include = {
 		"${BUILT_PRODUCTS_DIR}",
 	);
 	runOnlyForDeploymentPostprocessing = 0;
+	shellPath = /bin/sh;
+	shellScript = "for file in $(find ${SRCROOT}/Include -name '*.swift'); do cp $file ${BUILT_PRODUCTS_DIR}/; done";
 };
 /* */
 
