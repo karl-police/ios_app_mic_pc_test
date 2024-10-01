@@ -3,6 +3,10 @@ import Darwin
 
 
 struct SocketNetworkUtils {
+    private func ntohs(_ value: in_port_t) -> UInt16 {
+        return (UInt16(value) >> 8) | (UInt16(value) << 8)
+    }
+
     static func IsPrivateIP(_ ip: String) -> Bool {
         let components = ip.split(separator: ".").map { Int($0) }
         guard components.count == 4 else { return false }
@@ -27,7 +31,7 @@ struct SocketNetworkUtils {
 
         if getpeername(clientSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
             let ip = inet_ntoa(addr.sin_addr)
-            let port = Int(ntohs(addr.sin_port))
+            let port = Int(self.ntohs(addr.sin_port))
 
             return "\(ip):\(port)"
         } else {
