@@ -35,10 +35,10 @@ jobs:
       #  run: xcodebuild -resolvePackageDependencies
 
 
-      - name: Prepare pbxproj automation
-        run: |
-          chmod +x ./add_swift_files_test.sh
-          ./add_swift_files_test.sh
+      #- name: Prepare pbxproj automation
+      #  run: |
+      #    chmod +x ./add_swift_files_test.sh
+      #    ./add_swift_files_test.sh
 
       - name: Build the xcarchive
         env:
