@@ -143,6 +143,10 @@
 			files = (
 				Build_Include_TCPServer,
 
+				/* There's a script that will insert things here */
+				/* AUTOMATION_SCRIPT_ALERT_PUT_CONTENT_UNDER_HERE */
+				
+
 				BD21618D1C878A4700D57735 /* ViewController.swift in Sources */,
 				BD21618B1C878A4700D57735 /* AppDelegate.swift in Sources */,
 			);
