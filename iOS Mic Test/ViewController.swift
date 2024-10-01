@@ -117,6 +117,8 @@ public func GetListOfMicrophones() -> [AVCaptureDevice] {
     return session.devices
 }
 
+
+// ffplay -f f32le -ar 48k
 class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 48000.0 //44100.0
