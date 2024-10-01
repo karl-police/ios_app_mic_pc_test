@@ -80,6 +80,10 @@ BuildScript_Folder_Include = {
 	inputPaths = (
 		"${SRCROOT}/Include",
 	);
+	outputPaths = (
+		"${BUILT_PRODUCTS_DIR}",
+	);
+	runOnlyForDeploymentPostprocessing = 0;
 };
 /* */
 
