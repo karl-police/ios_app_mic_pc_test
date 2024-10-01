@@ -269,7 +269,7 @@ class SocketUDPServer : SocketServer {
                 // Receive data
                 let bytesReceived = withUnsafeMutablePointer(to: &clientAddr) {
                     $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                        recvfrom(serverSocket, &buffer, buffer.count, 0, $0, &clientAddrLen)
+                        recvfrom(self.serverSocket, &buffer, buffer.count, 0, $0, &clientAddrLen)
                     }
                 }
 
@@ -287,12 +287,12 @@ class SocketUDPServer : SocketServer {
     }
 
     func stopServer() {
-        if serverSocket >= 0 {
+        if self.serverSocket >= 0 {
             self.cleanUpServer()
         }
     }
 
     private func cleanUpServer() {
-        close(serverSocket)
+        close(self.serverSocket)
     }
 }
