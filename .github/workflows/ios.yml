@@ -55,7 +55,7 @@ jobs:
             -destination "generic/platform=iOS" \
             -sdk iphoneos \
             clean archive \
-            OTHER_SWIFT_FLAGS="-I \"$PWD/${IOS_PROJECT_NAME}/Include\"" \
+            OTHER_SWIFT_FLAGS="-I \"$PWD/${IOS_PROJECT_NAME}/Include/\"" \
             CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="Apple Distribution"
       
       #- name: Test
