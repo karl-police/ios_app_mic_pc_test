@@ -33,7 +33,12 @@ struct SocketNetworkUtils {
             let ip = inet_ntoa(addr.sin_addr)
             let port = Int(self.ntohs(addr.sin_port))
 
-            return "\(ip):\(port)"
+
+            var output = "\(ip)"
+            if port {
+                output += ":\(port)"
+            }
+            return output
         } else {
             return "Error getting client IP: \(String(cString: strerror(errno)))"
         }
