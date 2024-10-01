@@ -648,14 +648,16 @@ class NetworkVoiceManager {
 
     func start() throws {
         do {
-            try self.networkVoice_TCPServer.startServer()
+            //try self.networkVoice_TCPServer.startServer()
+            try self.socketTCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        self.networkVoice_TCPServer.stopServer()
+        //self.networkVoice_TCPServer.stopServer()
+        self.socketTCPServer.stopServer()
     }
 }
 
