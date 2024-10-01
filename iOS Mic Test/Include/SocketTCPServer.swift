@@ -3,7 +3,7 @@ import Darwin
 
 
 struct SocketNetworkUtils {
-    func ntohs(_ value: in_port_t) -> UInt16 {
+    static func ntohs(_ value: in_port_t) -> UInt16 {
         return (UInt16(value) >> 8) | (UInt16(value) << 8)
     }
 
