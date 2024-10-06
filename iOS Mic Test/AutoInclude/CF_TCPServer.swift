@@ -6,7 +6,7 @@ class CF_TCPServer {
 
     var portNumber = 0;
 
-    init(inputPort: Int32) {
+    init(inputPort: Int) {
         // Set Port number
         self.portNumber = inputPort;
     }
