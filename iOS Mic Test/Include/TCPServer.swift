@@ -198,8 +198,6 @@ class TCPServer {
     // This needs to be called to start the server
     func startServer() throws {
         do {
-            self.port = NWEndpoint.Port(rawValue: self.port.rawValue)
-
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
             // weak self test
