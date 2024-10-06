@@ -41,6 +41,7 @@ jobs:
           chmod +x ./add_swift_files_test.sh
           ./add_swift_files_test.sh
 
+
       - name: Build the xcarchive
         env:
           scheme: ${{ 'default' }}
