@@ -35,6 +35,7 @@ jobs:
       #  run: xcodebuild -resolvePackageDependencies
 
 
+      # Auto Include
       - name: Prepare pbxproj automation
         run: |
           chmod +x ./add_swift_files_test.sh
