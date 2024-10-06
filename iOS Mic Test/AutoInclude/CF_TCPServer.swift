@@ -74,8 +74,9 @@ class CF_TCPServer {
         }
 
         // Make socket reuseable
+        let nativeSocketHandle = CFSocketGetNative(socket!)
         var yes: Int32 = 1
-        setsockopt(CFSocketGetNative(socket!), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
+        setsockopt(CFSocketGetNative(nativeSocketHandle), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
 
         // Bind to socket
         let result = CFSocketSetAddress(socket, address)
