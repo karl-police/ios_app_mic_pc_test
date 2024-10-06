@@ -521,8 +521,13 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
+class NetworkVoice_CF_TCPServer : CF_TCPServer {
+
+}
+
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
+    var networkVoice_CF_TCPServer: NetworkVoice_CF_TCPServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -537,6 +542,10 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
             self?.handleAcceptedConnection(connection)
         }
+
+
+        // Testing Network
+        self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
     }
 
     // When we have connection we can start streaming

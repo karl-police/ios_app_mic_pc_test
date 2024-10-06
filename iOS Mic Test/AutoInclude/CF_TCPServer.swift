@@ -4,9 +4,9 @@ import CoreFoundation
 class CF_TCPServer {
     var serverSocket: CFSocket?
 
-    var portNumber = 0;
+    var portNumber: Int32 = 0;
 
-    init(inputPort: Int) {
+    init(inputPort: Int32) {
         // Set Port number
         self.portNumber = inputPort;
     }
@@ -74,19 +74,18 @@ class CF_TCPServer {
         }
 
         // Make socket reuseable
-        let nativeSocketHandle = CFSocketGetNative(socket!)
         var yes: Int32 = 1
-        setsockopt(CFSocketGetNative(nativeSocketHandle), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
+        setsockopt(CFSocketGetNative(serverSocket!), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
 
         // Bind to socket
-        let result = CFSocketSetAddress(socket, address)
+        let result = CFSocketSetAddress(serverSocket, address)
         if result != .success {
             print("Bind error")
             return
         }
 
         // Start listening for connections
-        let source = CFSocketCreateRunLoopSource(kCFAllocatorDefault, socket, 0)
+        let source = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .defaultMode)
         self.OnServerStarted()
         CFRunLoopRun() // Keep server alive
