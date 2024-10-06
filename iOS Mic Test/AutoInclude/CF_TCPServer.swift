@@ -24,13 +24,24 @@ class CF_TCPServer {
         guard let socket = socket else { return }
 
         let handle = CFSocketGetNative(socket)
-        //print("Accepted connection on socket \(handle)")
-        //self.handleClient(handle: handle)
+
+
+
+        // If we allow the connection to get accepted
+        self.OnClientConnectionAccepted(handle: handle)
     }
 
 
     func OnServerStarted() {
         print("TCP server started on port \(self.portNumber)")
+    }
+
+
+    // When the Server accepted a Client Connection
+    func OnClientConnectionAccepted(handle: CFSocketNativeHandle) {
+        print("Accepted connection on socket \(handle)")
+
+        close(handle)
     }
 
 
