@@ -13,18 +13,10 @@ class CF_TCPServer {
 
 
 
-    func serverSocketCallback(
-        _ socket: CFSocket?,
-        _ callbackType: CFSocketCallBackType,
-        _ address: CFData?,
-        _ data: UnsafeRawPointer?,
-        _ info: UnsafeMutableRawPointer?
-    )
-    {
+    var serverSocketCallback: CFSocketCallBack = { (_ socket, callbackType, _ address, dataPointer, infoPointer) in
         guard let socket = socket else { return }
 
         let handle = CFSocketGetNative(socket)
-
 
 
         // If we allow the connection to get accepted
