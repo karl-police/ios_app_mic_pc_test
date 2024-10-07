@@ -30,7 +30,7 @@ class CF_TCPServer {
         let handle = CFSocketGetNative(socket)
 
 
-        let referencedSelf = Unmanaged<TcpServerSocket>.fromOpaque(infoPointer).takeUnretainedValue()
+        let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
         // If we allow the connection to get accepted
         referencedSelf.OnClientConnectionAccepted(handle: handle)
