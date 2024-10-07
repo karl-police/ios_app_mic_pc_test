@@ -14,11 +14,11 @@ class CF_TCPServer {
 
 
     func serverSocketCallback(
-        _ socket: CFSocket!,
+        _ socket: CFSocket?,
         _ callbackType: CFSocketCallBackType,
-        _ address: CFData!,
-        _ data: UnsafePointer<Void>,
-        _ info: UnsafeMutablePointer<Void>
+        _ address: CFData?,
+        _ data: UnsafeRawPointer?,
+        _ info: UnsafeMutableRawPointer?
     )
     {
         guard let socket = socket else { return }
@@ -52,7 +52,7 @@ class CF_TCPServer {
             SOCK_STREAM,
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
-            serverSocketCallback as CFSocketCallBack, // conversion
+            serverSocketCallback as CFSocketCallBack, // conversion?
             nil
         )
 
