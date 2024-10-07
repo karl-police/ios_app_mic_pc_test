@@ -13,7 +13,7 @@ class CF_TCPServer {
 
 
 
-    func serverCallback(
+    static func staticServerCallback(
         _ socket: CFSocket?,
         _ callbackType: CFSocketCallBackType,
         _ address: CFData?,
@@ -52,9 +52,10 @@ class CF_TCPServer {
             SOCK_STREAM,
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
-            { (socket, callbackType, address, data, info) in
+            /*{ (socket, callbackType, address, data, info) in
                 self.serverCallback(socket, callbackType, address, data, info)
-            },
+            },*/
+            CF_TCPServer.staticServerCallback,
             nil
         )
 
