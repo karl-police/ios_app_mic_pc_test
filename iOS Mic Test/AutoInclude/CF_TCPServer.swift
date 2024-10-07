@@ -60,7 +60,7 @@ class CF_TCPServer {
         )
 
         // Bind socket to port
-        var sin = sockaddr_in(
+        var addressStruct = sockaddr_in(
             sin_len: UInt8(MemoryLayout<sockaddr_in>.size),
             sin_family: sa_family_t(AF_INET),
             sin_port: in_port_t(self.portNumber).bigEndian, // Port
@@ -68,11 +68,9 @@ class CF_TCPServer {
             sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
         )
 
-        let address = withUnsafePointer(to: &sin) {
-            $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout<sockaddr_in>.size) {
-                CFDataCreate(kCFAllocatorDefault, $0, MemoryLayout<sockaddr_in>.size)
-            }
-        }
+        let address = CFDataCreate(kCFAllocatorDefault,
+                                 NSData(bytes: &addressStruct, length: MemoryLayout<sockaddr_in>.size).bytes.assumingMemoryBound(to: UInt8.self),
+                                 MemoryLayout.size(ofValue: addressStruct))
 
         // Make socket reuseable
         var yes: Int32 = 1
