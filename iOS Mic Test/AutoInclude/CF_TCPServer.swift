@@ -13,14 +13,27 @@ class CF_TCPServer {
 
 
 
+    private var context: CFSocketContext {
+        var context = CFSocketContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
+        context.info = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+        return context
+    }
+
     var serverSocketCallback: CFSocketCallBack = { (_ socket, callbackType, _ address, dataPointer, infoPointer) in
         guard let socket = socket else { return }
+
+        guard callbackType == .acceptCallBack, let infoPointer = infoPointer,
+            let clientSocketHandle = dataPointer?.assumingMemoryBound(to: CFSocketNativeHandle.self).pointee else {
+                return
+        }
 
         let handle = CFSocketGetNative(socket)
 
 
+        let referencedSelf = Unmanaged<TcpServerSocket>.fromOpaque(infoPointer).takeUnretainedValue()
+
         // If we allow the connection to get accepted
-        self.OnClientConnectionAccepted(handle: handle)
+        referencedSelf.OnClientConnectionAccepted(handle: handle)
     }
 
 
@@ -45,7 +58,7 @@ class CF_TCPServer {
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
             serverSocketCallback as CFSocketCallBack, // conversion?
-            nil
+            &context
         )
 
         // Bind socket to port
