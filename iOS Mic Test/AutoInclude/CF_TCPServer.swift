@@ -52,10 +52,7 @@ class CF_TCPServer {
             SOCK_STREAM,
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
-            /*{ (socket, callbackType, address, data, info) in
-                self.serverCallback(socket, callbackType, address, data, info)
-            },*/
-            serverSocketCallback,
+            serverSocketCallback as CFSocketCallBack, // conversion
             nil
         )
 
