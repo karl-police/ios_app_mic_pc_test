@@ -51,6 +51,8 @@ class CF_TCPServer {
 
 
     func startServer() {
+        var context = self.context
+
         serverSocket = CFSocketCreate(
             kCFAllocatorDefault,
             PF_INET,
