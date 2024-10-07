@@ -51,10 +51,10 @@ class CF_TCPServer {
             PF_INET,
             SOCK_STREAM,
             IPPROTO_TCP,
-            CFSocketCallBackType.acceptCallBack.rawValue,
-            /*{ (socket, callbackType, address, data, info) in
+            CFSocketCallBackType.acceptCallBack.rawValue
+            { (socket, callbackType, address, data, info) in
                 self.serverCallback(socket, callbackType, address, data, info)
-            },*/
+            },
             CF_TCPServer.serverCallback,
             nil
         )
@@ -68,9 +68,11 @@ class CF_TCPServer {
             sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
         )
 
-        let address = CFDataCreate(kCFAllocatorDefault,
-                                 NSData(bytes: &addressStruct, length: MemoryLayout<sockaddr_in>.size).bytes.assumingMemoryBound(to: UInt8.self),
-                                 MemoryLayout.size(ofValue: addressStruct))
+        let address = withUnsafePointer(to: &addressStruct) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout<sockaddr_in>.size) {
+                CFDataCreate(kCFAllocatorDefault, $0, MemoryLayout<sockaddr_in>.size)
+            }
+        }
 
         // Make socket reuseable
         var yes: Int32 = 1
