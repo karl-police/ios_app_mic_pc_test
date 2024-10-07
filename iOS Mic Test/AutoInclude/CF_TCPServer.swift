@@ -55,7 +55,7 @@ class CF_TCPServer {
             /*{ (socket, callbackType, address, data, info) in
                 self.serverCallback(socket, callbackType, address, data, info)
             },*/
-            CF_TCPServer.serverSocketCallback,
+            serverSocketCallback,
             nil
         )
 
