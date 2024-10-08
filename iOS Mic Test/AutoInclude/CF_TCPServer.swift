@@ -105,6 +105,9 @@ class CF_TCPServer {
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
                 referencedSelf.TriggerTest()
+                referencedSelf.TriggerTest()
+                referencedSelf.TriggerTest()
+                referencedSelf.TriggerTest()
                 referencedSelf.close_CFSocket(cfSocket)
                 return
             }
