@@ -72,7 +72,7 @@ class CF_TCPServer {
 
     // When the Server accepted a Client Connection
     func OnClientConnectionAccepted(cf_socket: CFSocket) {
-        print("Accepted connection on socket \(cf_socket.protocol)")
+        print("Accepted connection on socket \(cf_socket)")
 
         self.cancelConnection(cf_socket)
     }
