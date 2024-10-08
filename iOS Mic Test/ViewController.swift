@@ -522,7 +522,7 @@ class NetworkVoiceTCPServer : TCPServer {
 }
 
 class NetworkVoice_CF_TCPServer : CF_TCPServer {
-    //var activeClientSocket
+    var activeClient_CFSocket: CFSocket?
 
     override func OnServerStarted() {
         G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.portNumber)")
@@ -536,7 +536,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
     private func m_cleanUp() {
-
+        self.activeClient_CFSocket? = nil
     }
 
     override func TemporaryLogging(_ str: String) {
