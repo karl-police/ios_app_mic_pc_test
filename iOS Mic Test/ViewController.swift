@@ -536,7 +536,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
     private func m_cleanUp() {
-        self.activeClient_CFSocket? = nil
+        self.activeClient_CFSocket = nil
     }
 
     override func TriggerTest() {
