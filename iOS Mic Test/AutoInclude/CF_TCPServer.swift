@@ -86,9 +86,6 @@ class CF_TCPServer {
     }
 
     var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
-        let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer!).takeUnretainedValue()
-        referencedSelf.TriggerTest()
-
         guard let cfSocket = cfSocket else { return }
 
         guard callbackType == .acceptCallBack, let infoPointer = infoPointer,
@@ -97,7 +94,9 @@ class CF_TCPServer {
         }
 
         // self reference
-        //let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
+        let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
+
+        referencedSelf.TriggerTest()
 
 
         // If local IP only
