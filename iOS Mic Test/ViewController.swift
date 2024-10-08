@@ -522,7 +522,34 @@ class NetworkVoiceTCPServer : TCPServer {
 }
 
 class NetworkVoice_CF_TCPServer : CF_TCPServer {
+    //var activeClientSocket
 
+    override func OnServerStarted() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("TCP server started on port \(self.portNumber)")
+    }
+
+
+    override func startServer() {
+        if (G_cfg_b_DoUDP == true) {
+            // UDP
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
+        } else {
+            // TCP
+            G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
+        }
+
+        do {
+            try super.startServer()
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
+        }
+    }
+
+
+    override func stopServer() {
+
+        super.stopServer()
+    }
 }
 
 class NetworkVoiceManager {
