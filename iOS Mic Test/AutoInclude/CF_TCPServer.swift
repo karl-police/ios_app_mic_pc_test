@@ -97,7 +97,9 @@ class CF_TCPServer {
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
         // Create CFSocket from client native socket
-        let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil)
+        guard let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil) else {
+            return
+        }
     
 
         // If local IP only
@@ -112,7 +114,6 @@ class CF_TCPServer {
             }
         }
 
-        referencedSelf.TriggerTest()
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(cfSocket)
         referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
