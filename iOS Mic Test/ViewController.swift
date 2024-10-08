@@ -539,6 +539,10 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         self.activeClient_CFSocket? = nil
     }
 
+    override func TriggerTest() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("test")
+    }
+
     override func TemporaryLogging(_ str: String) {
         G_UI_Class_connectionLabel.setStatusConnectionText(str)
     }
