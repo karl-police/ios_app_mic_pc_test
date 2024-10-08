@@ -189,7 +189,7 @@ class CF_TCPServer {
             CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
             self.OnServerStarted()
 
-            DispatchQueue.global(qos: .background).async {
+            DispatchQueue.main.async {
                 CFRunLoopRun() // Run server loop
             }
         //}
