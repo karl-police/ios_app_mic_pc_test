@@ -1,8 +1,37 @@
 import Foundation
 import CoreFoundation
 
+
+struct CFSocketNetworkUtils {
+    static func IsPrivateIP(_ ip: String) -> Bool {
+        let components = ip.split(separator: ".").map { Int($0) }
+        guard components.count == 4 else { return false }
+
+        guard let a = components[0], let b = components[1], let c = components[2], let d = components[3] else {
+            return false
+        }
+
+        // Local Private IP Ranges
+        // 10.0.0.0 - 10.255.255.255
+        // 172.16.0.0 - 172.31.255.255
+        // 192.168.0.0 - 192.168.255.255
+        return (a == 10) || // or
+            (a == 172 && (b >= 16 && b <= 31)) ||
+            (a == 192 && b == 168) ||
+            (ip == "127.0.0.1") // localhost
+    }
+}
+
+
+enum CF_ServerStates {
+    case started
+    case stopped
+}
+
+
 class CF_TCPServer {
     var serverSocket: CFSocket?
+    private var connectionsArray: [CFSocket] = []
 
     var portNumber: Int32 = 0;
 
@@ -27,13 +56,12 @@ class CF_TCPServer {
                 return
         }
 
-        let handle = CFSocketGetNative(socket)
-
-
+        // self reference
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
         // If we allow the connection to get accepted
-        referencedSelf.OnClientConnectionAccepted(handle: handle)
+        referencedSelf.connectionsArray.append(socket)
+        referencedSelf.OnClientConnectionAccepted(cf_socket: socket)
     }
 
 
@@ -43,10 +71,10 @@ class CF_TCPServer {
 
 
     // When the Server accepted a Client Connection
-    func OnClientConnectionAccepted(handle: CFSocketNativeHandle) {
-        print("Accepted connection on socket \(handle)")
+    func OnClientConnectionAccepted(cf_socket: CFSocket) {
+        print("Accepted connection on socket \(cf_socket)")
 
-        close(handle)
+        self.cancelConnection(cf_socket)
     }
 
 
@@ -54,13 +82,26 @@ class CF_TCPServer {
         print(str)
     }
 
+
+    // Use this instead to close connections...
+    func cancelConnection(_ cf_socket: CFSocket) {
+        if let index = self.connectionsArray.firstIndex(where: { $0 === cf_socket }) {
+            self.connectionsArray.remove(at: index)
+        }
+        
+        // Get native handle
+        let nativeHandle = CFSocketGetNative(cf_socket)
+        close(nativeHandle)
+    }
+
+
     func startServer() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
             var context = self.context
 
-            serverSocket = CFSocketCreate(
+            self.serverSocket = CFSocketCreate(
                 kCFAllocatorDefault,
                 PF_INET,
                 SOCK_STREAM,
@@ -109,17 +150,16 @@ class CF_TCPServer {
     func stopServer() {
         // If the socket exists
         if let serverSocket = self.serverSocket {
-            CFSocketInvalidate(serverSocket)
-            
-            let nativeHandle = CFSocketGetNative(serverSocket)
-            
-            // Close socket
-            close(nativeHandle)
-            
             // Remove socket loop
             if let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0) {
                 CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
             }
+            CFSocketInvalidate(serverSocket)
+            
+
+            // Close socket
+            let nativeHandle = CFSocketGetNative(serverSocket)
+            close(nativeHandle)
             
             self.serverSocket = nil
 
