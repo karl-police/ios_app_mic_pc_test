@@ -525,9 +525,14 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     //var activeClientSocket
 
     override func OnServerStarted() {
-        G_UI_Class_connectionLabel.setStatusConnectionText("TCP server started on port \(self.portNumber)")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.portNumber)")
     }
 
+    override func OnClientConnectionAccepted(handle: CFSocketNativeHandle) {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection on socket \(handle)")
+
+        close(handle)
+    }
 
     private func m_cleanUp() {
 
