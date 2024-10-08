@@ -215,7 +215,6 @@ class CF_TCPServer {
 
             CFSocketInvalidate(serverSocket)
             
-
             // Close socket
             let nativeHandle = CFSocketGetNative(serverSocket)
             close(nativeHandle)
