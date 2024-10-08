@@ -478,7 +478,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
 
-    func cleanUp() {
+    func m_cleanUp() {
         self.activeConnection = nil
     }
 
@@ -517,7 +517,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
         super.stopServer() // should remove all connections as well
 
-        cleanUp()
+        m_cleanUp()
     }
 }
 
@@ -528,6 +528,10 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("TCP server started on port \(self.portNumber)")
     }
 
+
+    private func m_cleanUp() {
+
+    }
 
     override func startServer() {
         if (G_cfg_b_DoUDP == true) {
@@ -547,8 +551,12 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
     override func stopServer() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
 
         super.stopServer()
+
+
+        m_cleanUp()
     }
 }
 
