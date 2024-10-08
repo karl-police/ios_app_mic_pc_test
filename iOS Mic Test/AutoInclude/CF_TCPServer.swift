@@ -55,7 +55,7 @@ class CF_TCPServer {
     }
 
     func startServer() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
             var context = self.context
