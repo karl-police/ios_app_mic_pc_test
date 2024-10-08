@@ -94,10 +94,13 @@ class CF_TCPServer {
         }
 
         // Listen for connections
-        let source = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .defaultMode)
+        let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
         self.OnServerStarted()
-        CFRunLoopRun() // Run server loop
+
+        DispatchQueue.global(qos: .background).async {
+            CFRunLoopRun() // Run server loop
+        }
     }
 
 
