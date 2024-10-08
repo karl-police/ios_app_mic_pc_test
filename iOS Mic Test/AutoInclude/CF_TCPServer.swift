@@ -50,6 +50,10 @@ class CF_TCPServer {
     }
 
 
+    func TemporaryLogging(_ str: String) {
+        print(str)
+    }
+
     func startServer() {
         var context = self.context
 
@@ -85,14 +89,38 @@ class CF_TCPServer {
         // Bind to socket
         let result = CFSocketSetAddress(serverSocket, address)
         if result != .success {
-            print("Bind error")
+            //print("Bind error")
             return
         }
 
-        // Start listening for connections
+        // Listen for connections
         let source = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .defaultMode)
         self.OnServerStarted()
-        CFRunLoopRun() // Keep server alive
+        CFRunLoopRun() // Run server loop
+    }
+
+
+    func stopServer() {
+        // If the socket exists
+        if let serverSocket = self.serverSocket {
+            CFSocketInvalidate(serverSocket)
+            
+            let nativeHandle = CFSocketGetNative(serverSocket)
+            
+            // Close socket
+            close(nativeHandle)
+            
+            // Remove socket loop
+            if let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0) {
+                CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
+            }
+            
+            self.serverSocket = nil
+
+            self.TemporaryLogging("TCP Server stopped")
+        } else {
+            self.TemporaryLogging("Server socket doesn't exist")
+        }
     }
 }

@@ -533,6 +533,10 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
     }
 
+    override func TemporaryLogging(_ str: String) {
+        G_UI_Class_connectionLabel.setStatusConnectionText(str)
+    }
+
     override func startServer() {
         if (G_cfg_b_DoUDP == true) {
             // UDP
