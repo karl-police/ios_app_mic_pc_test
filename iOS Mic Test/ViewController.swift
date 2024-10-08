@@ -529,9 +529,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     }
 
     override func OnClientConnectionAccepted(cfSocket: CFSocket) {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection on socket \(cfSocket)")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(cfSocket)")
 
-        self.cancelConnection(cfSocket)
+        self.close_CFSocket(cfSocket)
     }
 
 

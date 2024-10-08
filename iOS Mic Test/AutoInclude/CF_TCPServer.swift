@@ -2,7 +2,11 @@ import Foundation
 import CoreFoundation
 
 
-struct CFSocketNetworkUtils {
+struct CF_SocketNetworkUtils {
+    static func ntohs(_ value: in_port_t) -> UInt16 {
+        return (UInt16(value) >> 8) | (UInt16(value) << 8)
+    }
+
     static func IsPrivateIP(_ ip: String) -> Bool {
         let components = ip.split(separator: ".").map { Int($0) }
         guard components.count == 4 else { return false }
@@ -20,6 +24,28 @@ struct CFSocketNetworkUtils {
             (a == 192 && b == 168) ||
             (ip == "127.0.0.1") // localhost
     }
+
+
+    static func GetIP_FromNativeSocket(_ nativeSocket: Int32, _ b_includePort: Bool = false ) -> String {
+        var addr = sockaddr_in()
+        var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
+
+        if getpeername(nativeSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
+            let ip = inet_ntoa(addr.sin_addr)
+            let port = Int(self.ntohs(addr.sin_port))
+
+
+            var output = "\(ip)"
+            
+            if (b_includePort == true && port != nil) {
+                output += ":\(port)"
+            }
+
+            return output
+        } else {
+            return "Error getting IP: \(String(cString: strerror(errno)))"
+        }
+    }
 }
 
 
@@ -28,7 +54,7 @@ enum CF_ServerStates {
     case stopped
 }
 
-class CFSocketServerConfig {
+class CF_SocketServerConfig {
     // Whether only local addresses can connect
     var allowLocalOnly: Bool = false
 }
@@ -36,9 +62,9 @@ class CFSocketServerConfig {
 
 class CF_TCPServer {
     var serverSocket: CFSocket?
-    private var connectionsArray: [CFSocket] = []
+    private var activeCFSocketsArray: [CFSocket] = []
 
-    var ServerConfig = CFSocketServerConfig() // Config
+    var ServerConfig = CF_SocketServerConfig() // Config
 
     var portNumber: Int32 = 0;
 
@@ -55,8 +81,8 @@ class CF_TCPServer {
         return context
     }
 
-    var serverSocketCallback: CFSocketCallBack = { (_ socket, callbackType, _ address, dataPointer, infoPointer) in
-        guard let socket = socket else { return }
+    var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+        guard let cfSocket = cfSocket else { return }
 
         guard callbackType == .acceptCallBack, let infoPointer = infoPointer,
             let clientSocketHandle = dataPointer?.assumingMemoryBound(to: CFSocketNativeHandle.self).pointee else {
@@ -67,11 +93,22 @@ class CF_TCPServer {
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
 
+        // If local IP only
+        if (referencedSelf.ServerConfig.allowLocalOnly == true) {
+            let clientNativeSocket = CFSocketGetNative(cfSocket) // Int32
+
+            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientNativeSocket)
+
+            if (!CF_SocketNetworkUtils.IsPrivateIP(ipStr)) {
+                referencedSelf.close_CFSocket(cfSocket)
+                return
+            }
+        }
 
 
         // If we allow the connection to get accepted
-        referencedSelf.connectionsArray.append(socket)
-        referencedSelf.OnClientConnectionAccepted(cfSocket: socket)
+        referencedSelf.activeCFSocketsArray.append(cfSocket)
+        referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
     }
 
 
@@ -84,7 +121,7 @@ class CF_TCPServer {
     func OnClientConnectionAccepted(cfSocket: CFSocket) {
         print("Accepted connection on socket \(cfSocket)")
 
-        self.cancelConnection(cfSocket)
+        self.close_CFSocket(cfSocket)
     }
 
 
@@ -94,9 +131,9 @@ class CF_TCPServer {
 
 
     // Use this instead to close connections...
-    func cancelConnection(_ cfSocket: CFSocket) {
-        if let index = self.connectionsArray.firstIndex(where: { $0 === cfSocket }) {
-            self.connectionsArray.remove(at: index)
+    func close_CFSocket(_ cfSocket: CFSocket) {
+        if let index = self.activeCFSocketsArray.firstIndex(where: { $0 === cfSocket }) {
+            self.activeCFSocketsArray.remove(at: index)
         }
         
         // Get native handle
@@ -136,7 +173,7 @@ class CF_TCPServer {
                 }
             }
 
-            // Make socket reuseable
+            // Make socket re-useable
             var yes: Int32 = 1
             setsockopt(CFSocketGetNative(serverSocket!), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
 
