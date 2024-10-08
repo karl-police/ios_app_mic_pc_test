@@ -97,7 +97,7 @@ class CF_TCPServer {
         }
 
         // self reference
-        let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
+        //let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
 
         // If local IP only
