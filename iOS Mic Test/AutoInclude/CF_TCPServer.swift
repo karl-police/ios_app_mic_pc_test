@@ -96,22 +96,21 @@ class CF_TCPServer {
         // self reference
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
-        referencedSelf.TriggerTest()
-
-
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
+            referencedSelf.TriggerTest()
             let clientNativeSocket = CFSocketGetNative(cfSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientNativeSocket)
 
-            if (!CF_SocketNetworkUtils.IsPrivateIP(ipStr)) {
+            if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
+                referencedSelf.TriggerTest()
                 referencedSelf.close_CFSocket(cfSocket)
                 return
             }
         }
 
-
+        referencedSelf.TriggerTest()
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(cfSocket)
         referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
