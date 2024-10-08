@@ -28,10 +28,17 @@ enum CF_ServerStates {
     case stopped
 }
 
+class CFSocketServerConfig {
+    // Whether only local addresses can connect
+    var allowLocalOnly: Bool = false
+}
+
 
 class CF_TCPServer {
     var serverSocket: CFSocket?
     private var connectionsArray: [CFSocket] = []
+
+    var ServerConfig = CFSocketServerConfig() // Config
 
     var portNumber: Int32 = 0;
 
@@ -59,9 +66,12 @@ class CF_TCPServer {
         // self reference
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
+
+
+
         // If we allow the connection to get accepted
         referencedSelf.connectionsArray.append(socket)
-        referencedSelf.OnClientConnectionAccepted(cf_socket: socket)
+        referencedSelf.OnClientConnectionAccepted(cfSocket: socket)
     }
 
 
@@ -71,10 +81,10 @@ class CF_TCPServer {
 
 
     // When the Server accepted a Client Connection
-    func OnClientConnectionAccepted(cf_socket: CFSocket) {
-        print("Accepted connection on socket \(cf_socket)")
+    func OnClientConnectionAccepted(cfSocket: CFSocket) {
+        print("Accepted connection on socket \(cfSocket)")
 
-        self.cancelConnection(cf_socket)
+        self.cancelConnection(cfSocket)
     }
 
 
@@ -84,13 +94,13 @@ class CF_TCPServer {
 
 
     // Use this instead to close connections...
-    func cancelConnection(_ cf_socket: CFSocket) {
-        if let index = self.connectionsArray.firstIndex(where: { $0 === cf_socket }) {
+    func cancelConnection(_ cfSocket: CFSocket) {
+        if let index = self.connectionsArray.firstIndex(where: { $0 === cfSocket }) {
             self.connectionsArray.remove(at: index)
         }
         
         // Get native handle
-        let nativeHandle = CFSocketGetNative(cf_socket)
+        let nativeHandle = CFSocketGetNative(cfSocket)
         close(nativeHandle)
     }
 
