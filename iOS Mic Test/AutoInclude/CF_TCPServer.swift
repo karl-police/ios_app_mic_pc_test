@@ -82,10 +82,12 @@ class CF_TCPServer {
     }
 
     func TriggerTest() {
-        
+
     }
 
     var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+        referencedSelf.TriggerTest()
+
         guard let cfSocket = cfSocket else { return }
 
         guard callbackType == .acceptCallBack, let infoPointer = infoPointer,
@@ -96,8 +98,6 @@ class CF_TCPServer {
         // self reference
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
-
-        referencedSelf.TriggerTest()
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
