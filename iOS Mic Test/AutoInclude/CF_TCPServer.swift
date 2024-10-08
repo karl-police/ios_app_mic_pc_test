@@ -37,7 +37,7 @@ struct CF_SocketNetworkUtils {
 
             var output = "\(ip)"
             
-            if (b_includePort == true && port != nil) {
+            if (b_includePort == true /*&& port != nil*/) {
                 output += ":\(port)"
             }
 
@@ -143,8 +143,8 @@ class CF_TCPServer {
 
 
     func startServer() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+        //DispatchQueue.main.async { [weak self] in
+            //guard let self = self else { return }
             
             var context = self.context
 
@@ -189,8 +189,10 @@ class CF_TCPServer {
             CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
             self.OnServerStarted()
 
-            CFRunLoopRun() // Run server loop
-        }
+            DispatchQueue.global(qos: .background).async {
+                CFRunLoopRun() // Run server loop
+            }
+        //}
     }
 
 
