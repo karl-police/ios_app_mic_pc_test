@@ -119,8 +119,6 @@ class CF_TCPServer {
                 CFRunLoopStop(CFRunLoopGetCurrent())
             }
         }
-
-        return
     }
 
 
@@ -182,7 +180,7 @@ class CF_TCPServer {
         referencedSelf.activeCFSocketsArray.append(client_cfSocket)
 
         // Add run loop for client
-        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
+        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 1)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
         referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
@@ -294,6 +292,7 @@ class CF_TCPServer {
             // Remove socket loop
             if let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0) {
                 CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
+                CFRelease(runLoopSource)
             }
 
             // Close active sockets
