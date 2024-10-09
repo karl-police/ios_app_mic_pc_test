@@ -98,6 +98,7 @@ class CF_TCPServer {
 
         // Create CFSocket from client native socket
         guard let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil) else {
+            referencedSelf.TemporaryLogging("It didn't work...")
             return
         }
     
