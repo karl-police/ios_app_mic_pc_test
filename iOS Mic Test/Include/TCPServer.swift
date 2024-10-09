@@ -226,7 +226,7 @@ class TCPServer {
             self.cancelConnection(connection) // This closes the connection
         }
 
-        self.connectionsArray.removeAll() // Ensure removal of all
+        //self.connectionsArray.removeAll() // Ensure removal of all
 
         self.listener?.cancel()
 
