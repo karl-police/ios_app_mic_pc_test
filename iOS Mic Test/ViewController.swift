@@ -751,7 +751,7 @@ class NetworkVoiceManager {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        let streamDescription = audioFormat.streamDescription.pointee
+        /*let streamDescription = audioFormat.streamDescription.pointee
 
         var debugText = ""
         debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
@@ -759,7 +759,7 @@ class NetworkVoiceManager {
         debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
-            + "\n\n" + G_UI_debugTextBoxOut.text
+            + "\n\n" + G_UI_debugTextBoxOut.text*/
 
         
     }
