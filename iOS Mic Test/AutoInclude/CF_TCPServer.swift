@@ -292,7 +292,6 @@ class CF_TCPServer {
             // Remove socket loop
             if let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0) {
                 CFRunLoopRemoveSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
-                CFRelease(runLoopSource)
             }
 
             // Close active sockets
