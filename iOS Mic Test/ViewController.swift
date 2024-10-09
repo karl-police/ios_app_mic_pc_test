@@ -655,9 +655,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         activeClient_CFSocket = client_cfSocket
 
         // Handshake
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.m_customHandshake(client_cfSocket)
-        }
+        self.m_customHandshake(client_cfSocket)
     }
 
 
