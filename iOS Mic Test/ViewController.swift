@@ -524,8 +524,15 @@ class NetworkVoiceTCPServer : TCPServer {
 class NetworkVoice_CF_TCPServer : CF_TCPServer {
     var activeClient_CFSocket: CFSocket?
 
-    override func OnServerStarted() {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.portNumber)")
+    override func OnServerStateChanged(_ state: CF_ServerStates) {
+        switch state {
+            case .started:
+                G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.portNumber)")
+            case .stopped:
+                G_UI_Class_connectionLabel.setStatusConnectionText("TCP Server stopped")
+            default:
+                break
+        }
     }
 
     override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
@@ -578,6 +585,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     }
 }
 
+
+
+// Network Voice Manager
 class NetworkVoiceManager {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
     var networkVoice_CF_TCPServer: NetworkVoice_CF_TCPServer!
@@ -669,16 +679,16 @@ class NetworkVoiceManager {
 
     func start() throws {
         do {
-            try self.networkVoice_TCPServer.startServer()
-            //try self.networkVoice_CF_TCPServer.startServer()
+            //try self.networkVoice_TCPServer.startServer()
+            try self.networkVoice_CF_TCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        self.networkVoice_TCPServer.stopServer()
-        //self.networkVoice_CF_TCPServer.stopServer()
+        //self.networkVoice_TCPServer.stopServer()
+        self.networkVoice_CF_TCPServer.stopServer()
     }
 }
 

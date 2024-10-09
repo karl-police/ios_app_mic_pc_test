@@ -85,6 +85,11 @@ class CF_TCPServer {
     }
 
 
+    var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+        guard let client_cfSocket = client_cfSocket else { return }
+
+    }
+
     var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let cfSocket = cfSocket else { return }
 
@@ -121,8 +126,16 @@ class CF_TCPServer {
     }
 
 
-    func OnServerStarted() {
-        print("TCP server started on port \(self.portNumber)")
+    // Whenever a state changed.
+    func OnServerStateChanged(_ state: CF_ServerStates) {
+        switch state {
+            case .started:
+                print("TCP server started on port \(self.portNumber)")
+            case .stopped:
+                print("TCP Server stopped")
+            default:
+                break
+        }
     }
 
 
@@ -193,7 +206,7 @@ class CF_TCPServer {
         // Listen for connections
         let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
-        self.OnServerStarted()
+        self.OnServerStateChanged(CF_ServerStates.started)
 
         DispatchQueue.global(qos: .background).async {
             CFRunLoopRun() // Run server loop
@@ -222,7 +235,7 @@ class CF_TCPServer {
             
             self.serverSocket = nil
 
-            self.TemporaryLogging("TCP Server stopped")
+            self.OnServerStateChanged(CF_ServerStates.stopped)
         } else {
             self.TemporaryLogging("Server socket doesn't exist")
         }
