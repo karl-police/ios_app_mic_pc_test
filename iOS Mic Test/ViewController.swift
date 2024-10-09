@@ -544,16 +544,18 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         }
     }
 
-    override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates, _ ipStr: String) {
+    override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates) {
         switch state {
             case .disconnected:
+                let nativeHandle = CFSocketGetNative(client_cfSocket)
+
                 var isOurActive = false
                 if (client_cfSocket == activeClient_CFSocket) {
                     isOurActive = true
                     activeClient_CFSocket = nil
                 }
 
-                G_UI_Class_connectionLabel.setStatusConnectionText("Client Disconnected, \(ipStr), \(isOurActive)")
+                G_UI_Class_connectionLabel.setStatusConnectionText("Client Disconnected, \(nativeHandle), \(isOurActive)")
 
                 self.close_CFSocket(client_cfSocket) // Ensure
             default:
@@ -643,6 +645,10 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(ipStr)")
+
+        G_UI_debugTextBoxOut.text = "Accepted connection with \(ipStr), \(client_NativeCFSocket)"
+            + G_UI_debugTextBoxOut.text
+
 
         // Set active connection
         activeClient_CFSocket = client_cfSocket

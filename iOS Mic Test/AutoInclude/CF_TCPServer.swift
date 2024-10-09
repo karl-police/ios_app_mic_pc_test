@@ -113,9 +113,7 @@ class CF_TCPServer {
             
             // e.g. -1
             if result < 0 { // less than
-                let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(nativeHandle, b_includePort: true)
-
-                referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected, ipStr)
+                referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
 
                 CFSocketInvalidate(client_cfSocket)
                 CFRunLoopStop(CFRunLoopGetCurrent())
@@ -202,9 +200,10 @@ class CF_TCPServer {
         }
     }
 
-    func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates, _ ipStr: String) {
+    func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates) {
         switch state {
             case .disconnected:
+                let ipStr = CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true)
                 print("Client Disconnected, \(ipStr)")
             default:
                 break
