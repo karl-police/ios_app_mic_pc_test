@@ -118,6 +118,8 @@ class CF_TCPServer {
                 CFSocketInvalidate(client_cfSocket)
                 CFRunLoopStop(CFRunLoopGetCurrent())
             }
+        } else {
+            return
         }
     }
 
