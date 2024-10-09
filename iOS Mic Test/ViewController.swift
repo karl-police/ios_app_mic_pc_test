@@ -597,7 +597,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        DispatchQueue.global(qos: .background).async { [weak self] in
             var buffer = [UInt8](repeating: 0, count: 512)
             let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
