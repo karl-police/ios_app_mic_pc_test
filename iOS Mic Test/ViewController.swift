@@ -535,6 +535,31 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         }
     }
 
+    override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates) {
+        switch state {
+            case .disconnected:
+                let ipStr = CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true)
+
+                var isOurActive = false
+                if (client_cfSocket == activeClient_CFSocket) {
+                    isOurActive = true
+                }
+
+                G_UI_Class_connectionLabel.setStatusConnectionText("Client Disconnected, \(ipStr), \(isOurActive)")
+            default:
+                break
+        }
+    }
+
+
+    override func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
+        // If we already have a thing, don't accept
+        if (activeClient_CFSocket != nil) {
+            return false
+        }
+
+        return true
+    }
 
     // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
@@ -543,6 +568,8 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(ipStr)")
 
+        // Set active connection
+        activeClient_CFSocket = client_cfSocket
 
         self.close_CFSocket(client_cfSocket)
     }
@@ -581,7 +608,6 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
 
         super.stopServer()
-
 
         m_cleanUp()
     }
