@@ -173,7 +173,7 @@ class CF_TCPServer {
             SOCK_STREAM,
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
-            serverSocketCallback as CFSocketCallBack, // conversion?
+            serverSocketCallback, // as CFSocketCallBack conversion?
             &context
         )
 
