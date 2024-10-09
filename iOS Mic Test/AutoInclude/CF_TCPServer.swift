@@ -119,7 +119,7 @@ class CF_TCPServer {
 
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(clientCFSocket)
-        //referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
+        //referencedSelf.OnClientConnectionAccepted(cfSocket: clientCFSocket)
     }
 
 
