@@ -728,7 +728,9 @@ class NetworkVoiceManager {
         self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
 
         self.networkVoice_CF_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] client_cfSocket in
-            self?.handleAcceptedCFSocket(client_cfSocket)
+            DispatchQueue.main.async {
+                self?.handleAcceptedCFSocket(client_cfSocket)
+            }
         }
     }
 
@@ -752,6 +754,8 @@ class NetworkVoiceManager {
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
+
+        
     }
 
 
