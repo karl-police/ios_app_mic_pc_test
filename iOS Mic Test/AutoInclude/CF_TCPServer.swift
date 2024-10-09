@@ -35,9 +35,6 @@ struct CF_SocketNetworkUtils {
                 return "Error getting IP with inet_ntoa"
             }
 
-            //var ipBuffer = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
-            //inet_ntop(AF_INET, &addr.sin_addr, &ipBuffer, socklen_t(INET_ADDRSTRLEN))
-
             let ip = String(cString: ipCString)
             let port = Int(self.ntohs(addr.sin_port))
 
@@ -121,7 +118,7 @@ class CF_TCPServer {
 
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(cfSocket)
-        referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
+        //referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
     }
 
 
