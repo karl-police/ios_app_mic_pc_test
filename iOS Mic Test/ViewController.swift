@@ -620,7 +620,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                         + "\n\n"
                         + G_UI_debugTextBoxOut.text
 
-                    self?.close_CFSocket(incomingCFSocket)
+                    self.close_CFSocket(incomingCFSocket)
                 } else {
                     DispatchQueue.main.async {
                         G_UI_Class_connectionLabel.setStatusConnectionText(
@@ -631,7 +631,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
                         // We can now do the streaming thing
                         // Trigger this
-                        self?.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+                        self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
                     }
                 }
             }
