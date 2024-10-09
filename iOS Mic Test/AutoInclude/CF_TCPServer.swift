@@ -183,9 +183,7 @@ class CF_TCPServer {
         let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
-        DispatchQueue.main.async {
-            referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
-        }
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
     }
 
 
