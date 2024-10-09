@@ -57,11 +57,13 @@ enum CF_ServerStates {
     case stopped
 }
 
+
+
+// Server Config
 class CF_SocketServerConfig {
     // Whether only local addresses can connect
     var allowLocalOnly: Bool = false
 }
-
 
 class CF_TCPServer {
     var serverSocket: CFSocket?
@@ -173,7 +175,7 @@ class CF_TCPServer {
             SOCK_STREAM,
             IPPROTO_TCP,
             CFSocketCallBackType.acceptCallBack.rawValue,
-            serverSocketCallback, // as CFSocketCallBack conversion?
+            serverSocketCallback, // CFSocketCallBack
             &context
         )
 

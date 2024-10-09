@@ -535,6 +535,8 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         }
     }
 
+
+    // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
         let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
