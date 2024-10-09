@@ -180,8 +180,8 @@ class CF_TCPServer {
         referencedSelf.activeCFSocketsArray.append(client_cfSocket)
 
         // Add run loop for client
-        //let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 1)
-        //CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
+        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 1)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
         referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
     }
