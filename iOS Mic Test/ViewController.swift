@@ -387,6 +387,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
                 guard let response = ("Accepted").data(using: .utf8) else {
                     G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                        + "\n\n"
                         + G_UI_debugTextBoxOut.text
                     return
                 }
@@ -396,6 +397,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     completion: .contentProcessed({ error in 
                         if let error = error {
                             G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                                + "\n\n"
                                 + G_UI_debugTextBoxOut.text
                             
                             self?.cancelConnection(incomingConnection) // Ensure
@@ -609,6 +611,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                 
                 guard let response = ("Accepted").data(using: .utf8) else {
                     G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                        + "\n\n"
                         + G_UI_debugTextBoxOut.text
                     return
                 }
@@ -616,6 +619,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                 
                 if (sendResult == -1) {
                     G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                        + "\n\n"
                         + G_UI_debugTextBoxOut.text
 
                     self.close_CFSocket(incomingCFSocket)
@@ -647,6 +651,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(ipStr)")
 
         G_UI_debugTextBoxOut.text = "Accepted connection with \(ipStr), \(client_NativeCFSocket)"
+            + "\n\n"
             + G_UI_debugTextBoxOut.text
 
 
