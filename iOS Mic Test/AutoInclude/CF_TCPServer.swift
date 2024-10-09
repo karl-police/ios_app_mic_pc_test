@@ -104,7 +104,7 @@ class CF_TCPServer {
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
-            let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
+            //let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
             referencedSelf.TemporaryLogging("Result: \(ipStr)")
