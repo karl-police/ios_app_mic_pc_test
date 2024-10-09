@@ -106,7 +106,7 @@ class CF_TCPServer {
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
             let client_NativeCFSocket = CFSocketGetNative(clientCFSocket) // Int32
 
-            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
+            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket)
             let ipStr_temp2 = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
             referencedSelf.TemporaryLogging("Result: \(ipStr)")
             referencedSelf.TemporaryLogging("Result: \(ipStr_temp2)")
