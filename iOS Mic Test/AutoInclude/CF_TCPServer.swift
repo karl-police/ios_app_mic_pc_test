@@ -31,9 +31,11 @@ struct CF_SocketNetworkUtils {
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
         if getpeername(nativeSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
-            let ip = inet_ntoa(addr.sin_addr)
-            let port = Int(self.ntohs(addr.sin_port))
+            guard let ip = inet_ntoa(addr.sin_addr) else {
+                return "Error getting IP with inet_ntoa"
+            }
 
+            let port = Int(self.ntohs(addr.sin_port))
 
             var output = "\(ip)"
             
