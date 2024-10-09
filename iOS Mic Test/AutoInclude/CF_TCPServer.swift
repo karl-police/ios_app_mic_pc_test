@@ -104,12 +104,10 @@ class CF_TCPServer {
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
+            // Turn CFSocket to Native Handle
             let client_NativeCFSocket = CFSocketGetNative(clientCFSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket)
-            let ipStr_temp2 = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
-            referencedSelf.TemporaryLogging("Result: \(ipStr)")
-            referencedSelf.TemporaryLogging("Result: \(ipStr_temp2)")
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
                 referencedSelf.close_CFSocket(clientCFSocket)
@@ -119,7 +117,7 @@ class CF_TCPServer {
 
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(clientCFSocket)
-        //referencedSelf.OnClientConnectionAccepted(cfSocket: clientCFSocket)
+        referencedSelf.OnClientConnectionAccepted(cfSocket: clientCFSocket)
     }
 
 
