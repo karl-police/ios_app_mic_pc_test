@@ -496,7 +496,7 @@ class NetworkVoiceTCPServer : TCPServer {
         }
 
         // Force this on both
-        //self.cfg_nwParameters.allowLocalEndpointReuse = true // SO_REUSEADDR?
+        self.cfg_nwParameters.allowLocalEndpointReuse = true // SO_REUSEADDR?
         self.cfg_nwParameters.includePeerToPeer = true
         self.cfg_nwParameters.acceptLocalOnly = true
 
@@ -669,16 +669,16 @@ class NetworkVoiceManager {
 
     func start() throws {
         do {
-            //try self.networkVoice_TCPServer.startServer()
-            try self.networkVoice_CF_TCPServer.startServer()
+            try self.networkVoice_TCPServer.startServer()
+            //try self.networkVoice_CF_TCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        //self.networkVoice_TCPServer.stopServer()
-        self.networkVoice_CF_TCPServer.stopServer()
+        self.networkVoice_TCPServer.stopServer()
+        //self.networkVoice_CF_TCPServer.stopServer()
     }
 }
 
