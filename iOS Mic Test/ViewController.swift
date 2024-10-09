@@ -815,16 +815,16 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     func start() throws {
         do {
-            try self.networkVoice_TCPServer.startServer()
-            //try self.networkVoice_CF_TCPServer.startServer()
+            //try self.networkVoice_TCPServer.startServer()
+            try self.networkVoice_CF_TCPServer.startServer()
         } catch {
             throw error
         }
     }
 
     func stop() {
-        self.networkVoice_TCPServer.stopServer()
-        //self.networkVoice_CF_TCPServer.stopServer()
+        //self.networkVoice_TCPServer.stopServer()
+        self.networkVoice_CF_TCPServer.stopServer()
     }
 }
 
