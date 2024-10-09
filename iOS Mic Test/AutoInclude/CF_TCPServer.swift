@@ -1,5 +1,6 @@
 import Foundation
 import CoreFoundation
+import Darwin
 
 
 struct CF_SocketNetworkUtils {
