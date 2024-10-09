@@ -607,8 +607,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                 }
 
                 let receivedData = Data(buffer[0..<readResult])
-
-
+                
                 if (receivedData == expectedWord) {
                     timeoutTimer.invalidate() // Erase the timeout
                     
