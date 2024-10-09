@@ -654,9 +654,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         activeClient_CFSocket = client_cfSocket
 
         // Handshake
-        //m_customHandshake(client_cfSocket)
-
-        self.close_CFSocket(client_cfSocket)
+        m_customHandshake(client_cfSocket)
     }
 
 
