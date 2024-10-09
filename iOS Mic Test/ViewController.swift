@@ -385,12 +385,19 @@ class NetworkVoiceTCPServer : TCPServer {
                 // Perhaps whatever you try to connect, whether this is a safe way
                 // To check that it's the actual app is another question
 
-                let response = ("Accepted").data(using: .utf8)!
+                guard let response = ("Accepted").data(using: .utf8) else {
+                    G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                        + G_UI_debugTextBoxOut.text
+                    return
+                }
+
                 incomingConnection.send(
                     content: response,
                     completion: .contentProcessed({ error in 
                         if let error = error {
-                            G_UI_Class_connectionLabel.setStatusConnectionText("Error Sending Handshake Back")
+                            G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                                + G_UI_debugTextBoxOut.text
+                            
                             self?.cancelConnection(incomingConnection) // Ensure
                         } else {
                             G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
@@ -524,6 +531,8 @@ class NetworkVoiceTCPServer : TCPServer {
 class NetworkVoice_CF_TCPServer : CF_TCPServer {
     var activeClient_CFSocket: CFSocket?
 
+    var m_onAcceptedConnectionEstablished: ((CFSocket) -> Void)?
+
     override func OnServerStateChanged(_ state: CF_ServerStates) {
         switch state {
             case .started:
@@ -543,9 +552,12 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                 var isOurActive = false
                 if (client_cfSocket == activeClient_CFSocket) {
                     isOurActive = true
+                    activeClient_CFSocket = nil
                 }
 
                 G_UI_Class_connectionLabel.setStatusConnectionText("Client Disconnected, \(ipStr), \(isOurActive)")
+
+                self.close_CFSocket(client_cfSocket) // Ensure
             default:
                 break
         }
@@ -574,12 +586,57 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
             }
         }
 
+        
+        let client_NativeCFSocket = CFSocketGetNative(incomingCFSocket) // Int32
+
         /***
             IMPORTANT
         ***/
         // We need to receive this
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
+
+        var buffer = [UInt8](repeating: 0, count: 512)
+        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+
+        if (readResult > 0) {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
+
+            let receivedData = Data(buffer[0..<readResult])
+
+            if (receivedData == expectedWord) {
+                timeoutTimer.invalidate() // Erase the timeout
+                
+                guard let response = ("Accepted").data(using: .utf8) else {
+                    G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                        + G_UI_debugTextBoxOut.text
+                    return
+                }
+                let sendResult = send(client_NativeCFSocket, [UInt8](response), response.count, 0)
+                
+                if (sendResult == -1) {
+                    G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                        + G_UI_debugTextBoxOut.text
+
+                    self.close_CFSocket(incomingCFSocket)
+                } else {
+                    G_UI_Class_connectionLabel.setStatusConnectionText(
+                        "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
+                    )
+
+                    // Accept after send
+                    // Check
+                    guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
+                        G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
+                        return
+                    }
+
+                    // We can now do the streaming thing
+                    // Trigger this
+                    guard_m_onAcceptedConnectionEstablished(incomingCFSocket)
+                }
+            }
+        }
     }
 
     // Whenever we accept a new client connection
@@ -595,7 +652,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         // Handshake
         //m_customHandshake(client_cfSocket)
 
-        self.close_CFSocket(incomingCFSocket)
+        self.close_CFSocket(client_cfSocket)
     }
 
 
@@ -659,9 +716,39 @@ class NetworkVoiceManager {
         }
 
 
-        // Testing Network
+
+        // Testing CF Network
         self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
+
+        self.networkVoice_CF_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] client_cfSocket in
+            self?.handleAcceptedCFSocket(client_cfSocket)
+        }
     }
+
+
+    // For CF
+    private func handleAcceptedCFSocket(_ client_cfSocket: CFSocket) {
+        guard let audioEngine = self.audioEngineManager.audioEngine else { return }
+        guard let inputNode = self.audioEngineManager.inputNode else { return }
+        guard let audioFormat = self.audioEngineManager.audioFormat else { return }
+        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
+
+
+        let streamDescription = audioFormat.streamDescription.pointee
+
+        var debugText = ""
+        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
+        debugText += "Channels: \(audioFormat.channelCount)\n"
+        debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
+        debugText += "Format ID: \(streamDescription.mFormatID)\n"
+        G_UI_debugTextBoxOut.text = debugText
+            + "\n\n" + G_UI_debugTextBoxOut.text
+    }
+
+
+
 
     // When we have connection we can start streaming
     // This will make us start streaming
@@ -709,7 +796,7 @@ class NetworkVoiceManager {
         
         // Check if data is available
         guard let dataPointer = audioData.mData else {
-            //G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+            G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
             return
         }
 
@@ -721,7 +808,7 @@ class NetworkVoiceManager {
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
-                    //G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+                    G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
                 }
             })
         )
