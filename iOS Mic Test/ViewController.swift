@@ -624,7 +624,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                             + "\n\n"
                             + G_UI_debugTextBoxOut.text
 
-                        self.close_CFSocket(incomingCFSocket)
+                        self?.close_CFSocket(incomingCFSocket)
                     } else {
                         G_UI_Class_connectionLabel.setStatusConnectionText(
                             "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
@@ -634,7 +634,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
                         // We can now do the streaming thing
                         // Trigger this
-                        self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+                        self?.delegate?.handleAcceptedCFSocket(incomingCFSocket)
                     }
                 }
             }
