@@ -597,36 +597,36 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        var buffer = [UInt8](repeating: 0, count: 512)
-        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            var buffer = [UInt8](repeating: 0, count: 512)
+            let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
-        if (readResult > 0) {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
+            if (readResult > 0) {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
-            let receivedData = Data(buffer[0..<readResult])
+                let receivedData = Data(buffer[0..<readResult])
 
 
-            if (receivedData == expectedWord) {
-                timeoutTimer.invalidate() // Erase the timeout
-                
+                if (receivedData == expectedWord) {
+                    timeoutTimer.invalidate() // Erase the timeout
+                    
 
-                guard let response = ("Accepted").data(using: .utf8) else {
-                    G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                        + "\n\n"
-                        + G_UI_debugTextBoxOut.text
-                    return
-                }
-                let sendResult = send(client_NativeCFSocket, [UInt8](response), response.count, 0)
-                
-                if (sendResult == -1) {
-                    G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
-                        + "\n\n"
-                        + G_UI_debugTextBoxOut.text
+                    guard let response = ("Accepted").data(using: .utf8) else {
+                        G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                            + "\n\n"
+                            + G_UI_debugTextBoxOut.text
+                        return
+                    }
+                    let sendResult = send(client_NativeCFSocket, [UInt8](response), response.count, 0)
+                    
+                    if (sendResult == -1) {
+                        G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                            + "\n\n"
+                            + G_UI_debugTextBoxOut.text
 
-                    self.close_CFSocket(incomingCFSocket)
-                } else {
-                    DispatchQueue.main.async {
-                            G_UI_Class_connectionLabel.setStatusConnectionText(
+                        self.close_CFSocket(incomingCFSocket)
+                    } else {
+                        G_UI_Class_connectionLabel.setStatusConnectionText(
                             "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
                         )
 
@@ -639,6 +639,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                 }
             }
         }
+        
     }
 
     // Whenever we accept a new client connection
