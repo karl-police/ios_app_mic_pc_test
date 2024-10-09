@@ -215,7 +215,7 @@ class TCPServer {
             }
 
             // Start listening
-            self.listener?.start(queue: .main)
+            self.listener?.start(queue: .background)
         } catch {
             throw error
         }
