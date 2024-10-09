@@ -431,7 +431,9 @@ class NetworkVoiceTCPServer : TCPServer {
 
         // Check
         guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
+            G_UI_debugTextBoxOut.text = "Function is missing"
+                + "\n\n"
+                + G_UI_debugTextBoxOut.text
             return
         }
         // We can now do the streaming thing
@@ -633,7 +635,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                     // Accept after send
                     // Check
                     guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
-                        G_UI_Class_connectionLabel.setStatusConnectionText("Function is missing")
+                        G_UI_debugTextBoxOut.text = "Function is missing"
+                            + "\n\n"
+                            + G_UI_debugTextBoxOut.text
                         return
                     }
 
@@ -662,7 +666,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
         // Handshake
         DispatchQueue.global(qos: .userInitiated).async {
-            m_customHandshake(client_cfSocket)
+            self.m_customHandshake(client_cfSocket)
         }
     }
 
