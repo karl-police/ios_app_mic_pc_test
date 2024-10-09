@@ -626,15 +626,17 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
                         self?.close_CFSocket(incomingCFSocket)
                     } else {
-                        G_UI_Class_connectionLabel.setStatusConnectionText(
-                            "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
-                        )
+                        DispatchQueue.main.async {
+                            G_UI_Class_connectionLabel.setStatusConnectionText(
+                                "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
+                            )
 
-                        // Accept after send
+                            // Accept after send
 
-                        // We can now do the streaming thing
-                        // Trigger this
-                        self?.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+                            // We can now do the streaming thing
+                            // Trigger this
+                            self?.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+                        }
                     }
                 }
             }
