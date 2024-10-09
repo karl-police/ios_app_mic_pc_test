@@ -117,7 +117,7 @@ class CF_TCPServer {
 
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(clientCFSocket)
-        referencedSelf.OnClientConnectionAccepted(cfSocket: clientCFSocket)
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: clientCFSocket)
     }
 
 
@@ -127,10 +127,10 @@ class CF_TCPServer {
 
 
     // When the Server accepted a Client Connection
-    func OnClientConnectionAccepted(cfSocket: CFSocket) {
-        print("Accepted connection on socket \(cfSocket)")
+    func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
+        print("Accepted connection on socket \(client_cfSocket)")
 
-        self.close_CFSocket(cfSocket)
+        self.close_CFSocket(client_cfSocket)
     }
 
 
