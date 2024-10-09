@@ -111,13 +111,9 @@ class CF_TCPServer {
             var buffer = [UInt8](repeating: 0, count: 1)
             let result = recv(nativeHandle, &buffer, buffer.count, MSG_PEEK)
             
-            if result == 0 {
+            // e.g. -1
+            if result < 0 { // less than
                 referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
-
-                CFSocketInvalidate(client_cfSocket)
-                CFRunLoopStop(CFRunLoopGetCurrent())
-            } else if result < 0 { // less than
-                referencedSelf.TemporaryLogging("Error or unexpected disconnection")
 
                 CFSocketInvalidate(client_cfSocket)
                 CFRunLoopStop(CFRunLoopGetCurrent())
