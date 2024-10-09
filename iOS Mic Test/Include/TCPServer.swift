@@ -215,7 +215,7 @@ class TCPServer {
             }
 
             // Start listening
-            self.listener?.start(queue: .global(qos: .background))
+            self.listener?.start(queue: .main)
         } catch {
             throw error
         }
@@ -230,8 +230,8 @@ class TCPServer {
 
         self.listener?.cancel()
 
-        self.listener?.stateUpdateHandler = nil
-        self.listener?.newConnectionHandler = nil
+        //self.listener?.stateUpdateHandler = nil
+        //self.listener?.newConnectionHandler = nil
         //self.listener = nil
     }
 }
