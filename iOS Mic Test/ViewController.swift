@@ -328,12 +328,17 @@ var G_cfg_b_DoUDP = false // Something changeable
     =================================
 
     The next part in what format to send data as.
-    And then there's also the protocol.
+    And then there's also the protocol, e.g. TCP and UDP.
 ***/
+protocol NetworkVoiceDelegate: AnyObject {
+    func handleAcceptedConnection(_ connection: NWConnection)
+    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket)
+}
+
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? // Active Connection
 
-    var m_onAcceptedConnectionEstablished: ((NWConnection) -> Void)?
+    weak var delegate: NetworkVoiceDelegate?
 
     override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
@@ -428,17 +433,9 @@ class NetworkVoiceTCPServer : TCPServer {
             + "\n\n"
             + G_UI_debugTextBoxOut.text
 
-
-        // Check
-        guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
-            G_UI_debugTextBoxOut.text = "Function is missing"
-                + "\n\n"
-                + G_UI_debugTextBoxOut.text
-            return
-        }
         // We can now do the streaming thing
         // Trigger this
-        guard_m_onAcceptedConnectionEstablished(connection)
+        self.delegate?.handleAcceptedConnection(connection)
     }
 
 
@@ -535,7 +532,7 @@ class NetworkVoiceTCPServer : TCPServer {
 class NetworkVoice_CF_TCPServer : CF_TCPServer {
     var activeClient_CFSocket: CFSocket?
 
-    var m_onAcceptedConnectionEstablished: ((CFSocket) -> Void)?
+    weak var delegate: NetworkVoiceDelegate?
 
     override func OnServerStateChanged(_ state: CF_ServerStates) {
         switch state {
@@ -633,17 +630,10 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                     )
 
                     // Accept after send
-                    // Check
-                    guard let guard_m_onAcceptedConnectionEstablished = self.m_onAcceptedConnectionEstablished else {
-                        G_UI_debugTextBoxOut.text = "Function is missing"
-                            + "\n\n"
-                            + G_UI_debugTextBoxOut.text
-                        return
-                    }
 
                     // We can now do the streaming thing
                     // Trigger this
-                    guard_m_onAcceptedConnectionEstablished(incomingCFSocket)
+                    self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
                 }
             }
         }
@@ -711,8 +701,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
 
+
 // Network Voice Manager
-class NetworkVoiceManager {
+class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
     var networkVoice_CF_TCPServer: NetworkVoice_CF_TCPServer!
 
@@ -726,23 +717,17 @@ class NetworkVoiceManager {
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
         // Event when we actually got a real connection going
-        self.networkVoice_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] connection in
-            self?.handleAcceptedConnection(connection)
-        }
-
-
+        self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
         self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
 
-        self.networkVoice_CF_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] client_cfSocket in
-            self?.handleAcceptedCFSocket(client_cfSocket)
-        }
+        self.networkVoice_CF_TCPServer.delegate = self
     }
 
 
     // For CF
-    private func handleAcceptedCFSocket(_ client_cfSocket: CFSocket) {
+    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
@@ -751,7 +736,7 @@ class NetworkVoiceManager {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        /*let streamDescription = audioFormat.streamDescription.pointee
+        let streamDescription = audioFormat.streamDescription.pointee
 
         var debugText = ""
         debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
@@ -759,11 +744,8 @@ class NetworkVoiceManager {
         debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
-            + "\n\n" + G_UI_debugTextBoxOut.text*/
-
-        
+            + "\n\n" + G_UI_debugTextBoxOut.text
     }
-
 
 
 
