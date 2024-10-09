@@ -26,7 +26,7 @@ struct CF_SocketNetworkUtils {
     }
 
 
-    static func GetIP_FromNativeSocket(_ nativeSocket: Int32, _ b_includePort: Bool = false ) -> String {
+    static func GetIP_FromNativeSocket(_ nativeSocket: Int32, b_includePort: Bool = false ) -> String {
         var addr = sockaddr_in()
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
@@ -104,10 +104,12 @@ class CF_TCPServer {
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
-            //let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
+            let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
+            let ipStr_temp2 = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientNativeSocket, b_includePort: true)
             referencedSelf.TemporaryLogging("Result: \(ipStr)")
+            referencedSelf.TemporaryLogging("Result: \(ipStr_temp2)")
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
                 referencedSelf.close_CFSocket(clientCFSocket)
