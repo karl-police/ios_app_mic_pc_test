@@ -115,7 +115,7 @@ class CF_TCPServer {
             if result < 0 { // less than
                 referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
 
-                CFSocketInvalidate(client_cfSocket)
+                //CFSocketInvalidate(client_cfSocket)
                 CFRunLoopStop(CFRunLoopGetCurrent())
             }
         }
