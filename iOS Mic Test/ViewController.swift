@@ -728,9 +728,7 @@ class NetworkVoiceManager {
         self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
 
         self.networkVoice_CF_TCPServer.m_onAcceptedConnectionEstablished = { [weak self] client_cfSocket in
-            DispatchQueue.main.async {
-                self?.handleAcceptedCFSocket(client_cfSocket)
-            }
+            self?.handleAcceptedCFSocket(client_cfSocket)
         }
     }
 
