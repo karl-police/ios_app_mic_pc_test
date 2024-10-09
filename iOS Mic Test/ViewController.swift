@@ -529,7 +529,11 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     }
 
     override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(client_cfSocket)")
+        let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
+        let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
+
+        G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(ipStr)")
+
 
         self.close_CFSocket(client_cfSocket)
     }
