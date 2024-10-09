@@ -544,11 +544,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         }
     }
 
-    override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates) {
+    override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates, _ ipStr: String) {
         switch state {
             case .disconnected:
-                let ipStr = CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true)
-
                 var isOurActive = false
                 if (client_cfSocket == activeClient_CFSocket) {
                     isOurActive = true
