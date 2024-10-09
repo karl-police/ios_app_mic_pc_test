@@ -602,7 +602,9 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
             let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
             if (readResult > 0) {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
+                DispatchQueue.main.async {
+                    G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
+                }
 
                 let receivedData = Data(buffer[0..<readResult])
 
@@ -611,15 +613,11 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
                     timeoutTimer.invalidate() // Erase the timeout
                     
 
-                    guard let response = ("Accepted").data(using: .utf8) else {
-                        G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                            + "\n\n"
-                            + G_UI_debugTextBoxOut.text
-                        return
-                    }
-                    let sendResult = send(client_NativeCFSocket, [UInt8](response), response.count, 0)
+                    guard let response = ("Accepted").data(using: .utf8) else { return }
                     
-                    if (sendResult == -1) {
+                    let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
+                    
+                    if (sendResult != .success) {
                         G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
                             + "\n\n"
                             + G_UI_debugTextBoxOut.text
