@@ -215,7 +215,7 @@ class TCPServer {
             }
 
             // Start listening
-            self.listener?.start(queue: .main)
+            self.listener?.start(queue: .global)
         } catch {
             throw error
         }
@@ -226,7 +226,7 @@ class TCPServer {
             self.cancelConnection(connection) // This closes the connection
         }
 
-        //self.connectionsArray.removeAll() // Ensure removal of all
+        self.connectionsArray.removeAll() // Ensure removal of all
 
         self.listener?.cancel()
 
