@@ -97,27 +97,26 @@ class CF_TCPServer {
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
         // Create CFSocket from client native socket
-        /*guard let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil) else {
+        guard let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil) else {
             return
-        }*/
+        }
     
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
-            //let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
+            let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
             referencedSelf.TemporaryLogging("Result: \(ipStr)")
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
-                //referencedSelf.close_CFSocket(clientCFSocket)
-                close(clientSocketHandle)
+                referencedSelf.close_CFSocket(clientCFSocket)
                 return
             }
         }
 
         // If we allow the connection to get accepted
-        referencedSelf.activeCFSocketsArray.append(cfSocket)
+        referencedSelf.activeCFSocketsArray.append(clientCFSocket)
         //referencedSelf.OnClientConnectionAccepted(cfSocket: cfSocket)
     }
 
