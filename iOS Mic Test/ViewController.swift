@@ -561,6 +561,27 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         return true
     }
 
+
+    private func m_customHandshake(_ incomingCFSocket: CFSocket) {
+        let handshakeTimeout: TimeInterval = 10.0
+
+        let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
+            // Cancel on timeout
+            self?.close_CFSocket(incomingConnection)
+
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
+            }
+        }
+
+        /***
+            IMPORTANT
+        ***/
+        // We need to receive this
+        // And the incoming request has to send this
+        let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
+    }
+
     // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
@@ -571,7 +592,8 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         // Set active connection
         activeClient_CFSocket = client_cfSocket
 
-        self.close_CFSocket(client_cfSocket)
+        // Handshake
+        m_customHandshake(client_cfSocket)
     }
 
 
