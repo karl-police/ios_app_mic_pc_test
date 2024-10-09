@@ -81,9 +81,6 @@ class CF_TCPServer {
         return context
     }
 
-    func TriggerTest() {
-
-    }
 
     var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let cfSocket = cfSocket else { return }
@@ -98,7 +95,6 @@ class CF_TCPServer {
 
         // Create CFSocket from client native socket
         guard let clientCFSocket = CFSocketCreateWithNative(kCFAllocatorDefault, clientSocketHandle, 0, nil, nil) else {
-            referencedSelf.TemporaryLogging("It didn't work...")
             return
         }
     
@@ -108,6 +104,7 @@ class CF_TCPServer {
             let clientNativeSocket = CFSocketGetNative(clientCFSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientNativeSocket)
+            referencedSelf.TemporaryLogging("Result: \(ipStr)")
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
                 referencedSelf.close_CFSocket(clientCFSocket)
