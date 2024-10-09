@@ -31,14 +31,14 @@ struct CF_SocketNetworkUtils {
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
         if getpeername(nativeSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
-            /*guard let ipCString = inet_ntoa(addr.sin_addr) else {
+            guard let ipCString = inet_ntoa(addr.sin_addr) else {
                 return "Error getting IP with inet_ntoa"
-            }*/
+            }
 
-            var ipBuffer = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
-            inet_ntop(AF_INET, &addr.sin_addr, &ipBuffer, socklen_t(INET_ADDRSTRLEN))
+            //var ipBuffer = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
+            //inet_ntop(AF_INET, &addr.sin_addr, &ipBuffer, socklen_t(INET_ADDRSTRLEN))
 
-            let ip = String(cString: ipBuffer)
+            let ip = String(cString: ipCString)
             let port = Int(self.ntohs(addr.sin_port))
 
             var output = "\(ip)"
