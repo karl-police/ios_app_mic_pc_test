@@ -1,6 +1,5 @@
 import Foundation
 import CoreFoundation
-import Darwin
 
 
 struct CF_SocketNetworkUtils {
@@ -32,10 +31,11 @@ struct CF_SocketNetworkUtils {
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
         if getpeername(nativeSocket, UnsafeMutableRawPointer(&addr).assumingMemoryBound(to: sockaddr.self), &addrLen) == 0 {
-            guard let ip = inet_ntoa(addr.sin_addr) else {
+            guard let ipCString = inet_ntoa(addr.sin_addr) else {
                 return "Error getting IP with inet_ntoa"
             }
 
+            let ip = String(cString: ipCString)
             let port = Int(self.ntohs(addr.sin_port))
 
             var output = "\(ip)"
