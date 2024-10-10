@@ -106,13 +106,13 @@ class CF_TCPServer {
         let referencedSelf = Unmanaged<CF_TCPServer>.fromOpaque(infoPointer).takeUnretainedValue()
 
         if (callbackType == .readCallBack) {
-            // Apparently read can also point to a disconnection?
             let nativeHandle = CFSocketGetNative(client_cfSocket)
-            var buffer = [UInt8](repeating: 0, count: 1)
-            let result = recv(nativeHandle, &buffer, buffer.count, MSG_PEEK)
-            
-            // e.g. -1
-            if result < 0 { // less than
+
+            var errorCode: Int32 = 0
+            var errorCodeLen = socklen_t(MemoryLayout.size(ofValue: errorCode))
+            let result = getsockopt(nativeHandle, SOL_SOCKET, SO_ERROR, &errorCode, &errorCodeLen)
+
+            if result == 0 && errorCode != 0 {
                 referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
 
                 CFSocketInvalidate(client_cfSocket)
