@@ -108,11 +108,13 @@ class CF_TCPServer {
         if (callbackType == .readCallBack) {
             let nativeHandle = CFSocketGetNative(client_cfSocket)
 
+            // Apparently getsockopt is used to get the socket status
+            // If the errorCode is not 0, it means that there may have been an issue.
             var errorCode: Int32 = 0
             var errorCodeLen = socklen_t(MemoryLayout.size(ofValue: errorCode))
             let result = getsockopt(nativeHandle, SOL_SOCKET, SO_ERROR, &errorCode, &errorCodeLen)
 
-            if result == 0 && errorCode != 0 {
+            if (result == 0 && errorCode != 0) {
                 referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
 
                 CFSocketInvalidate(client_cfSocket)
@@ -180,7 +182,7 @@ class CF_TCPServer {
         referencedSelf.activeCFSocketsArray.append(client_cfSocket)
 
         // Add run loop for client
-        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 1)
+        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
         referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
