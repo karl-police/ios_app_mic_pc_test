@@ -601,9 +601,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
         if (readResult > 0) {
-            DispatchQueue.main.async {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
-            }
+            G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             let receivedData = Data(buffer[0..<readResult])
             
