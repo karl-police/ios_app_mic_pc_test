@@ -315,3 +315,60 @@ class CF_TCPServer {
         }
     }
 }
+
+
+
+
+
+
+class CF_UDPServer: CF_TCPServer {
+    override func startServer() {
+        var context = self.context
+
+        // Change to a Init function
+        self.serverSocket = CFSocketCreate(
+            kCFAllocatorDefault,
+            PF_INET,
+            SOCK_DGRAM, // UDP
+            IPPROTO_UDP, // UDP
+            CFSocketCallBackType.dataCallBack.rawValue,
+            serverSocketCallback, // CFSocketCallBack
+            &context
+        )
+
+        // Bind socket to port
+        var addressStruct = sockaddr_in(
+            sin_len: UInt8(MemoryLayout<sockaddr_in>.size),
+            sin_family: sa_family_t(AF_INET),
+            sin_port: in_port_t(self.portNumber).bigEndian, // Port
+            sin_addr: in_addr(s_addr: INADDR_ANY.bigEndian),
+            sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
+        )
+
+        let address = withUnsafePointer(to: &addressStruct) {
+            $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout<sockaddr_in>.size) {
+                CFDataCreate(kCFAllocatorDefault, $0, MemoryLayout<sockaddr_in>.size)
+            }
+        }
+
+        // Make socket re-useable
+        var yes: Int32 = 1
+        setsockopt(CFSocketGetNative(serverSocket!), SOL_SOCKET, SO_REUSEADDR, &yes, socklen_t(MemoryLayout<Int32>.size))
+
+        // Bind to socket
+        let result = CFSocketSetAddress(serverSocket, address)
+        if result != .success {
+            //print("Bind error")
+            return
+        }
+
+        // Listen for connections
+        let runLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, serverSocket, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .defaultMode)
+        self.OnServerStateChanged(CF_ServerStates.started)
+
+        DispatchQueue.global(qos: .background).async {
+            CFRunLoopRun() // Run server loop
+        }
+    }
+}
