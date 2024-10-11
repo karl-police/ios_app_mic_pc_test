@@ -323,7 +323,7 @@ class CF_TCPServer {
 
 class CF_UDPServer: CF_TCPServer {
     override func startServer() {
-        var context = self.context
+        var context = self.clientSocketCallback
 
         // Change to a Init function
         self.serverSocket = CFSocketCreate(
