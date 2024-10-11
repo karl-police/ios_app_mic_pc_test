@@ -272,7 +272,7 @@ class CF_NetworkServer {
 
 
     func startServer() {
-        //self.setupSocketCallbacks()
+        self.setupSocketCallbacks()
 
         if (self.serverSocketCallback == nil || self.clientSocketCallback == nil) {
             self.TemporaryLogging("There was an issue with creating the callbacks for the server.")
