@@ -75,7 +75,7 @@ class CF_SocketServerConfig {
 
 class CF_TCPServer {
     var serverSocket: CFSocket?
-    var activeCFSocketsArray: [CFSocket] = []
+    internal var activeCFSocketsArray: [CFSocket] = []
 
     var ServerConfig = CF_SocketServerConfig() // Config
 
