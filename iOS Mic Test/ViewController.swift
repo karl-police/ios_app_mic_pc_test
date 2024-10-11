@@ -697,6 +697,12 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
 
+enum TempNetworkProtocols {
+    case TCP
+    case UDP
+}
+
+
 
 // Network Voice Manager
 class NetworkVoiceManager: NetworkVoiceDelegate {
@@ -707,7 +713,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var audioEngineManager: AudioEngineManager!
 
     // Set Network Protocol setting
-    var cfg_networkProtocol: String = "TCP"
+    var cfg_networkProtocol = TempNetworkProtocols.TCP
 
 
     init(withAudioEngineManager: AudioEngineManager) {
@@ -810,6 +816,17 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 }
             })
         )
+    }
+
+
+    // It just toggles
+    func changeNetworkProtocol() {
+        if (self.cfg_networkProtocol == TempNetworkProtocols.TCP) {
+            // If it's TCP, set it to UDP.
+            self.cfg_networkProtocol = TempNetworkProtocols.UDP
+        } else {
+            self.cfg_networkProtocol = TempNetworkProtocols.TCP
+        }
     }
 
 
@@ -1457,7 +1474,16 @@ class ViewController: UIViewController {
     }
 
     func m_toggle_NetworkProtocol() {
+        self.audioManager.networkVoiceManager.changeNetworkProtocol()
 
+        switch self.audioManager.networkVoiceManager.cfg_networkProtocol {
+            case TempNetworkProtocols.TCP:
+                btnProtocolToggle.setTitle(BTN_TCP_MODE, for: .normal)
+            case TempNetworkProtocols.UDP:
+                btnProtocolToggle.setTitle(BTN_UDP_MODE, for: .normal)
+            default:
+                break
+        }
     }
 
 
