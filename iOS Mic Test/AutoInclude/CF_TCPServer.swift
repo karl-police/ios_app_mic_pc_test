@@ -158,9 +158,11 @@ class CF_NetworkServer {
 
             let clientCallbackTypes: CFOptionFlags = CFSocketCallBackType.readCallBack.rawValue
 
+            guard let clientSocketCallback = referencedSelf.clientSocketCallback else { return }
+
             guard let client_cfSocket = CFSocketCreateWithNative(
                 kCFAllocatorDefault, clientSocketHandle, clientCallbackTypes,
-                referencedSelf.clientSocketCallback, // Add callback for client
+                clientSocketCallback, // Add callback for client
                 &clientContext
             ) else {
                 return
