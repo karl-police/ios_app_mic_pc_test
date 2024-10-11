@@ -87,7 +87,7 @@ class CF_NetworkServer {
 
     var ServerConfig = CF_SocketServerConfig() // Config
 
-    private var clientSocketCallback: CFSocketCallBack?
+    private var clientSocketCallback: CFSocketCallBack!
     private var serverSocketCallback: CFSocketCallBack?
 
     var portNumber: Int32 = 0;
@@ -158,11 +158,9 @@ class CF_NetworkServer {
 
             let clientCallbackTypes: CFOptionFlags = CFSocketCallBackType.readCallBack.rawValue
 
-            guard let clientSocketCallback = referencedSelf.clientSocketCallback else { return }
-
             guard let client_cfSocket = CFSocketCreateWithNative(
                 kCFAllocatorDefault, clientSocketHandle, clientCallbackTypes,
-                clientSocketCallback, // Add callback for client
+                referencedSelf.clientSocketCallback, // Add callback for client
                 &clientContext
             ) else {
                 return
@@ -274,7 +272,12 @@ class CF_NetworkServer {
 
 
     func startServer() {
-        self.setupSocketCallbacks()
+        //self.setupSocketCallbacks()
+
+        if (self.serverSocketCallback == nil || self.clientSocketCallback == nil) {
+            self.TemporaryLogging("There was an issue with creating the callbacks for the server.")
+            return
+        }
 
 
         // Init server socket
