@@ -697,6 +697,12 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
 
+enum TempNetworkProtocols {
+    case TCP
+    case UDP
+}
+
+
 
 // Network Voice Manager
 class NetworkVoiceManager: NetworkVoiceDelegate {
@@ -706,13 +712,16 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
+    // Set Network Protocol setting
+    var cfg_networkProtocol = TempNetworkProtocols.TCP
+
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
-        // Event when we actually got a real connection going
+        // Used for event when we actually got a real connection going
         self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
@@ -807,6 +816,17 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 }
             })
         )
+    }
+
+
+    // It just toggles
+    func changeNetworkProtocol() {
+        if (self.cfg_networkProtocol == TempNetworkProtocols.TCP) {
+            // If it's TCP, set it to UDP.
+            self.cfg_networkProtocol = TempNetworkProtocols.UDP
+        } else {
+            self.cfg_networkProtocol = TempNetworkProtocols.TCP
+        }
     }
 
 
@@ -1039,6 +1059,9 @@ class AudioManager {
 struct STR_TBL {
     var BTN_START_TEST_RECORD = "Record Test"
     var BTN_STOP_RECORDING = "Stop Recording"
+
+    var BTN_TCP_MODE = "Using TCP"
+    var BTN_UDP_MODE = "Using UDP"
 }
 
 
@@ -1120,7 +1143,7 @@ class ViewController: UIViewController {
 
     var polarPatternTableView: CombinedSettingsTableView!
 
-    let audioManager = AudioManager()
+    let audioManager = AudioManager() // Handles everything related to Audio Operations
     var is_RecordingTest = false
     var is_VoIP_active = false
 
@@ -1146,6 +1169,13 @@ class ViewController: UIViewController {
         view.addSubview(btnMicToggle)
 
 
+        // Protocol Toggle
+        btnProtocolToggle = UIButton(type: .system)
+        btnProtocolToggle.setTitle( STR_TBL.BTN_TCP_MODE, for: .normal )
+        btnProtocolToggle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(btnProtocolToggle)
+
+
         // Set up constraints
         NSLayoutConstraint.activate([
             self.ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
@@ -1166,11 +1196,19 @@ class ViewController: UIViewController {
             btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
             btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
+
+
+            // Protocol Button
+            btnProtocolToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -70),
+            btnProtocolToggle.widthAnchor.constraint(equalToConstant: 150),
+            btnProtocolToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
 
         // Add action to the button
         btnRecordTestToggle.addTarget(self, action: #selector(action_recordTestToggleClicked), for: .touchUpInside)
         btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
+        btnProtocolToggle.addTarget(self, action: #selector(action_protocolToggleClicked), for: .touchUpInside)
 
 
         // Create UITextView without setting a frame
@@ -1348,6 +1386,9 @@ class ViewController: UIViewController {
     @IBAction func action_micToggleClicked(_ sender: UIButton) {
         self.m_toggle_MicVoIP()
     }
+    @IBAction func action_protocolToggleClicked(_ sender: UIButton) {
+        self.m_toggle_NetworkProtocol()
+    }
 
 
     // Prompt to save file
@@ -1429,6 +1470,19 @@ class ViewController: UIViewController {
                 }
             }
 
+        }
+    }
+
+    func m_toggle_NetworkProtocol() {
+        self.audioManager.networkVoiceManager.changeNetworkProtocol()
+
+        switch self.audioManager.networkVoiceManager.cfg_networkProtocol {
+            case TempNetworkProtocols.TCP:
+                btnProtocolToggle.setTitle(BTN_TCP_MODE, for: .normal)
+            case TempNetworkProtocols.UDP:
+                btnProtocolToggle.setTitle(BTN_UDP_MODE, for: .normal)
+            default:
+                break
         }
     }
 
