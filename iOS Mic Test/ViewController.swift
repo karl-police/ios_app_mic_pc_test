@@ -1056,8 +1056,8 @@ struct STR_TBL {
     static let BTN_START_TEST_RECORD = "Record Test"
     static let BTN_STOP_RECORDING = "Stop Recording"
 
-    static let BTN_TCP_MODE = "Using TCP"
-    static let BTN_UDP_MODE = "Using UDP"
+    let BTN_TCP_MODE = "Using TCP"
+    let BTN_UDP_MODE = "Using UDP"
 }
 
 
