@@ -1042,6 +1042,8 @@ class AudioManager {
 struct STR_TBL {
     var BTN_START_TEST_RECORD = "Record Test"
     var BTN_STOP_RECORDING = "Stop Recording"
+
+    let BTN_TCP_MODE = "Using TCP"
 }
 
 
