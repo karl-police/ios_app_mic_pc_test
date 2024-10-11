@@ -239,7 +239,7 @@ class CF_TCPServer {
 
 
     func initServerSocket() {
-        let context = self.context
+        var context = self.context
 
         self.serverSocket = CFSocketCreate(
             kCFAllocatorDefault,
@@ -329,8 +329,14 @@ class CF_TCPServer {
 
 class CF_UDPServer: CF_TCPServer {
 
+    private var context: CFSocketContext {
+        var context = CFSocketContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
+        context.info = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
+        return context
+    }
+
     override func initServerSocket() {
-        let context = self.context
+        var context = self.context
 
         self.serverSocket = CFSocketCreate(
             kCFAllocatorDefault,
