@@ -87,7 +87,7 @@ class CF_NetworkServer {
 
     var ServerConfig = CF_SocketServerConfig() // Config
 
-    private var clientSocketCallback: CFSocketCallBack!
+    private var clientSocketCallback: CFSocketCallBack?
     private var serverSocketCallback: CFSocketCallBack?
 
     var portNumber: Int32 = 0;
