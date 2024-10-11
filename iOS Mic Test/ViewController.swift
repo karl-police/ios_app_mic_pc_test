@@ -314,12 +314,8 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
-enum TempNetworkProtocols {
-    case TCP
-    case UDP
-}
 
-var G_cfg_b_NetworkMode = TempNetworkProtocols.TCP // TCP by default
+var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
 
 
 /***
@@ -496,7 +492,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Start Server
     override func startServer() throws {
-        if (G_cfg_b_NetworkMode == TempNetworkProtocols.UDP) {
+        if (G_cfg_b_NetworkMode == CF_NetworkProtocols.UDP) {
             // UDP
             self.cfg_nwParameters = NWParameters.udp
 
@@ -669,7 +665,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     }
 
     override func startServer() {
-        if (G_cfg_b_NetworkMode == TempNetworkProtocols.UDP) {
+        if (G_cfg_b_NetworkMode == CF_NetworkProtocols.UDP) {
             // UDP
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
@@ -816,11 +812,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     // It just switches
     func changeNetworkProtocol() {
-        if (G_cfg_b_NetworkMode == TempNetworkProtocols.TCP) {
+        if (G_cfg_b_NetworkMode == CF_NetworkProtocols.TCP) {
             // If it's TCP, set it to UDP.
-            G_cfg_b_NetworkMode = TempNetworkProtocols.UDP
+            G_cfg_b_NetworkMode = CF_NetworkProtocols.UDP
         } else {
-            G_cfg_b_NetworkMode = TempNetworkProtocols.TCP
+            G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP
         }
     }
 
@@ -1473,9 +1469,9 @@ class ViewController: UIViewController {
         self.audioManager.networkVoiceManager.changeNetworkProtocol()
 
         switch G_cfg_b_NetworkMode {
-            case TempNetworkProtocols.TCP:
+            case CF_NetworkProtocols.TCP:
                 btnProtocolToggle.setTitle(STR_TBL.BTN_TCP_MODE, for: .normal)
-            case TempNetworkProtocols.UDP:
+            case CF_NetworkProtocols.UDP:
                 btnProtocolToggle.setTitle(STR_TBL.BTN_UDP_MODE, for: .normal)
             default:
                 break

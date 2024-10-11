@@ -1,6 +1,10 @@
 import Foundation
 import CoreFoundation
 
+enum CF_NetworkProtocols {
+    case TCP
+    case UDP
+}
 
 struct CF_SocketNetworkUtils {
     static func ntohs(_ value: in_port_t) -> UInt16 {
@@ -73,9 +77,8 @@ class CF_SocketServerConfig {
     var allowLocalOnly: Bool = false
 }
 
-
-class CF_ServerBase {
-    var serverSocket: CFSocket? 
+class CF_TCPServer {
+    var serverSocket: CFSocket?
     internal var activeCFSocketsArray: [CFSocket] = []
 
     var ServerConfig = CF_SocketServerConfig() // Config
@@ -88,19 +91,13 @@ class CF_ServerBase {
     }
 
 
-    // Configurable customizable checks
-    func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
-        return true
-    }
-}
 
-
-class CF_TCPServer: CF_ServerBase {
     private var context: CFSocketContext {
         var context = CFSocketContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
         context.info = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
         return context
     }
+
 
     internal var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let client_cfSocket = client_cfSocket else { return }
@@ -130,6 +127,11 @@ class CF_TCPServer: CF_ServerBase {
         }
     }
 
+
+    // Configurable customizable checks
+    func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
+        return true
+    }
 
     private var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let cfSocket = cfSocket else { return }
