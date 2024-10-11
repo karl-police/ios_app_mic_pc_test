@@ -1053,7 +1053,7 @@ class AudioManager {
         } catch {
             throw error
         }
-    }e
+    }
 }
 
 
