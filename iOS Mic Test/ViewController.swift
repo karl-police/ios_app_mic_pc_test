@@ -317,6 +317,8 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 var G_cfg_b_DoUDP = false // Something changeable
+var G_cfg_b_NetworkMode = TempNetworkProtocols.TCP // TCP by default
+
 
 /***
     =================================
@@ -819,7 +821,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
-    // It just toggles
+    // It just switches
     func changeNetworkProtocol() {
         if (self.cfg_networkProtocol == TempNetworkProtocols.TCP) {
             // If it's TCP, set it to UDP.
@@ -1057,11 +1059,11 @@ class AudioManager {
 
 // Collection of some Strings
 struct STR_TBL {
-    var BTN_START_TEST_RECORD = "Record Test"
-    var BTN_STOP_RECORDING = "Stop Recording"
+    static let BTN_START_TEST_RECORD = "Record Test"
+    static let BTN_STOP_RECORDING = "Stop Recording"
 
-    var BTN_TCP_MODE = "Using TCP"
-    var BTN_UDP_MODE = "Using UDP"
+    static let BTN_TCP_MODE = "Using TCP"
+    static let BTN_UDP_MODE = "Using UDP"
 }
 
 
