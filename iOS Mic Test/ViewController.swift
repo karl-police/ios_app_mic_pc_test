@@ -1480,9 +1480,9 @@ class ViewController: UIViewController {
 
         switch self.audioManager.networkVoiceManager.cfg_networkProtocol {
             case TempNetworkProtocols.TCP:
-                btnProtocolToggle.setTitle(BTN_TCP_MODE, for: .normal)
+                btnProtocolToggle.setTitle(STR_TBL.BTN_TCP_MODE, for: .normal)
             case TempNetworkProtocols.UDP:
-                btnProtocolToggle.setTitle(BTN_UDP_MODE, for: .normal)
+                btnProtocolToggle.setTitle(STR_TBL.BTN_UDP_MODE, for: .normal)
             default:
                 break
         }
