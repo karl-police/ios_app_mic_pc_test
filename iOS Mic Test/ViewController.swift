@@ -315,6 +315,10 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
+enum TempNetworkProtocols {
+    case TCP
+    case UDP
+}
 
 var G_cfg_b_DoUDP = false // Something changeable
 var G_cfg_b_NetworkMode = TempNetworkProtocols.TCP // TCP by default
@@ -699,13 +703,6 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
 
 
 
-enum TempNetworkProtocols {
-    case TCP
-    case UDP
-}
-
-
-
 // Network Voice Manager
 class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
@@ -713,9 +710,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
-
-    // Set Network Protocol setting
-    var cfg_networkProtocol = TempNetworkProtocols.TCP
 
 
     init(withAudioEngineManager: AudioEngineManager) {
@@ -823,11 +817,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     // It just switches
     func changeNetworkProtocol() {
-        if (self.cfg_networkProtocol == TempNetworkProtocols.TCP) {
+        if (G_cfg_b_NetworkMode == TempNetworkProtocols.TCP) {
             // If it's TCP, set it to UDP.
-            self.cfg_networkProtocol = TempNetworkProtocols.UDP
+            G_cfg_b_NetworkMode = TempNetworkProtocols.UDP
         } else {
-            self.cfg_networkProtocol = TempNetworkProtocols.TCP
+            G_cfg_b_NetworkMode = TempNetworkProtocols.TCP
         }
     }
 
@@ -1478,7 +1472,7 @@ class ViewController: UIViewController {
     func m_toggle_NetworkProtocol() {
         self.audioManager.networkVoiceManager.changeNetworkProtocol()
 
-        switch self.audioManager.networkVoiceManager.cfg_networkProtocol {
+        switch G_cfg_b_NetworkMode {
             case TempNetworkProtocols.TCP:
                 btnProtocolToggle.setTitle(STR_TBL.BTN_TCP_MODE, for: .normal)
             case TempNetworkProtocols.UDP:
