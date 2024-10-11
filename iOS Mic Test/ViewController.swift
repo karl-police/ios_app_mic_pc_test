@@ -1146,6 +1146,13 @@ class ViewController: UIViewController {
         view.addSubview(btnMicToggle)
 
 
+        // Protocol Toggle
+        btnProtocolToggle = UIButton(type: .system)
+        btnProtocolToggle.setTitle("Use TCP", for: .normal)
+        btnProtocolToggle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(btnProtocolToggle)
+
+
         // Set up constraints
         NSLayoutConstraint.activate([
             self.ui_connectionLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 28),
@@ -1166,11 +1173,19 @@ class ViewController: UIViewController {
             btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
             btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
+
+
+            // Protocol Button
+            btnProtocolToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -70),
+            btnProtocolToggle.widthAnchor.constraint(equalToConstant: 150),
+            btnProtocolToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
 
         // Add action to the button
         btnRecordTestToggle.addTarget(self, action: #selector(action_recordTestToggleClicked), for: .touchUpInside)
         btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
+        btnProtocolToggle.addTarget(self, action: #selector(action_protocolToggleClicked), for: .touchUpInside)
 
 
         // Create UITextView without setting a frame
@@ -1347,6 +1362,9 @@ class ViewController: UIViewController {
     }
     @IBAction func action_micToggleClicked(_ sender: UIButton) {
         self.m_toggle_MicVoIP()
+    }
+    @IBAction func action_protocolToggleClicked(_ sender: UIButton) {
+        
     }
 
 
