@@ -75,7 +75,7 @@ class CF_SocketServerConfig {
 
 class CF_TCPServer {
     var serverSocket: CFSocket?
-    private var activeCFSocketsArray: [CFSocket] = []
+    var activeCFSocketsArray: [CFSocket] = []
 
     var ServerConfig = CF_SocketServerConfig() // Config
 
@@ -95,7 +95,7 @@ class CF_TCPServer {
     }
 
 
-    private var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+    var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let client_cfSocket = client_cfSocket else { return }
 
         guard callbackType == .readCallBack, let infoPointer = infoPointer else {
