@@ -504,7 +504,6 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
-
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 
@@ -688,6 +687,8 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
         }
+
+        G_UI_debugTextBoxOut.text = ""
     }
 
 
