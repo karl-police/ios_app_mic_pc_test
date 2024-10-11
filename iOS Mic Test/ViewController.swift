@@ -706,13 +706,16 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
 
+    // Set Network Protocol setting
+    var cfg_networkProtocol: String = "TCP"
+
 
     init(withAudioEngineManager: AudioEngineManager) {
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
 
-        // Event when we actually got a real connection going
+        // Used for event when we actually got a real connection going
         self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
@@ -1120,7 +1123,7 @@ class ViewController: UIViewController {
 
     var polarPatternTableView: CombinedSettingsTableView!
 
-    let audioManager = AudioManager()
+    let audioManager = AudioManager() // Handles everything related to Audio Operations
     var is_RecordingTest = false
     var is_VoIP_active = false
 
@@ -1364,7 +1367,7 @@ class ViewController: UIViewController {
         self.m_toggle_MicVoIP()
     }
     @IBAction func action_protocolToggleClicked(_ sender: UIButton) {
-        
+        self.m_toggle_NetworkProtocol()
     }
 
 
@@ -1448,6 +1451,10 @@ class ViewController: UIViewController {
             }
 
         }
+    }
+
+    func m_toggle_NetworkProtocol() {
+
     }
 
 
