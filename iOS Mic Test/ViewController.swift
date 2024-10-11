@@ -1043,7 +1043,8 @@ struct STR_TBL {
     var BTN_START_TEST_RECORD = "Record Test"
     var BTN_STOP_RECORDING = "Stop Recording"
 
-    let BTN_TCP_MODE = "Using TCP"
+    var BTN_TCP_MODE = "Using TCP"
+    var BTN_UDP_MODE = "Using UDP"
 }
 
 
@@ -1153,7 +1154,7 @@ class ViewController: UIViewController {
 
         // Protocol Toggle
         btnProtocolToggle = UIButton(type: .system)
-        btnProtocolToggle.setTitle("Use TCP", for: .normal)
+        btnProtocolToggle.setTitle( STR_TBL.BTN_TCP_MODE, for: .normal )
         btnProtocolToggle.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(btnProtocolToggle)
 
