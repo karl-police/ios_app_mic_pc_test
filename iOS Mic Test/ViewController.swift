@@ -320,7 +320,6 @@ enum TempNetworkProtocols {
     case UDP
 }
 
-var G_cfg_b_DoUDP = false // Something changeable
 var G_cfg_b_NetworkMode = TempNetworkProtocols.TCP // TCP by default
 
 
@@ -498,7 +497,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Start Server
     override func startServer() throws {
-        if (G_cfg_b_DoUDP == true) {
+        if (G_cfg_b_NetworkMode == TempNetworkProtocols.UDP) {
             // UDP
             self.cfg_nwParameters = NWParameters.udp
 
@@ -672,7 +671,7 @@ class NetworkVoice_CF_TCPServer : CF_TCPServer {
     }
 
     override func startServer() {
-        if (G_cfg_b_DoUDP == true) {
+        if (G_cfg_b_NetworkMode == TempNetworkProtocols.UDP) {
             // UDP
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
@@ -911,6 +910,7 @@ class AudioEngineManager {
 }
 
 
+// Audio Manager
 class AudioManager {
     var audioRecorder: AVAudioRecorder?
     var audioSettings = AudioSettingsClass()
@@ -1056,8 +1056,8 @@ struct STR_TBL {
     static let BTN_START_TEST_RECORD = "Record Test"
     static let BTN_STOP_RECORDING = "Stop Recording"
 
-    let BTN_TCP_MODE = "Using TCP"
-    let BTN_UDP_MODE = "Using UDP"
+    static let BTN_TCP_MODE = "Using TCP"
+    static let BTN_UDP_MODE = "Using UDP"
 }
 
 
