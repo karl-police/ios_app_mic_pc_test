@@ -528,7 +528,7 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
-class NetworkVoice_CF_TCPServer : CF_TCPServer {
+class NetworkVoice_CF_TCPServer : CF_NetworkServer {
     var activeClient_CFSocket: CFSocket?
 
     weak var delegate: NetworkVoiceDelegate?
