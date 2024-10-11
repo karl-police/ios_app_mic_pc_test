@@ -819,7 +819,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
-    // It just switches
+    // It just toggles
     func changeNetworkProtocol() {
         if (self.cfg_networkProtocol == TempNetworkProtocols.TCP) {
             // If it's TCP, set it to UDP.
