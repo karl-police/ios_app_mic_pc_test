@@ -335,6 +335,67 @@ class CF_UDPServer: CF_TCPServer {
         return context
     }
 
+
+    private var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+        guard let cfSocket = cfSocket else { return }
+
+        guard callbackType == .dataCallBack, let infoPointer = infoPointer,
+            let clientSocketHandle = dataPointer?.assumingMemoryBound(to: CFSocketNativeHandle.self).pointee else {
+                return
+        }
+
+        // self reference
+        let referencedSelf = Unmanaged<CF_UDPServer>.fromOpaque(infoPointer).takeUnretainedValue()
+
+
+        // Create CFSocket from client native socket
+        var clientContext = CFSocketContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
+        clientContext.info = UnsafeMutableRawPointer(Unmanaged.passUnretained(referencedSelf).toOpaque())
+
+        let clientCallbackTypes: CFOptionFlags = CFSocketCallBackType.readCallBack.rawValue
+
+        guard let client_cfSocket = CFSocketCreateWithNative(
+            kCFAllocatorDefault, clientSocketHandle, clientCallbackTypes,
+            referencedSelf.clientSocketCallback, // Add callback for client
+            &clientContext
+        ) else {
+            return
+        }
+    
+
+        // If local IP only
+        if (referencedSelf.ServerConfig.allowLocalOnly == true) {
+            // Turn CFSocket to Native Handle
+            let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
+
+            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket)
+
+            if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
+                referencedSelf.close_CFSocket(client_cfSocket)
+                return
+            }
+        }
+
+
+        // Additional checking
+        if (referencedSelf.ShouldAcceptClientCFSocket(client_cfSocket) == false) {
+            // If false then close
+            referencedSelf.close_CFSocket(client_cfSocket)
+            return
+        }
+
+
+        // If we allow the connection to get accepted
+        referencedSelf.activeCFSocketsArray.append(client_cfSocket)
+
+        // Add run loop for client
+        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
+
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket)
+    }
+
+
     override func initServerSocket() {
         var context = self.context
 
