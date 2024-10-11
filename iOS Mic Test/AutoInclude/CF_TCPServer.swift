@@ -256,9 +256,14 @@ class CF_NetworkServer {
 
 
 
+    // Get set Protocol as String
+    internal func GetCurrentProtocolAsString() -> String {
+        return CF_SocketNetworkUtils.GetStringFromNetworkProtocol(self.ServerConfig.networkProtocol)
+    }
+
     // Whenever a state changed
     func OnServerStateChanged(_ state: CF_ServerStates) {
-        let protocolStr = CF_SocketNetworkUtils.GetStringFromNetworkProtocol(self.ServerConfig.networkProtocol)
+        let protocolStr = self.GetCurrentProtocolAsString()
 
         switch state {
             case .started:

@@ -528,17 +528,19 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
-class NetworkVoice_CF_TCPServer : CF_NetworkServer {
+class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     var activeClient_CFSocket: CFSocket?
 
     weak var delegate: NetworkVoiceDelegate?
 
     override func OnServerStateChanged(_ state: CF_ServerStates) {
+        let protocolStr = self.GetCurrentProtocolAsString()
+
         switch state {
             case .started:
-                G_UI_Class_connectionLabel.setStatusConnectionText("Server started, Port \(self.portNumber)")
+                G_UI_Class_connectionLabel.setStatusConnectionText("\(protocolStr) Server started, Port \(self.portNumber)")
             case .stopped:
-                G_UI_Class_connectionLabel.setStatusConnectionText("TCP Server stopped")
+                G_UI_Class_connectionLabel.setStatusConnectionText("\(protocolStr) Server stopped")
             default:
                 break
         }
@@ -701,7 +703,7 @@ class NetworkVoice_CF_TCPServer : CF_NetworkServer {
 // Network Voice Manager
 class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
-    var networkVoice_CF_TCPServer: NetworkVoice_CF_TCPServer!
+    var networkVoice_CF_TCPServer: NetworkVoice_CF_NetworkServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
     var audioEngineManager: AudioEngineManager!
@@ -716,7 +718,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
-        self.networkVoice_CF_TCPServer = NetworkVoice_CF_TCPServer(inputPort: 8125)
+        self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: 8125)
 
         self.networkVoice_CF_TCPServer.delegate = self
     }
