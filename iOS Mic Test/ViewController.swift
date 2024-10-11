@@ -667,6 +667,9 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
     override func startServer() {
+        // We set the protocol now
+        self.ServerConfig.networkProtocol = G_cfg_b_NetworkMode
+
         if (G_cfg_b_NetworkMode == CF_NetworkProtocols.UDP) {
             // UDP
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
@@ -1194,7 +1197,7 @@ class ViewController: UIViewController {
 
             // Protocol Button
             btnProtocolToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -70),
+            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75),
             btnProtocolToggle.widthAnchor.constraint(equalToConstant: 150),
             btnProtocolToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
