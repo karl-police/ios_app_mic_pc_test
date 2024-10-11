@@ -95,7 +95,7 @@ class CF_TCPServer {
     }
 
 
-    var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
+    internal var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let client_cfSocket = client_cfSocket else { return }
 
         guard callbackType == .readCallBack, let infoPointer = infoPointer else {
