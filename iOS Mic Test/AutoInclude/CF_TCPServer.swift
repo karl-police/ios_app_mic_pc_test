@@ -73,8 +73,9 @@ class CF_SocketServerConfig {
     var allowLocalOnly: Bool = false
 }
 
-class CF_TCPServer {
-    var serverSocket: CFSocket?
+
+class CF_ServerBase {
+    var serverSocket: CFSocket? 
     internal var activeCFSocketsArray: [CFSocket] = []
 
     var ServerConfig = CF_SocketServerConfig() // Config
@@ -87,13 +88,19 @@ class CF_TCPServer {
     }
 
 
+    // Configurable customizable checks
+    func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
+        return true
+    }
+}
 
+
+class CF_TCPServer: CF_ServerBase {
     private var context: CFSocketContext {
         var context = CFSocketContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
         context.info = UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque())
         return context
     }
-
 
     internal var clientSocketCallback: CFSocketCallBack = { (_ client_cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let client_cfSocket = client_cfSocket else { return }
@@ -123,11 +130,6 @@ class CF_TCPServer {
         }
     }
 
-
-    // Configurable customizable checks
-    func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
-        return true
-    }
 
     private var serverSocketCallback: CFSocketCallBack = { (_ cfSocket, callbackType, _ address, dataPointer, infoPointer) in
         guard let cfSocket = cfSocket else { return }
@@ -215,8 +217,12 @@ class CF_TCPServer {
 
     // When the Server accepted a Client Connection
     func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
-        print("Accepted connection on socket \(client_cfSocket)")
+        let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
+        let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
 
+        print("Accepted connection on socket \(ipStr)")
+
+        // Close
         self.close_CFSocket(client_cfSocket)
     }
 
