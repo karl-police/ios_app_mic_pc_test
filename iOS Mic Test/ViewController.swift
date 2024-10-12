@@ -1197,7 +1197,7 @@ class ViewController: UIViewController {
 
             // Protocol Button
             btnProtocolToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75),
+            btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -85),
             btnProtocolToggle.widthAnchor.constraint(equalToConstant: 150),
             btnProtocolToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
