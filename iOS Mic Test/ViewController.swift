@@ -316,6 +316,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
+var G_cfg_b_useNW = true // NW by default
 
 
 /***
@@ -881,15 +882,23 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     func start() throws {
         do {
-            //try self.networkVoice_TCPServer.startServer()
-            try self.networkVoice_CF_TCPServer.startServer()
+            if (G_cfg_b_useNW == true) {
+                // NWListener
+                try self.networkVoice_TCPServer.startServer()
+            } else {
+                // CFSocket
+                try self.networkVoice_CF_TCPServer.startServer()
+            }
+            
         } catch {
             throw error
         }
     }
 
     func stop() {
-        //self.networkVoice_TCPServer.stopServer()
+        // Do this I guess?
+        self.networkVoice_TCPServer.stopServer()
+
         self.networkVoice_CF_TCPServer.stopServer()
     }
 }
