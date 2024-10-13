@@ -749,12 +749,17 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             + "\n\n" + G_UI_debugTextBoxOut.text
 
 
+        // Prepare
+        audioEngine.prepare()
+
+
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket)
         }
+
 
         do {
             try audioEngine.start()
@@ -1079,7 +1084,7 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            audioEngineManager.audioEngine.prepare()
+            //audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
@@ -1271,12 +1276,19 @@ class ViewController: UIViewController {
             btnProtocolToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -85),
             btnProtocolToggle.widthAnchor.constraint(equalToConstant: 150),
             btnProtocolToggle.heightAnchor.constraint(equalToConstant: 50),
+
+            // Network Framework Button
+            btnNetworkFrameworkToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            btnNetworkFrameworkToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -155),
+            btnNetworkFrameworkToggle.widthAnchor.constraint(equalToConstant: 150),
+            btnNetworkFrameworkToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
 
         // Add action to the button
         btnRecordTestToggle.addTarget(self, action: #selector(action_recordTestToggleClicked), for: .touchUpInside)
         btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
         btnProtocolToggle.addTarget(self, action: #selector(action_protocolToggleClicked), for: .touchUpInside)
+        btnNetworkFrameworkToggle.addTarget(self, action: #selector(action_networkFrameworkToggleClicked), for: .touchUpInside)
 
 
         // Create UITextView without setting a frame
@@ -1456,6 +1468,15 @@ class ViewController: UIViewController {
     }
     @IBAction func action_protocolToggleClicked(_ sender: UIButton) {
         self.m_toggle_NetworkProtocol()
+    }
+    @IBAction func action_networkFrameworkToggleClicked(_ sender: UIButton) {
+        if (G_cfg_b_useNW == true) {
+            G_cfg_b_useNW = false // CF
+            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_CFSOCKET, for: .normal)
+        } else {
+            G_cfg_b_useNW = true // NW
+            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_NW, for: .normal)
+        }
     }
 
 
