@@ -356,7 +356,7 @@ class NetworkVoiceTCPServer : TCPServer {
             self?.connectionStateHandler(connection: connection, state: state)
         }
 
-        connection.start(queue: DispatchQueue.global())
+        connection.start(queue: .main)
     }
 
     // Handshake
