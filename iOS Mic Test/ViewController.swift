@@ -316,7 +316,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
-var G_cfg_b_useNW = true // NW by default
+var G_cfg_b_useNW = false // CFSocket by default
 
 
 /***
@@ -1249,7 +1249,7 @@ class ViewController: UIViewController {
 
         // Network Toggle
         btnNetworkFrameworkToggle = UIButton(type: .system)
-        btnNetworkFrameworkToggle.setTitle( STR_TBL.BTN_USE_NW, for: .normal )
+        self.updateNetworkFrameworkToggleButton()
         btnNetworkFrameworkToggle.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(btnNetworkFrameworkToggle)
 
@@ -1483,12 +1483,20 @@ class ViewController: UIViewController {
     @IBAction func action_networkFrameworkToggleClicked(_ sender: UIButton) {
         if (G_cfg_b_useNW == true) {
             G_cfg_b_useNW = false // CF
-            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_CFSOCKET, for: .normal)
         } else {
             G_cfg_b_useNW = true // NW
+        }
+        updateNetworkFrameworkToggleButton() // Update
+    }
+
+    func updateNetworkFrameworkToggleButton() {
+        if (G_cfg_b_useNW == true) {
+            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_CFSOCKET, for: .normal)
+        } else {
             btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_NW, for: .normal)
         }
     }
+
 
 
     // Prompt to save file
