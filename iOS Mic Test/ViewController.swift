@@ -746,7 +746,58 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
+
+
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, time) in
+            // Transmit
+            self.transmitAudioCF(buffer: buffer, client_cfSocket)
+        }
+
+        do {
+            try audioEngine.start()
+            
+            G_UI_Class_connectionLabel.setStatusConnectionText(
+                "Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true))"
+            )
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+        }
     }
+
+
+    func transmitAudioCF(buffer: AVAudioPCMBuffer, _ client_cfSocket: CFSocket) {
+        let audioData = buffer.audioBufferList.pointee.mBuffers
+        let dataSize = audioData.mDataByteSize
+        
+        // Check if data is available
+        guard let dataPointer = audioData.mData else {
+            G_UI_debugTextBoxOut.text = "Problem"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+            return
+        }
+
+        // Data
+        let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
+        let cfData = CFDataCreate(kCFAllocatorDefault, audioBytes.withUnsafeBytes { $0.baseAddress!.assumingMemoryBound(to: UInt8.self) }, audioBytes.count)
+        
+        guard let cfDataToSend = cfData else {
+            G_UI_debugTextBoxOut.text = "Problem 2"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+            return
+        }
+
+        // Send audio data
+        let sendResult = CFSocketSendData(client_cfSocket, nil, cfDataToSend, 0)
+
+        if (sendResult != .success) {
+            G_UI_debugTextBoxOut.text = "Error sending data"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+        }
+    }
+
+
 
 
 
@@ -796,7 +847,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         
         // Check if data is available
         guard let dataPointer = audioData.mData else {
-            G_UI_Class_connectionLabel.setStatusConnectionText("Problem")
+            G_UI_debugTextBoxOut.text = "Problem"
+                + "\n\n" + G_UI_debugTextBoxOut.text
             return
         }
 
