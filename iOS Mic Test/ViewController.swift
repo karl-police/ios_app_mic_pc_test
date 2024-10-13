@@ -749,10 +749,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             + "\n\n" + G_UI_debugTextBoxOut.text
 
 
-        // Prepare
-        audioEngine.prepare()
-
-
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
@@ -760,6 +756,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             self.transmitAudioCF(buffer: buffer, client_cfSocket)
         }
 
+        // Prepare
+        audioEngine.prepare()
+        
 
         do {
             try audioEngine.start()
@@ -800,6 +799,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         if (sendResult != .success) {
             G_UI_debugTextBoxOut.text = "Error sending data"
                 + "\n\n" + G_UI_debugTextBoxOut.text
+
+            fatalError("TEEEEST")
         }
     }
 
