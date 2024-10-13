@@ -1070,7 +1070,7 @@ class AudioManager {
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
-            //audioEngineManager.audioEngine.prepare()
+            audioEngineManager.audioEngine.prepare()
 
             try self.setup_AudioSessionForVoIP()
 
@@ -1111,6 +1111,9 @@ struct STR_TBL {
 
     static let BTN_TCP_MODE = "Using TCP"
     static let BTN_UDP_MODE = "Using UDP"
+
+    static let BTN_USE_NW = "Using NW"
+    static let BTN_USE_CFSOCKET = "Using CFSocket"
 }
 
 
@@ -1182,6 +1185,7 @@ class ViewController: UIViewController {
     var tableView: UITableView!
     var debugTextBoxOut = G_UI_debugTextBoxOut
 
+    var btnNetworkFrameworkToggle: UIButton!
     var btnProtocolToggle: UIButton!
     var btnRecordTestToggle: UIButton!
     var btnMicToggle: UIButton!
@@ -1217,6 +1221,12 @@ class ViewController: UIViewController {
         btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(btnMicToggle)
 
+
+        // Network Toggle
+        btnNetworkFrameworkToggle = UIButton(type: .system)
+        btnNetworkFrameworkToggle.setTitle( STR_TBL.BTN_USE_NW, for: .normal )
+        btnNetworkFrameworkToggle.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(btnNetworkFrameworkToggle)
 
         // Protocol Toggle
         btnProtocolToggle = UIButton(type: .system)
