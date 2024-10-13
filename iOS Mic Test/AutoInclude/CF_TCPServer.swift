@@ -143,6 +143,7 @@ class CF_NetworkServer {
             let result = getsockopt(nativeHandle, SOL_SOCKET, SO_ERROR, &errorCode, &errorCodeLen)
 
             if (result == 0 && errorCode != 0) {
+                // Client Disconnected
                 referencedSelf.OnClientStateChanged(client_cfSocket, CF_ClientStates.disconnected)
 
                 CFSocketInvalidate(client_cfSocket)
