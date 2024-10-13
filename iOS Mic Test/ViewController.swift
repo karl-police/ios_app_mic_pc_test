@@ -758,7 +758,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         // Prepare
         audioEngine.prepare()
-        
+
 
         do {
             try audioEngine.start()
@@ -799,8 +799,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         if (sendResult != .success) {
             G_UI_debugTextBoxOut.text = "Error sending data"
                 + "\n\n" + G_UI_debugTextBoxOut.text
-
-            fatalError("TEEEEST")
         }
     }
 
@@ -833,6 +831,12 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
+            guard connection.state == .ready else {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Connection is not ready")
+                self.audioEngineManager.audioEngine.stop() // Test
+                return
+            }
+
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
