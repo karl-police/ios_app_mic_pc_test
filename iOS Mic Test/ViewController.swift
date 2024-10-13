@@ -755,14 +755,14 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
-            var errorCode: Int32 = 0
+            /*var errorCode: Int32 = 0
             var errorCodeLen = socklen_t(MemoryLayout.size(ofValue: errorCode))
             let result = getsockopt(clientNativeHandle, SOL_SOCKET, SO_ERROR, &errorCode, &errorCodeLen)
 
             if (result == 0 && errorCode != 0) {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Client interrupted disconnected")
                 return // Skip if disconnected
-            }
+            }*/
 
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket)
@@ -843,12 +843,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
-            guard connection.state == .ready else {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Connection is not ready")
-                self.audioEngineManager.audioEngine.stop() // Test
-                return
-            }
-
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
