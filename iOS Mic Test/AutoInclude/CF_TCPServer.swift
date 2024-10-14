@@ -182,6 +182,7 @@ class CF_NetworkServer {
             return
         }
     
+        self.TemporaryLogging("Test 123")
 
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
@@ -196,6 +197,7 @@ class CF_NetworkServer {
             }
         }
 
+        self.TemporaryLogging("Test 12345")
 
         // Additional checking
         if (referencedSelf.ShouldAcceptClientCFSocket(client_cfSocket) == false) {
