@@ -145,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				Build_Include_ProjectGlobals,
+				/*Build_Include_ProjectGlobals,*/
 				Build_Include_TCPServer,
 
 				/* There's a script that will insert things here */
