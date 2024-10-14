@@ -421,7 +421,7 @@ class CF_NetworkServer {
 
             self.OnServerStateChanged(CF_ServerStates.stopped)
         } else {
-            self.TemporaryLogging("Server socket doesn't exist")
+            print("Server socket doesn't exist")
         }
     }
 }

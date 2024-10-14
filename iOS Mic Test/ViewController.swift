@@ -529,6 +529,8 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 }
 
+
+// CFSocket method
 class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     var activeClient_CFSocket: CFSocket?
 
@@ -547,6 +549,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         }
     }
 
+
+    // Manually called when the Client State changes, e.g. disconnection
     override func OnClientStateChanged(_ client_cfSocket: CFSocket, _ state: CF_ClientStates) {
         switch state {
             case .disconnected:
@@ -682,7 +686,6 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         // Set this on both
         self.ServerConfig.allowLocalOnly = true
 
-
         do {
             try super.startServer()
         } catch {
@@ -751,19 +754,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         let clientNativeHandle = CFSocketGetNative(client_cfSocket)
 
-
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: nil /*audioFormat*/
         ) { (buffer, time) in
-            /*var errorCode: Int32 = 0
-            var errorCodeLen = socklen_t(MemoryLayout.size(ofValue: errorCode))
-            let result = getsockopt(clientNativeHandle, SOL_SOCKET, SO_ERROR, &errorCode, &errorCodeLen)
-
-            if (result == 0 && errorCode != 0) {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Client interrupted disconnected")
-                return // Skip if disconnected
-            }*/
-
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket)
         }
@@ -905,6 +898,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 // CFSocket
                 try self.networkVoice_CF_TCPServer.startServer()
             }
+
+            // Debug
+            G_UI_debugTextBoxOut.text = "\(self)"
+                + "\n\n" + G_UI_debugTextBoxOut.text
             
         } catch {
             throw error
