@@ -1488,9 +1488,9 @@ class ViewController: UIViewController {
 
     func updateNetworkFrameworkToggleButton() {
         if (G_cfg_b_useNW == true) {
-            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_CFSOCKET, for: .normal)
+            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_NW, for: .normal) // NW
         } else {
-            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_NW, for: .normal)
+            btnNetworkFrameworkToggle.setTitle(STR_TBL.BTN_USE_CFSOCKET, for: .normal) // CF
         }
     }
 
