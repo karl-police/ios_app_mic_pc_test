@@ -901,8 +901,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
             // Debug
             G_UI_debugTextBoxOut.text = "\(self)"
-                + "\n\n" + "\(self.audioEngineManager)"
-                + "\n\n" + "\(self.audioEngineManager.audioEngine)"
+                + "\n\n" + "\(self.audioEngineManager!)"
+                + "\n\n" + "\(self.audioEngineManager.audioEngine!)"
                 + "\n\n" + G_UI_debugTextBoxOut.text
             
         } catch {
