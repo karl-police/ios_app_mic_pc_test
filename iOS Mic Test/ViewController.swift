@@ -758,35 +758,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
-            //self.transmitAudioCF(buffer: buffer, client_cfSocket)
-
-            let audioData = buffer.audioBufferList.pointee.mBuffers
-            let dataSize = audioData.mDataByteSize
-            
-            // Check if data is available
-            guard let dataPointer = audioData.mData else {
-                G_UI_debugTextBoxOut.text = "Problem"
-                    + "\n\n" + G_UI_debugTextBoxOut.text
-                return
-            }
-
-            // Data
-            let audioBytes = Data(bytes: dataPointer, count: Int(dataSize))
-            let cfData = CFDataCreate(kCFAllocatorDefault, audioBytes.withUnsafeBytes { $0.baseAddress!.assumingMemoryBound(to: UInt8.self) }, audioBytes.count)
-            
-            guard let cfDataToSend = cfData else {
-                G_UI_debugTextBoxOut.text = "Problem 2"
-                    + "\n\n" + G_UI_debugTextBoxOut.text
-                return
-            }
-
-            // Send audio data
-            let sendResult = CFSocketSendData(client_cfSocket, nil, cfDataToSend, 0)
-
-            if (sendResult != .success) {
-                G_UI_debugTextBoxOut.text = "Error sending data"
-                    + "\n\n" + G_UI_debugTextBoxOut.text
-            }
+            self.transmitAudioCF(buffer: buffer, client_cfSocket)
         }
 
         // Prepare
