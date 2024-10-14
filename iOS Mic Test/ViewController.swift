@@ -870,7 +870,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
-                    G_UI_Class_connectionLabel.setStatusConnectionText("Error sending audio data: \(error)")
+                    G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
+                        + "\n\n" + G_UI_debugTextBoxOut.text
                 }
             })
         )
@@ -898,13 +899,17 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 // CFSocket
                 try self.networkVoice_CF_TCPServer.startServer()
             }
-
+            
             // Debug
             G_UI_debugTextBoxOut.text = "\(self)"
-                + "\n\n" + "\(self.audioEngineManager!)"
-                + "\n\n" + "\(self.audioEngineManager.audioEngine!)"
                 + "\n\n" + G_UI_debugTextBoxOut.text
-            
+                + "\n\n" + "\(self.audioEngineManager.audioEngine)"
+                + "\n\n" + "\(self.audioEngineManager.audioFormat)"
+                + "\n\n" + "\(self.audioEngineManager.audioSettings)"
+                + "\n\n" + "\(self.audioEngineManager.audioEngine.inputNode)"
+                + "\n\n" + "\(self.audioEngineManager.audioEngine.outputNode)"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+
         } catch {
             throw error
         }

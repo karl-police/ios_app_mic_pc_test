@@ -30,6 +30,50 @@ struct CF_SocketNetworkUtils {
     }
 
 
+
+    static func GetIP_FromCFDataAddress(_ address: CFData, b_includePort: Bool = false) -> String {
+        let sockaddrPointer = CFDataGetBytePtr(address)
+        let sockaddrLen = CFDataGetLength(address)
+
+        guard let sockaddrPointer = sockaddrPointer else {
+            return "Error getting sockaddrPointer"
+        }
+
+        var output = ""
+        var ipStr = "No IP"
+        var port: Int = 0
+
+        sockaddrPointer.withMemoryRebound(to: sockaddr.self, capacity: sockaddrLen) { sockaddrPtr in
+            if sockaddrPtr.pointee.sa_family == sa_family_t(AF_INET) {
+                // IPv4
+                var addr4 = sockaddrPtr.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { $0.pointee }
+                var ipBuffer = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
+                inet_ntop(AF_INET, &addr4.sin_addr, &ipBuffer, socklen_t(INET_ADDRSTRLEN))
+
+                ipStr = String(cString: ipBuffer)
+                port = Int(ntohs(addr4.sin_port)) // Port
+
+            } else if sockaddrPtr.pointee.sa_family == sa_family_t(AF_INET6) {
+                // IPv6
+                var addr6 = sockaddrPtr.withMemoryRebound(to: sockaddr_in6.self, capacity: 1) { $0.pointee }
+                var ipBuffer = [CChar](repeating: 0, count: Int(INET6_ADDRSTRLEN))
+                inet_ntop(AF_INET6, &addr6.sin6_addr, &ipBuffer, socklen_t(INET6_ADDRSTRLEN))
+
+                ipStr = String(cString: ipBuffer)
+                port = Int(ntohs(addr6.sin6_port))
+            }
+        }
+
+        output = ipStr
+        // idk about IPv6 yet
+        if (b_includePort == true) {
+            output += ":\(port)"
+        }
+
+        return output
+    }
+
+
     static func GetIP_FromNativeSocket(_ nativeSocket: Int32, b_includePort: Bool = false ) -> String {
         var addr = sockaddr_in()
         var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
@@ -157,8 +201,37 @@ class CF_NetworkServer {
 
     // Whether to let through a connection or not
     private func internal_shouldLetThroughConnection(
-        _ client_cfSocket: CFSocket, _ address: CFData?
+        _ client_cfSocket: CFSocket,
+        _ address: CFData?
     ) -> Bool {
+
+        guard let address = address else {
+            return false
+        }
+
+        // If local IP only
+        if (self.ServerConfig.allowLocalOnly == true) {
+            // Turn CFSocket to Native Handle
+            //let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
+
+            let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address)
+            self.TemporaryLogging(ipStr)
+
+            if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
+                self.close_CFSocket(client_cfSocket)
+                return false
+            }
+        }
+
+        // Additional checking
+        if (self.ShouldAcceptClientCFSocket(client_cfSocket) == false) {
+            // If false then close
+            self.close_CFSocket(client_cfSocket)
+            return false
+        }
+
+        
+        // If we made it through
         return true
     }
 
@@ -192,33 +265,10 @@ class CF_NetworkServer {
         }
     
 
-        guard let address = address else {
-            self.TemporaryLogging("No address")
+        let b_shouldAllowConnection = referencedSelf.internal_shouldLetThroughConnection(client_cfSocket, address)
+        if (b_shouldAllowConnection == false) {
             return
         }
-
-        // If local IP only
-        if (referencedSelf.ServerConfig.allowLocalOnly == true) {
-            // Turn CFSocket to Native Handle
-            //let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
-
-            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
-            self.TemporaryLogging(ipStr)
-
-            if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
-                referencedSelf.close_CFSocket(client_cfSocket)
-                return
-            }
-        }
-
-
-        // Additional checking
-        if (referencedSelf.ShouldAcceptClientCFSocket(client_cfSocket) == false) {
-            // If false then close
-            referencedSelf.close_CFSocket(client_cfSocket)
-            return
-        }
-
 
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(client_cfSocket)
