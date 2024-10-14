@@ -398,7 +398,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     return
                 }
 
-                /*incomingConnection.send(
+                incomingConnection.send(
                     content: response,
                     completion: .contentProcessed({ error in 
                         if let error = error {
@@ -415,7 +415,7 @@ class NetworkVoiceTCPServer : TCPServer {
                             self?.m_acceptIncomingConnection(incomingConnection)
                         }
                     })
-                )*/
+                )
             }
         }
 
