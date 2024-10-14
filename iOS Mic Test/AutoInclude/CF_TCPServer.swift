@@ -309,6 +309,9 @@ class CF_NetworkServer {
         if let index = self.activeCFSocketsArray.firstIndex(where: { $0 === cfSocket }) {
             self.activeCFSocketsArray.remove(at: index)
         }
+
+        // Invalidate
+        CFSocketInvalidate(cfSocket)
         
         // Get native handle
         let nativeHandle = CFSocketGetNative(cfSocket)
