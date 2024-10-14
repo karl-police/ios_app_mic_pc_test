@@ -155,8 +155,11 @@ class CF_NetworkServer {
 
 
 
-    private func internal_shouldLetThroughConnection() {
-
+    // Whether to let through a connection or not
+    private func internal_shouldLetThroughConnection(
+        _ client_cfSocket: CFSocket, _ address: CFData?
+    ) -> Bool {
+        return true
     }
 
 
