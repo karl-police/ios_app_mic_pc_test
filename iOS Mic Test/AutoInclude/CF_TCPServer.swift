@@ -154,6 +154,12 @@ class CF_NetworkServer {
 
 
 
+
+    private func internal_shouldLetThroughConnection() {
+
+    }
+
+
     // Process the rest of the callback
     private func serverCallbackProcessClient(
         _ cfSocket: CFSocket,
@@ -191,9 +197,9 @@ class CF_NetworkServer {
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
             // Turn CFSocket to Native Handle
-            let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
+            //let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
 
-            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket)
+            let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(clientSocketHandle)
             self.TemporaryLogging(ipStr)
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
