@@ -183,12 +183,18 @@ class CF_NetworkServer {
         }
     
 
+        guard let address = address else {
+            self.TemporaryLogging("No address")
+            return
+        }
+
         // If local IP only
         if (referencedSelf.ServerConfig.allowLocalOnly == true) {
             // Turn CFSocket to Native Handle
             let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
 
             let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket)
+            self.TemporaryLogging(ipStr)
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
                 referencedSelf.close_CFSocket(client_cfSocket)
