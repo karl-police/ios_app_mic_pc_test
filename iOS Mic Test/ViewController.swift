@@ -754,13 +754,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         let clientNativeHandle = CFSocketGetNative(client_cfSocket)
 
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
-        ) { (buffer, time) in
-            // Transmit
-            self.transmitAudioCF(buffer: buffer, client_cfSocket)
-        }
-
         // Prepare
         audioEngine.prepare()
 
@@ -774,6 +767,15 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
         }
+
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+        ) { (buffer, time) in
+            // Transmit
+            self.transmitAudioCF(buffer: buffer, client_cfSocket)
+        }
+
+        
     }
 
 
@@ -901,6 +903,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
             // Debug
             G_UI_debugTextBoxOut.text = "\(self)"
+                + "\n\n" + "\(self.audioEngineManager)"
                 + "\n\n" + G_UI_debugTextBoxOut.text
             
         } catch {
