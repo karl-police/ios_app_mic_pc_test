@@ -379,7 +379,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
+        /*incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
@@ -417,7 +417,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     })
                 )
             }
-        }
+        }*/
 
     }
 
