@@ -361,7 +361,7 @@ class NetworkVoiceTCPServer : TCPServer {
 
     // Handshake
     private func m_customHandshake(_ incomingConnection: NWConnection) {
-        let handshakeTimeout: TimeInterval = 10.0
+        /*let handshakeTimeout: TimeInterval = 10.0
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel on timeout
@@ -370,7 +370,7 @@ class NetworkVoiceTCPServer : TCPServer {
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
             }
-        }
+        }*/
 
         /***
             IMPORTANT
@@ -383,7 +383,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
-                timeoutTimer.invalidate() // Erase the timeout
+                //timeoutTimer.invalidate() // Erase the timeout
 
                 // We are alright!
                 // Let's tell that back
