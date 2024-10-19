@@ -516,17 +516,13 @@ class NetworkVoiceTCPServer : TCPServer {
         self.cfg_nwParameters.includePeerToPeer = true
         self.cfg_nwParameters.acceptLocalOnly = true
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            do {
+        do {
             try super.startServer()
 
-                // The log that the server started is located at the listener state update function.
-            } catch {
-                G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
-            }
+            // The log that the server started is located at the listener state update function.
+        } catch {
+            G_UI_Class_connectionLabel.setStatusConnectionText("Error when trying to start: \(error.localizedDescription)")
         }
-        }
-        
 
         G_UI_debugTextBoxOut.text = self.getDump_nwParams()
             + "\n" + self.getDump_nwListener()
