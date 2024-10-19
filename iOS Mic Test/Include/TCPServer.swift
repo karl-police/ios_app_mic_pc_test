@@ -99,23 +99,6 @@ class TCPServer {
         }
     }
 
-    func startReceive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 2048) { content, _, isComplete, error in
-            if let content {
-                print("connection did receive, count: \(content.count)")
-            }
-            if isComplete {
-                print("connection did receive, EOF")
-            }
-            if let error {
-                print("connection did fail, error: \(error)")
-                return
-            }
-            self.startReceive(on: connection)
-        }
-    }
-
-
 
     // Use this instead to close connections...
     func cancelConnection(_ connection: NWConnection) {
@@ -221,7 +204,7 @@ class TCPServer {
     // This needs to be called to start the server
     func startServer() throws {
         do {
-            self.listener = try! NWListener(using: self.cfg_nwParameters, on: self.port)
+            self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
             self.listener?.newConnectionHandler = { newConnection in 
                 self.handleListenerNewConnection(newConnection)

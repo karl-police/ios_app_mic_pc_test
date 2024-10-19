@@ -351,25 +351,8 @@ class NetworkVoiceTCPServer : TCPServer {
         super.handleListenerNewConnection(newConnection)
 
 
-        // Test
-        //self.m_customHandshake(newConnection)
-        self.startReceive(on: newConnection)
-    }
-
-    override func startReceive(on connection: NWConnection) {
-        connection.receive(minimumIncompleteLength: 1, maximumLength: 2048) { content, _, isComplete, error in
-            if let content {
-                G_UI_Class_connectionLabel.setStatusConnectionText("connection did receive, count: \(content.count)")
-            }
-            if isComplete {
-                G_UI_Class_connectionLabel.setStatusConnectionText("connection did receive, EOF")
-            }
-            if let error {
-                G_UI_Class_connectionLabel.setStatusConnectionText("connection did fail, error: \(error)")
-                return
-            }
-            self.startReceive(on: connection)
-        }
+        // Custom Handshake
+        self.m_customHandshake(newConnection)
     }
 
     override func handleConnection(_ connection: NWConnection) {
