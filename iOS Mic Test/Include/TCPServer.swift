@@ -200,7 +200,9 @@ class TCPServer {
     // This needs to be called to start the server
     func startServer() throws {
         do {
-            self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
+            if (self.listener == nil) {
+                self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
+            }
 
             // weak self test
             self.listener?.newConnectionHandler = { newConnection in 
@@ -231,9 +233,11 @@ class TCPServer {
         self.connectionsArray.removeAll() // Ensure removal of all
 
 
+        
+        self.listener?.cancel()
+
         self.listener?.stateUpdateHandler = nil
         self.listener?.newConnectionHandler = nil
-        self.listener?.cancel()
         //self.listener = nil
     }
 }
