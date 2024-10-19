@@ -422,6 +422,10 @@ class NetworkVoiceTCPServer : TCPServer {
                 )
             }
         }
+
+        G_UI_debugTextBoxOut.text = ".receive passed"
+            + "\n\n"
+            + G_UI_debugTextBoxOut.text
     }
 
 
