@@ -589,7 +589,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
 
-    private func m_customHandshake(_ incomingCFSocket: CFSocket) {
+    private func m_customHandshake(_ incomingCFSocket: CFSocket, _ addressData: CFData) {
         let handshakeTimeout: TimeInterval = 10.0
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
@@ -625,7 +625,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
                 guard let response = ("Accepted").data(using: .utf8) else { return }
                 
-                let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
+                //let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
+                let sendResult = CFSocketSendData(incomingCFSocket, addressData, response as CFData, 0)
                 
                 if (sendResult != .success) {
                     G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
@@ -651,7 +652,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
     // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(
-        client_cfSocket: CFSocket, addressQ: CFData?
+        client_cfSocket: CFSocket,
+        addressQ: CFData?
     ) {
         guard let address = addressQ else { return }
 
@@ -671,7 +673,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         // Handshake
         DispatchQueue.main.async {
-            self.m_customHandshake(client_cfSocket)
+            self.m_customHandshake(client_cfSocket, address)
         }
     }
 
