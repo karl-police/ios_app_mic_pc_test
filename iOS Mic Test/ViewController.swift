@@ -588,6 +588,12 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         return true
     }
 
+    public func valuePtrCast<T>(voidPtr: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<T> {
+        return UnsafeMutablePointer<T>(voidPtr)
+    }
+    public func valuePtrCast<T>(voidPtr: UnsafePointer<Void>) -> UnsafePointer<T> {
+        return UnsafePointer<T>(voidPtr)
+    }
 
     private func m_customHandshake(_ incomingCFSocket: CFSocket, _ clientSocketHandle: Int32) {
         let handshakeTimeout: TimeInterval = 10.0
@@ -611,9 +617,12 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
+        var addrOut = sockaddr_in()
+        var addrLenInOut = sizeof(sockaddr_in.self)
+
         var buffer = [UInt8](repeating: 0, count: 512)
         //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-        let readResult = recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0)
+        let readResult = recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0, valuePtrCast(&addrOut), valuePtrCast(&addrLenInOut))
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
