@@ -105,6 +105,8 @@ class TCPServer {
         if let index = self.connectionsArray.firstIndex(where: { $0 === connection }) {
             self.connectionsArray.remove(at: index)
         }
+
+        connection.stateUpdateHandler = nil // remove stateUpdateHandler
         connection.cancel()
     }
 
