@@ -240,6 +240,6 @@ class TCPServer {
             self.listener = nil
         }
 
-        OnListenerStopped()
+        self.OnListenerStopped()
     }
 }
