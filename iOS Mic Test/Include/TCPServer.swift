@@ -238,8 +238,8 @@ class TCPServer {
             listener.newConnectionHandler = nil
             listener.cancel()
             self.listener = nil
-
-            self.OnListenerStopped()
         }
+
+        self.OnListenerStopped()
     }
 }
