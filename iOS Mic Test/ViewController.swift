@@ -508,6 +508,7 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
+            self.cfg_nwParameters = NWParameters.tcp // Test
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 
