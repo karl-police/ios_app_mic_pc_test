@@ -203,26 +203,28 @@ class TCPServer {
 
     // This needs to be called to start the server
     func startServer() throws {
-        do {
-            self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
+        try DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) throws {
+            do {
+                self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
-            self.listener?.newConnectionHandler = { newConnection in 
-                self.handleListenerNewConnection(newConnection)
-            }
-
-            self.listener?.stateUpdateHandler = { state in
-                guard let listener = self.listener else {
-                    //fatalError("There's no Listener") // if nil
-                    return
+                self.listener?.newConnectionHandler = { newConnection in 
+                    self.handleListenerNewConnection(newConnection)
                 }
 
-                self.OnListenerStateUpdated(listener: listener, state: state)
-            }
+                self.listener?.stateUpdateHandler = { state in
+                    guard let listener = self.listener else {
+                        //fatalError("There's no Listener") // if nil
+                        return
+                    }
 
-            // Start listening
-            self.listener?.start(queue: .main)
-        } catch {
-            throw error
+                    self.OnListenerStateUpdated(listener: listener, state: state)
+                }
+
+                // Start listening
+                self.listener?.start(queue: .main)
+            } catch {
+                throw error
+            }
         }
     }
 
