@@ -589,7 +589,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
 
-    private func m_customHandshake(_ incomingCFSocket: CFSocket) {
+    private func m_customHandshake(_ incomingCFSocket: CFSocket, _ clientSocketHandle: Int32) {
         let handshakeTimeout: TimeInterval = 10.0
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
@@ -612,7 +612,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         var buffer = [UInt8](repeating: 0, count: 512)
-        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        let readResult = recv(clientSocketHandle, &buffer, buffer.count, 0)
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
@@ -650,7 +651,11 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
     // Whenever we accept a new client connection
-    override func OnClientConnectionAccepted(client_cfSocket: CFSocket, addressQ: CFData?) {
+    override func OnClientConnectionAccepted(
+        client_cfSocket: CFSocket,
+        addressQ: CFData?,
+        _ clientSocketHandle: Int32
+    ) {
         guard let address = addressQ else { return }
 
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
@@ -669,7 +674,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         // Handshake
         DispatchQueue.main.async {
-            self.m_customHandshake(client_cfSocket)
+            self.m_customHandshake(client_cfSocket, clientSocketHandle)
         }
     }
 

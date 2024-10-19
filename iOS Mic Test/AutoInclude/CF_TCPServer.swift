@@ -277,7 +277,7 @@ class CF_NetworkServer {
         let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
-        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address, clientSocketHandle)
     }
 
 
@@ -353,7 +353,11 @@ class CF_NetworkServer {
 
 
     // When the Server accepted a Client Connection
-    func OnClientConnectionAccepted(client_cfSocket: CFSocket, addressQ: CFData?) {
+    func OnClientConnectionAccepted(
+        client_cfSocket: CFSocket,
+        addressQ: CFData?,
+        _ clientSocketHandle: Int32
+    ) {
         guard let address = addressQ else { return }
 
         //let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
