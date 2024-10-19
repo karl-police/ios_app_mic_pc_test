@@ -588,14 +588,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         return true
     }
 
-    public func valuePtrCast<T>(voidPtr: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<T> {
-        return UnsafeMutablePointer<T>(voidPtr)
-    }
-    public func valuePtrCast<T>(voidPtr: UnsafePointer<Void>) -> UnsafePointer<T> {
-        return UnsafePointer<T>(voidPtr)
-    }
 
-    private func m_customHandshake(_ incomingCFSocket: CFSocket, _ clientSocketHandle: Int32) {
+    private func m_customHandshake(_ incomingCFSocket: CFSocket) {
         let handshakeTimeout: TimeInterval = 10.0
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
@@ -617,12 +611,18 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        var addrOut = sockaddr_in()
-        var addrLenInOut = sizeof(sockaddr_in.self)
-
         var buffer = [UInt8](repeating: 0, count: 512)
         //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-        let readResult = recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0, valuePtrCast(&addrOut), valuePtrCast(&addrLenInOut))
+
+        var senderAddr = sockaddr_in()
+        var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
+
+        let readResult = withUnsafeMutablePointer(to: &senderAddr) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { addrPtr in
+                // Call recvfrom
+                recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0, addrPtr, &addrLen)
+            }
+        }
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
@@ -682,7 +682,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         // Handshake
         DispatchQueue.main.async {
-            self.m_customHandshake(client_cfSocket, clientSocketHandle)
+            self.m_customHandshake(client_cfSocket)
         }
     }
 
