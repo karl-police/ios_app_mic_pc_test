@@ -204,7 +204,7 @@ class TCPServer {
     // This needs to be called to start the server
     func startServer() throws {
         do {
-            self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
+            self.listener = try! NWListener(using: self.cfg_nwParameters, on: self.port)
 
             self.listener?.newConnectionHandler = { newConnection in 
                 self.handleListenerNewConnection(newConnection)
