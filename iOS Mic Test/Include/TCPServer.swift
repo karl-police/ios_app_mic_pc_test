@@ -116,10 +116,13 @@ class TCPServer {
         switch state {
         case .ready:
             print("Listener is ready")
+            break
         case .failed(let nwError):
             print("Listener failed: \(nwError)")
+            break
         case .cancelled:
             print("Listener cancelled")
+            break
         default:
             break
         }
