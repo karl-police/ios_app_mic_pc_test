@@ -626,7 +626,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
                 guard let response = ("Accepted").data(using: .utf8) else { return }
                 
                 //let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
-                let sendResult = CFSocketSendData(incomingCFSocket, addressData, response as CFData, 0)
+                let sendResult = sendCFData(addressData: addressData, response as CFData, toCFSocket: incomingCFSocket)
                 
                 if (sendResult != .success) {
                     G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
