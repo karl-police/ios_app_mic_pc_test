@@ -236,6 +236,23 @@ class CF_NetworkServer {
     }
 
 
+    // Apparently to send stuff
+    func sendForUDP(_ message: String, address: CFData) {
+        guard let socket = self.serverSocket else {
+            self.TemporaryLogging("No Server Socket")
+            return
+        }
+
+        let messageData = message.data(using: .utf8)!
+
+        // Send the message
+        let result = CFSocketSendData(socket, address, messageData as CFData, 0)
+        if result != .success {
+            self.TemporaryLogging("Failed to send data: \(result)")
+        }
+    }
+
+
     // Process the rest of the callback
     private func serverCallbackProcessClient(
         _ cfSocket: CFSocket,
@@ -284,7 +301,10 @@ class CF_NetworkServer {
 
             // UDP
             case CF_NetworkProtocols.UDP: do {
-                referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
+                guard let addr = address else { return }
+                self.sendForUDP("Accepted", address: addr)
+
+                //referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
             }
         }
     }
