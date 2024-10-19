@@ -612,7 +612,28 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         var buffer = [UInt8](repeating: 0, count: 512)
-        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        guard let response = ("Accepted").data(using: .utf8) else { return }
+                
+        let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
+        
+        if (sendResult != .success) {
+            G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                + "\n\n"
+                + G_UI_debugTextBoxOut.text
+
+            self.close_CFSocket(incomingCFSocket)
+        } else {
+            G_UI_Class_connectionLabel.setStatusConnectionText(
+                "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
+            )
+
+            // Accept after send
+
+            // We can now do the streaming thing
+            // Trigger this
+            self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+        }
+        /*let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
@@ -645,7 +666,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
                     self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
                 }
             }
-        }
+        }*/
 
     }
 
