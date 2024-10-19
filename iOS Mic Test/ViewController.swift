@@ -650,9 +650,12 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
     // Whenever we accept a new client connection
-    override func OnClientConnectionAccepted(client_cfSocket: CFSocket) {
+    override func OnClientConnectionAccepted(client_cfSocket: CFSocket, addressQ: CFData?) {
+        guard let address = addressQ else { return }
+
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
-        let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
+        //let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
+        let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address, b_includePort: true)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Accepted connection with \(ipStr)")
 
