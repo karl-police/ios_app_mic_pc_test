@@ -653,8 +653,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(
         client_cfSocket: CFSocket,
-        addressQ: CFData?,
-        _ clientSocketHandle: Int32
+        addressQ: CFData?
     ) {
         guard let address = addressQ else { return }
 
