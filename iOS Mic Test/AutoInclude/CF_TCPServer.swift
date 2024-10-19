@@ -262,6 +262,82 @@ class CF_NetworkServer {
     }
 
 
+    func addressAndPort(from addressData: CFData) -> (ip: String?, port: Int?) {
+        let dataPointer = CFDataGetBytePtr(addressData)
+        let addressLength = CFDataGetLength(addressData)
+
+        guard let addressPtr = dataPointer else {
+            return (nil, nil)
+        }
+
+        if addressLength >= MemoryLayout<sockaddr_in>.size {
+            var addr = sockaddr_in()
+            memcpy(&addr, addressPtr, MemoryLayout<sockaddr_in>.size)
+
+            let port = Int(CF_SocketNetworkUtils.ntohs(addr.sin_port))
+            
+            var ip = [CChar](repeating: 0, count: Int(INET_ADDRSTRLEN))
+            inet_ntop(AF_INET, &addr.sin_addr, &ip, socklen_t(ip.count))
+
+            return (String(cString: ip), port)
+        }
+        else if addressLength >= MemoryLayout<sockaddr_in6>.size {
+            var addr = sockaddr_in6()
+            memcpy(&addr, addressPtr, MemoryLayout<sockaddr_in6>.size)
+
+            let port = Int(CF_SocketNetworkUtils.ntohs(addr.sin6_port))
+
+            var ip = [CChar](repeating: 0, count: Int(INET6_ADDRSTRLEN))
+            inet_ntop(AF_INET6, &addr.sin6_addr, &ip, socklen_t(ip.count))
+
+            return (String(cString: ip), port)
+        }
+
+        return (nil, nil)
+    }
+
+    func receiveData(_ buffer: inout [UInt8], addressData: CFData, _ fromCFSocket_Handle: Int32 = 0) -> Int {
+        switch self.ServerConfig.networkProtocol {
+            // TCP
+            case CF_NetworkProtocols.TCP: do {
+                return recv(fromCFSocket_Handle, &buffer, buffer.count, 0)
+            }
+
+            // UDP
+            case CF_NetworkProtocols.UDP: do {
+                let (ip, port) = addressAndPort(from: addressData)
+
+                if let ip = ip, let port = port {
+                    var addr = sockaddr_in()
+                    addr.sin_family = sa_family_t(AF_INET)
+                    addr.sin_port = in_port_t(port).bigEndian
+                    addr.sin_addr = in_addr(s_addr: inet_addr(ip))
+
+                    var senderAddr = sockaddr_in()
+                    var senderAddrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
+                    
+                    let socketFD = socket(AF_INET, SOCK_DGRAM, 0)
+                    let bindResult = withUnsafePointer(to: addr) {
+                        $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPointer in
+                            bind(socketFD, sockaddrPointer, socklen_t(MemoryLayout<sockaddr_in>.size))
+                        }
+                    }
+
+                    let bytesReceived = withUnsafeMutablePointer(to: &senderAddr) { addrPointer in
+                        addrPointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddrPointer in
+                            recvfrom(socketFD, &buffer, buffer.count, 0, sockAddrPointer, &senderAddrLen)
+                        }
+                    }
+
+                    return bytesReceived
+                }
+            }
+        }
+
+        return -1
+    }
+
+
     // Process the rest of the callback
     private func serverCallbackProcessClient(
         _ cfSocket: CFSocket,

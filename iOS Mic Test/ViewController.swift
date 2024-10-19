@@ -612,7 +612,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         var buffer = [UInt8](repeating: 0, count: 512)
-        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
+        let readResult = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
