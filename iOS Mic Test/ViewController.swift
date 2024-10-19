@@ -449,9 +449,6 @@ class NetworkVoiceTCPServer : TCPServer {
             // If this part reaches
             // It means that we should verify whether we really want to connect or not.
             G_UI_Class_connectionLabel.setStatusConnectionText("Incoming request from  \(connection.endpoint)")
-
-            // Check for handshake
-            //self.m_customHandshake(connection)
         case .failed(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection failed: \(error.localizedDescription)")
             self.cancelConnection(connection) // Ensure
