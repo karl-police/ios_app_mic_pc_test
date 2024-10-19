@@ -379,7 +379,7 @@ class NetworkVoiceTCPServer : TCPServer {
         // And the incoming request has to send this
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
-        /*incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
+        incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 512) { [weak self] data, context, isComplete, error in
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
@@ -417,61 +417,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     })
                 )
             }
-        }*/
-
-        incomingConnection.receiveMessage { [weak self] (data, context, isComplete, error) in
-            G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
-
-            if let error = error {
-                G_UI_debugTextBoxOut.text = "Error receiving message: \(error.localizedDescription)"
-                    + "\n\n"
-                    + G_UI_debugTextBoxOut.text
-                self?.cancelConnection(incomingConnection) // Ensure connection is cancelled on error
-                return
-            }
-
-            guard let data = data, isComplete else {
-                G_UI_debugTextBoxOut.text = "Incomplete data or no data received."
-                    + "\n\n"
-                    + G_UI_debugTextBoxOut.text
-                return
-            }
-
-            if data == expectedWord {
-                // We are alright!
-                // Let's send a response back
-
-                guard let response = ("Accepted").data(using: .utf8) else {
-                    G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                        + "\n\n"
-                        + G_UI_debugTextBoxOut.text
-                    return
-                }
-
-                incomingConnection.send(
-                    content: response,
-                    completion: .contentProcessed({ error in
-                        if let error = error {
-                            G_UI_debugTextBoxOut.text = "Error sending handshake back: \(error.localizedDescription)"
-                                + "\n\n"
-                                + G_UI_debugTextBoxOut.text
-
-                            self?.cancelConnection(incomingConnection) // Ensure connection is cancelled on error
-                        } else {
-                            G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
-
-                            // Accept it after sending the response
-                            self?.m_acceptIncomingConnection(incomingConnection)
-                        }
-                    })
-                )
-            } else {
-                G_UI_debugTextBoxOut.text = "Received unexpected data"
-                    + "\n\n"
-                    + G_UI_debugTextBoxOut.text
-            }
         }
-
     }
 
 
