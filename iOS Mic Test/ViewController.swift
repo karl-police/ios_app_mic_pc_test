@@ -486,6 +486,10 @@ class NetworkVoiceTCPServer : TCPServer {
         }
     }
 
+    override func OnListenerStopped() {
+        G_UI_Class_connectionLabel.setStatusConnectionText("Server stopped")
+    }
+
 
     func m_cleanUp() {
         self.activeConnection = nil

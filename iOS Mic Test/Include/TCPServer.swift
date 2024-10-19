@@ -125,6 +125,10 @@ class TCPServer {
         }
     }
 
+    func OnListenerStopped() {
+
+    }
+
 
 
     func getDump_nwParams() -> String {
@@ -235,5 +239,7 @@ class TCPServer {
             listener.cancel()
             self.listener = nil
         }
+
+        self.OnListenerStopped()
     }
 }
