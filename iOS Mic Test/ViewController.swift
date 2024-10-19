@@ -701,7 +701,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
 
     override func stopServer() {
-        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
+        G_UI_Class_connectionLabel.setStatusConnectionText("Stopping CF server...")
 
         super.stopServer()
 
@@ -921,9 +921,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     func stop() {
         // Do this I guess?
-        self.networkVoice_TCPServer.stopServer()
-
-        self.networkVoice_CF_TCPServer.stopServer()
+        if (G_cfg_b_useNW == true) {
+            // NWListener
+            self.networkVoice_TCPServer.stopServer()
+        } else {
+            // CFSocket
+            self.networkVoice_CF_TCPServer.stopServer()
+        }
     }
 }
 
