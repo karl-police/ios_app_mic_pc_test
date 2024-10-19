@@ -612,17 +612,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         var buffer = [UInt8](repeating: 0, count: 512)
-        //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-
-        var senderAddr = sockaddr_in()
-        var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
-
-        let readResult = withUnsafeMutablePointer(to: &senderAddr) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { addrPtr in
-                // Call recvfrom
-                recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0, addrPtr, &addrLen)
-            }
-        }
+        let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
@@ -661,8 +651,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
     // Whenever we accept a new client connection
     override func OnClientConnectionAccepted(
-        client_cfSocket: CFSocket,
-        addressQ: CFData?
+        client_cfSocket: CFSocket, addressQ: CFData?
     ) {
         guard let address = addressQ else { return }
 
