@@ -304,7 +304,7 @@ class CF_NetworkServer {
             }
 
             // UDP
-            case CF_NetworkProtocols.UDP: do {
+            /*case CF_NetworkProtocols.UDP: do {
                 let (ip, port) = addressAndPort(from: addressData)
 
                 if let ip = ip, let port = port {
@@ -331,7 +331,7 @@ class CF_NetworkServer {
 
                     return bytesReceived
                 }
-            }
+            }*/
         }
 
         return -1
