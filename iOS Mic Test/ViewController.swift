@@ -613,7 +613,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         var buffer = [UInt8](repeating: 0, count: 512)
         //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-        let readResult = recv(clientSocketHandle, &buffer, buffer.count, 0)
+        let readResult = recvfrom(client_NativeCFSocket, &buffer, buffer.count, 0)
 
         if (readResult > 0) {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
