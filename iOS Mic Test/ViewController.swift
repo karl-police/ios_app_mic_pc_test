@@ -352,7 +352,24 @@ class NetworkVoiceTCPServer : TCPServer {
 
 
         // Test
-        self.m_customHandshake(newConnection)
+        //self.m_customHandshake(newConnection)
+        self.startReceive(on: newConnection)
+    }
+
+    override func startReceive(on connection: NWConnection) {
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 2048) { content, _, isComplete, error in
+            if let content {
+                G_UI_Class_connectionLabel.setStatusConnectionText("connection did receive, count: \(content.count)")
+            }
+            if isComplete {
+                G_UI_Class_connectionLabel.setStatusConnectionText("connection did receive, EOF")
+            }
+            if let error {
+                G_UI_Class_connectionLabel.setStatusConnectionText("connection did fail, error: \(error)")
+                return
+            }
+            self.startReceive(on: connection)
+        }
     }
 
     override func handleConnection(_ connection: NWConnection) {
@@ -508,7 +525,6 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting UDP Server...")
         } else {
             // TCP
-            self.cfg_nwParameters = NWParameters.tcp // Test
             G_UI_Class_connectionLabel.setStatusConnectionText("Starting TCP Server...")
         }
 

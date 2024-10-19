@@ -99,6 +99,23 @@ class TCPServer {
         }
     }
 
+    func startReceive(on connection: NWConnection) {
+        connection.receive(minimumIncompleteLength: 1, maximumLength: 2048) { content, _, isComplete, error in
+            if let content {
+                print("connection did receive, count: \(content.count)")
+            }
+            if isComplete {
+                print("connection did receive, EOF")
+            }
+            if let error {
+                print("connection did fail, error: \(error)")
+                return
+            }
+            self.startReceive(on: connection)
+        }
+    }
+
+
 
     // Use this instead to close connections...
     func cancelConnection(_ connection: NWConnection) {
