@@ -332,6 +332,9 @@ class CF_NetworkServer {
                     return bytesReceived
                 }
             }*/
+
+            default:
+                break
         }
 
         return -1
