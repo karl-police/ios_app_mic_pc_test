@@ -277,7 +277,7 @@ class CF_NetworkServer {
         let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
-        switch self.ServerConfig.networkProtocol {
+        /*switch self.ServerConfig.networkProtocol {
             case CF_NetworkProtocols.TCP: do {
                 referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
             }
@@ -286,7 +286,9 @@ class CF_NetworkServer {
             case CF_NetworkProtocols.UDP: do {
                 
             }
-        }
+        }*/
+
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
     }
 
 
