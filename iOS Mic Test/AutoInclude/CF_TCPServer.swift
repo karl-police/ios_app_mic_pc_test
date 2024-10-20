@@ -304,34 +304,21 @@ class CF_NetworkServer {
             }
 
             // UDP
-            /*case CF_NetworkProtocols.UDP: do {
-                let (ip, port) = addressAndPort(from: addressData)
+            case CF_NetworkProtocols.UDP: do {
+                guard let cfSocket = self.serverSocket else { return -1 }
+                let socketFD = CFSocketGetNative(cfSocket)
 
-                if let ip = ip, let port = port {
-                    var addr = sockaddr_in()
-                    addr.sin_family = sa_family_t(AF_INET)
-                    addr.sin_port = in_port_t(port).bigEndian
-                    addr.sin_addr = in_addr(s_addr: inet_addr(ip))
+                var addr = sockaddr_in()
+                var addrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
 
-                    var senderAddr = sockaddr_in()
-                    var senderAddrLen = socklen_t(MemoryLayout<sockaddr_in>.size)
-                    
-                    let socketFD = socket(AF_INET, SOCK_DGRAM, 0)
-                    let bindResult = withUnsafePointer(to: addr) {
-                        $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPointer in
-                            bind(socketFD, sockaddrPointer, socklen_t(MemoryLayout<sockaddr_in>.size))
-                        }
+                let receivedBytes = withUnsafeMutablePointer(to: &addr) { addrPointer in
+                    addrPointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockaddrPointer in
+                        return recvfrom(socketFD, &buffer, buffer.count, 0, sockaddrPointer, &addrLen)
                     }
-
-                    let bytesReceived = withUnsafeMutablePointer(to: &senderAddr) { addrPointer in
-                        addrPointer.withMemoryRebound(to: sockaddr.self, capacity: 1) { sockAddrPointer in
-                            recvfrom(socketFD, &buffer, buffer.count, 0, sockAddrPointer, &senderAddrLen)
-                        }
-                    }
-
-                    return bytesReceived
                 }
-            }*/
+
+                return receivedBytes
+            }
 
             default:
                 break
@@ -341,11 +328,17 @@ class CF_NetworkServer {
     }
 
 
+    // For UDP
+    func OnServerDataReceived(_ data: Data, from addressData: CFData) {
+        
+    }
+
+
     // Process the rest of the callback
     private func serverCallbackProcessClient(
         _ cfSocket: CFSocket,
         _ callbackType: CFSocketCallBackType,
-        _ address: CFData?,
+        _ addressQ: CFData?,
         _ dataPointer:  UnsafeRawPointer?,
         _ infoPointer: UnsafeRawPointer,
 
@@ -370,7 +363,7 @@ class CF_NetworkServer {
         }
     
 
-        let b_shouldAllowConnection = referencedSelf.internal_shouldLetThroughConnection(client_cfSocket, address)
+        let b_shouldAllowConnection = referencedSelf.internal_shouldLetThroughConnection(client_cfSocket, addressQ)
         if (b_shouldAllowConnection == false) {
             return
         }
@@ -382,18 +375,29 @@ class CF_NetworkServer {
         let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
         CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
-        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
+        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: addressQ)
 
-        /*switch self.ServerConfig.networkProtocol {
-            case CF_NetworkProtocols.TCP: do {
-                referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
-            }
+        switch self.ServerConfig.networkProtocol {
+            /*case CF_NetworkProtocols.TCP: do {
+                
+            }*/
 
             // UDP
             case CF_NetworkProtocols.UDP: do {
-                referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: address)
+                // If Data was received
+                if (callbackType == .dataCallBack) {
+                    guard let address = addressQ else { return }
+
+                    if let dataPointer = dataPointer {
+                        let data = Unmanaged<CFData>.fromOpaque(dataPointer).takeUnretainedValue() as Data
+                        referencedSelf.OnServerDataReceived(data, from: address)
+                    }
+                }
             }
-        }*/
+
+            default:
+                break
+        }
     }
 
 
