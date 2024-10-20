@@ -333,7 +333,7 @@ var G_cfg_b_useNW = false // CFSocket by default
 ***/
 protocol NetworkVoiceDelegate: AnyObject {
     func handleAcceptedConnection(_ connection: NWConnection)
-    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket)
+    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData)
 }
 
 class NetworkVoiceTCPServer : TCPServer {
@@ -612,8 +612,6 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         let expectedWord = ("iOS_Mic_Test").data(using: .utf8)
 
         var buffer = [UInt8](repeating: 0, count: 512)
-        //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-
         var receivedDataQ: Data? = nil
 
         switch self.ServerConfig.networkProtocol {
@@ -640,7 +638,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
                 guard let response = ("Accepted").data(using: .utf8) else { return }
                 
                 //let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
-                let sendResult = sendCFData(addressData: addressData, response as CFData, toCFSocket: incomingCFSocket)
+                let sendResult = self.SendCFData(response as CFData, addressData: addressData, toCFSocket: incomingCFSocket)
                 
                 if (sendResult != .success) {
                     G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
@@ -657,7 +655,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
                     // We can now do the streaming thing
                     // Trigger this
-                    self.delegate?.handleAcceptedCFSocket(incomingCFSocket)
+                    self.delegate?.handleAcceptedCFSocket(incomingCFSocket, addressData)
                 }
             }
         }
@@ -761,7 +759,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
     // For CF
-    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket) {
+    func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioFormat = self.audioEngineManager.audioFormat else { return }
@@ -787,7 +785,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
-            self.transmitAudioCF(buffer: buffer, client_cfSocket)
+            self.transmitAudioCF(buffer: buffer, client_cfSocket, addressData)
         }
 
         // Prepare
@@ -798,7 +796,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             try audioEngine.start()
             
             G_UI_Class_connectionLabel.setStatusConnectionText(
-                "Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true))"
+                //"Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true))"
+                "Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFDataAddress(addressData, b_includePort: true))"
             )
         } catch {
             G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
@@ -806,7 +805,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
-    func transmitAudioCF(buffer: AVAudioPCMBuffer, _ client_cfSocket: CFSocket) {
+    func transmitAudioCF(buffer: AVAudioPCMBuffer, _ client_cfSocket: CFSocket, _ addressData: CFData) {
         let audioData = buffer.audioBufferList.pointee.mBuffers
         let dataSize = audioData.mDataByteSize
         
@@ -828,7 +827,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
         // Send audio data
-        let sendResult = CFSocketSendData(client_cfSocket, nil, cfDataToSend, 0)
+        //let sendResult = CFSocketSendData(client_cfSocket, nil, cfDataToSend, 0)
+        let sendResult = self.networkVoice_CF_TCPServer.SendCFData(cfDataToSend, addressData: addressData, toCFSocket: client_cfSocket)
 
         if (sendResult != .success) {
             G_UI_debugTextBoxOut.text = "Error sending data"

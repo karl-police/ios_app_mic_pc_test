@@ -240,7 +240,7 @@ class CF_NetworkServer {
 
 
     // Apparently to send stuff
-    func sendCFData(addressData: CFData, _ data: CFData, toCFSocket: CFSocket? = nil) -> CFSocketError {
+    func SendCFData(_ data: CFData, addressData: CFData, toCFSocket: CFSocket? = nil) -> CFSocketError {
         switch self.ServerConfig.networkProtocol {
             // TCP
             case CF_NetworkProtocols.TCP: do {
