@@ -613,12 +613,25 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         var buffer = [UInt8](repeating: 0, count: 512)
         //let readResult = recv(client_NativeCFSocket, &buffer, buffer.count, 0)
-        let readResult = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
 
-        if (readResult > 0) {
+        var receivedDataQ: Data? = nil
+
+        switch self.ServerConfig.networkProtocol {
+            case CF_NetworkProtocols.TCP: do {
+                let readResult = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
+
+                if (readResult > 0) {
+                    receivedDataQ = Data(buffer[0..<readResult])
+                }
+            }
+
+            case CF_NetworkProtocols.UDP: do {
+                receivedDataQ = self.WaitForData()
+            } 
+        }
+
+        if let receivedData = receivedDataQ {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
-
-            let receivedData = Data(buffer[0..<readResult])
             
             if (receivedData == expectedWord) {
                 timeoutTimer.invalidate() // Erase the timeout
