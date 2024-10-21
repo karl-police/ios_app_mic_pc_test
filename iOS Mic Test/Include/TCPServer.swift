@@ -206,24 +206,21 @@ class TCPServer {
         do {
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
-            withExtendedLifetime(self.listener) {
-
-                self.listener?.newConnectionHandler = { newConnection in 
-                    self.handleListenerNewConnection(newConnection)
-                }
-
-                self.listener?.stateUpdateHandler = { state in
-                    guard let listener = self.listener else {
-                        //fatalError("There's no Listener") // if nil
-                        return
-                    }
-
-                    self.OnListenerStateUpdated(listener: listener, state: state)
-                }
-
-                // Start listening
-                self.listener?.start(queue: .main)
+            self.listener?.newConnectionHandler = { newConnection in 
+                self.handleListenerNewConnection(newConnection)
             }
+
+            self.listener?.stateUpdateHandler = { state in
+                guard let listener = self.listener else {
+                    //fatalError("There's no Listener") // if nil
+                    return
+                }
+
+                self.OnListenerStateUpdated(listener: listener, state: state)
+            }
+
+            // Start listening
+            self.listener?.start(queue: .main)
         } catch {
             throw error
         }
@@ -237,9 +234,10 @@ class TCPServer {
         self.connectionsArray.removeAll() // Ensure removal of all
 
         if let listener = self.listener {
+            listener.cancel()
+
             listener.stateUpdateHandler = nil
             listener.newConnectionHandler = nil
-            listener.cancel()
             self.listener = nil
         }
 
