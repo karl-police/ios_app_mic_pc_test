@@ -409,9 +409,11 @@ class NetworkVoiceTCPServer : TCPServer {
                     content: response,
                     completion: .contentProcessed({ error in 
                         if let error = error {
-                            G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
-                                + "\n\n"
-                                + G_UI_debugTextBoxOut.text
+                            DispatchQueue.main.async {
+                                G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                                    + "\n\n"
+                                    + G_UI_debugTextBoxOut.text
+                            }
                             
                             self?.cancelConnection(incomingConnection) // Ensure
                         } else {
