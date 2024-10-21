@@ -314,6 +314,12 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
+struct struct_NetworkVoice_ConfigurationData {
+    let sampleRate: Double
+    let bufferSize: UInt32
+}
+
+
 
 var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
 var G_cfg_b_useNW = false // CFSocket by default
@@ -334,6 +340,8 @@ var G_cfg_b_useNW = false // CFSocket by default
 protocol NetworkVoiceDelegate: AnyObject {
     func handleAcceptedConnection(_ connection: NWConnection)
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData)
+
+    func handleReceivedConfiguration(_ data: Data)
 }
 
 class NetworkVoiceTCPServer : TCPServer {
@@ -388,43 +396,51 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
 
             if (data == expectedWord) {
-                timeoutTimer.invalidate() // Erase the timeout
+                // Wait for configuration
+                incomingConnection.receive(minimumIncompleteLength: 1, maximumLength: 1024) { [weak self] dataQ, context, isComplete, error in
+                    timeoutTimer.invalidate() // Erase the timeout
 
-                // We are alright!
-                // Let's tell that back
-                // Just note that... seeing how this works
-                // Perhaps whatever you try to connect, whether this is a safe way
-                // To check that it's the actual app is another question
+                    // Setup data
+                    guard let data = dataQ else { return }
+                    self?.delegate?.handleReceivedConfiguration(data)
 
-                guard let response = ("Accepted").data(using: .utf8) else {
-                    DispatchQueue.main.async {
-                        G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                            + "\n\n"
-                            + G_UI_debugTextBoxOut.text
-                    }
-                    return
-                }
 
-                incomingConnection.send(
-                    content: response,
-                    completion: .contentProcessed({ error in 
-                        if let error = error {
-                            DispatchQueue.main.async {
-                                G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
-                                    + "\n\n"
-                                    + G_UI_debugTextBoxOut.text
-                            }
-                            
-                            self?.cancelConnection(incomingConnection) // Ensure
-                        } else {
-                            G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
+                    // We are alright!
+                    // Let's tell that back
+                    // Just note that... seeing how this works
+                    // Perhaps whatever you try to connect, whether this is a safe way
+                    // To check that it's the actual app is another question
 
-                            // Accept it
-                            // After we sent
-                            self?.m_acceptIncomingConnection(incomingConnection)
+                    guard let response = ("Accepted").data(using: .utf8) else {
+                        DispatchQueue.main.async {
+                            G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                                + "\n\n"
+                                + G_UI_debugTextBoxOut.text
                         }
-                    })
-                )
+                        return
+                    }
+
+                    incomingConnection.send(
+                        content: response,
+                        completion: .contentProcessed({ error in 
+                            if let error = error {
+                                DispatchQueue.main.async {
+                                    G_UI_debugTextBoxOut.text = "Error Sending Handshake Back"
+                                        + "\n\n"
+                                        + G_UI_debugTextBoxOut.text
+                                }
+                                
+                                self?.cancelConnection(incomingConnection) // Ensure
+                            } else {
+                                G_UI_Class_connectionLabel.setStatusConnectionText("Response sent to \(incomingConnection.endpoint)")
+
+                                // Accept it
+                                // After we sent
+                                self?.m_acceptIncomingConnection(incomingConnection)
+                            }
+                        })
+                    )
+                }
             }
         }
     }
@@ -615,9 +631,9 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         var buffer = [UInt8](repeating: 0, count: 512)
         var receivedDataQ: Data? = nil
 
-        switch self.ServerConfig.networkProtocol {
+        /*switch self.ServerConfig.networkProtocol {
             case CF_NetworkProtocols.TCP: do {
-                let readResult = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
+                let readResult = self.receiveDataWithBuffer(&buffer, addressData: addressData, client_NativeCFSocket)
 
                 if (readResult > 0) {
                     receivedDataQ = Data(buffer[0..<readResult])
@@ -627,7 +643,10 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
             case CF_NetworkProtocols.UDP: do {
                 receivedDataQ = self.WaitForData()
             } 
-        }
+        }*/
+
+        // Receive data either for TCP or UDP
+        receivedDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
 
         if let receivedData = receivedDataQ {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
@@ -741,10 +760,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_CF_TCPServer: NetworkVoice_CF_NetworkServer!
 
     var DEFAULT_TCP_PORT: UInt16 = 8125
+
+    var audioManager: AudioManager!
     var audioEngineManager: AudioEngineManager!
 
 
-    init(withAudioEngineManager: AudioEngineManager) {
+    init(withAudioEngineManager: AudioEngineManager, withAudioManager: AudioManager) {
+        self.audioManager = withAudioManager
         self.audioEngineManager = withAudioEngineManager
 
         self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
@@ -759,6 +781,23 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
+    func getAudioConnectionDebugText(
+        audioFormat: AVAudioFormat,
+        audioSettings: AudioSettingsClass,
+        streamDescription: AudioStreamBasicDescription
+    ) -> String {
+        var debugText = ""
+        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
+        debugText += "Channels: \(audioFormat.channelCount)\n"
+        debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
+        debugText += "Format ID: \(streamDescription.mFormatID)\n"
+        debugText += "\n"
+        debugText += "Buffer Size: \(audioSettings.bufferSize)\n"
+
+        return debugText
+    }
+
+
     // For CF
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
@@ -769,25 +808,23 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        let streamDescription = audioFormat.streamDescription.pointee
-
-        var debugText = ""
-        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
-        debugText += "Channels: \(audioFormat.channelCount)\n"
-        debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
-        debugText += "Format ID: \(streamDescription.mFormatID)\n"
-        G_UI_debugTextBoxOut.text = debugText
-            + "\n\n" + G_UI_debugTextBoxOut.text
-
-
-        let clientNativeHandle = CFSocketGetNative(client_cfSocket)
-
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket, addressData)
         }
+
+        let streamDescription = audioFormat.streamDescription.pointee
+
+        var debugText = self.getAudioConnectionDebugText(
+            audioFormat: audioFormat,
+            audioSettings: audioSettings,
+            streamDescription: streamDescription
+        )
+        G_UI_debugTextBoxOut.text = debugText
+            + "\n\n" + G_UI_debugTextBoxOut.text
+
 
         // Prepare
         audioEngine.prepare()
@@ -863,23 +900,24 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        let streamDescription = audioFormat.streamDescription.pointee
-
-        var debugText = ""
-        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
-        debugText += "Channels: \(audioFormat.channelCount)\n"
-        debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
-        debugText += "Format ID: \(streamDescription.mFormatID)\n"
-        G_UI_debugTextBoxOut.text = debugText
-            + "\n\n" + G_UI_debugTextBoxOut.text
-
-
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
+
+
+        let streamDescription = audioFormat.streamDescription.pointee
+
+        var debugText = self.getAudioConnectionDebugText(
+            audioFormat: audioFormat,
+            audioSettings: audioSettings,
+            streamDescription: streamDescription
+        )
+        G_UI_debugTextBoxOut.text = debugText
+            + "\n\n" + G_UI_debugTextBoxOut.text
+
 
         audioEngine.prepare()
         
@@ -925,7 +963,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                         // Try to disconnect, if that's the case
                         if (connection.state == .cancelled) {
                             do {
-                                try self.stop_VoIP()
+                                try self.audioManager.stop_VoIP()
                             } catch {
                                 G_UI_debugTextBoxOut.text = "Error: \(error)"
                                     + "\n\n" + G_UI_debugTextBoxOut.text
@@ -940,6 +978,56 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             })
         )
     }
+
+
+    // For Voice Config
+    func handleReceivedConfiguration(_ data: Data) {
+        var receivedConfigDataQ: struct_NetworkVoice_ConfigurationData? = nil
+
+        data.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) in
+            guard let baseAddress = pointer.baseAddress else {
+                DispatchQueue.main.async {
+                    G_UI_debugTextBoxOut.text = "baseAddress is nil"
+                        + "\n\n" + G_UI_debugTextBoxOut.text
+                }
+                return
+            }
+            let typedPointer  = baseAddress.assumingMemoryBound(to: struct_NetworkVoice_ConfigurationData.self)
+            let value = typedPointer.pointee // Read in one go?
+            
+            receivedConfigDataQ = value
+        }
+
+
+        guard var receivedConfigData = receivedConfigDataQ else {
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Error with config: \(receivedConfigDataQ)"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
+            return
+        }
+
+        DispatchQueue.main.async {
+            G_UI_debugTextBoxOut.text = "Received config \(receivedConfigData)"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+
+            G_UI_debugTextBoxOut.text = "App Restart may be required to reset config when not using VoIP"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+        }
+
+        
+        // Configure Audio things
+        let session = AVAudioSession.sharedInstance()
+
+        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+
+        // Change Values
+        audioSettings.sampleRate = receivedConfigData.sampleRate
+        audioSettings.bufferSize = receivedConfigData.bufferSize
+
+        
+    }
+
 
 
     // It just switches
@@ -1071,7 +1159,7 @@ class AudioManager {
     // Init function
     init() {
         self.audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
-        self.networkVoiceManager = NetworkVoiceManager(withAudioEngineManager: self.audioEngineManager)
+        self.networkVoiceManager = NetworkVoiceManager(withAudioEngineManager: self.audioEngineManager, withAudioManager: self)
     }
 
 
