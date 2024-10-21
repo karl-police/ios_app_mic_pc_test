@@ -356,8 +356,8 @@ class NetworkVoiceTCPServer : TCPServer {
     }
 
     override func handleConnection(_ connection: NWConnection) {
-        connection.stateUpdateHandler = { [weak self] state in
-            self?.connectionStateHandler(connection: connection, state: state)
+        connection.stateUpdateHandler = { state in
+            self.connectionStateHandler(connection: connection, state: state)
         }
 
         connection.start(queue: .main)
@@ -811,8 +811,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         
         // Check if data is available
         guard let dataPointer = audioData.mData else {
-            G_UI_debugTextBoxOut.text = "Problem"
-                + "\n\n" + G_UI_debugTextBoxOut.text
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Problem"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
             return
         }
 
@@ -821,8 +823,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         let cfData = CFDataCreate(kCFAllocatorDefault, audioBytes.withUnsafeBytes { $0.baseAddress!.assumingMemoryBound(to: UInt8.self) }, audioBytes.count)
         
         guard let cfDataToSend = cfData else {
-            G_UI_debugTextBoxOut.text = "Problem 2"
-                + "\n\n" + G_UI_debugTextBoxOut.text
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Problem 2"
+                    + "\n\n" + G_UI_debugTextBoxOut.text   
+            }
             return
         }
 
@@ -831,8 +835,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         let sendResult = self.networkVoice_CF_TCPServer.SendCFData(cfDataToSend, addressData: addressData, toCFSocket: client_cfSocket)
 
         if (sendResult != .success) {
-            G_UI_debugTextBoxOut.text = "Error sending data"
-                + "\n\n" + G_UI_debugTextBoxOut.text
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Error sending data"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
         }
     }
 

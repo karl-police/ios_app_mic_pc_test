@@ -88,14 +88,14 @@ class TCPServer {
 
     func connectionStateHandler(connection: NWConnection, state: NWConnection.State) {
         switch state {
-        case .ready:
-            print("Connection established with \(connection.endpoint)")
-        case .failed(let nwError):
-            print("Connection failed: \(nwError)")
-        case .cancelled:
-            print("Connection cancelled with \(connection.endpoint)")
-        default:
-            break
+            case .ready:
+                print("Connection established with \(connection.endpoint)")
+            case .failed(let nwError):
+                print("Connection failed: \(nwError)")
+            case .cancelled:
+                print("Connection cancelled with \(connection.endpoint)")
+            default:
+                break
         }
     }
 
