@@ -463,6 +463,9 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled with \(connection.endpoint)")
             self.cancelConnection(connection) // Ensure
 
+            // when we are actively in a voip
+            // TODO: It would be good to stop the stream
+
         case .waiting(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
         case .preparing:
