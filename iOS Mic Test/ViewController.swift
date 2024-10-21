@@ -876,6 +876,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             + "\n\n" + G_UI_debugTextBoxOut.text
 
 
+        inputNode.reset() // TESTING
+
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
