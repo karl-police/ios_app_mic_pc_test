@@ -1154,6 +1154,7 @@ class AudioManager {
             // some allocated nodes that we need to ensure
             // exist
             self.audioEngineManager.setupInit()
+            self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
