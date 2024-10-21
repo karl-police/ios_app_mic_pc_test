@@ -1237,16 +1237,12 @@ class UI_NetworkStatus_SingletonClass {
             self.statusInfoStruct.localIP = "N/A"
         }
 
-        DispatchQueue.main.async {
-            self.updateStatusConnectionLabel()
-        }
+        self.updateStatusConnectionLabel()
     }
 
     func setStatusConnectionText(_ text: String) {
-        DispatchQueue.main.async {
-            statusInfoStruct.connectionStatusText = text
-            self.updateStatusConnectionLabel() // Update
-        }
+        statusInfoStruct.connectionStatusText = text
+        self.updateStatusConnectionLabel() // Update
     }
 }
 
