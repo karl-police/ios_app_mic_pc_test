@@ -918,12 +918,14 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         connection.send(
             content: audioBytes,
             completion: .contentProcessed({ error in
-                if let error = error {
-                    DispatchQueue.main.async {
+            
+                DispatchQueue.main.async {
+                    if let error = error {
                         G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
                             + "\n\n" + G_UI_debugTextBoxOut.text
                     }
                 }
+
             })
         )
     }
