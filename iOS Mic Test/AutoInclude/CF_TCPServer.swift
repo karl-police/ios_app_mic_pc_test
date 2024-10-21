@@ -265,13 +265,12 @@ class CF_NetworkServer {
     }
 
 
-    func receiveData(_ buffer: inout [UInt8], addressData: CFData, _ fromCFSocket_Handle: Int32 = 0) -> Int {
+    func receiveDataWithBuffer(_ buffer: inout [UInt8], addressData: CFData, _ fromCFSocket_Handle: Int32 = 0) -> Int {
         switch self.ServerConfig.networkProtocol {
             // TCP
             case CF_NetworkProtocols.TCP: do {
                 return recv(fromCFSocket_Handle, &buffer, buffer.count, 0)
             }
-
             // UDP
             /*case CF_NetworkProtocols.UDP: do {
                 
@@ -284,9 +283,31 @@ class CF_NetworkServer {
         return -1
     }
 
+    func receiveData(_ buffer: inout [UInt8], addressData: CFData, _ fromCFSocket_Handle: Int32 = 0) -> Data? {
+        var receivedDataQ: Data? = nil
+
+        switch self.ServerConfig.networkProtocol {
+            case CF_NetworkProtocols.TCP: do {
+                let readResult = self.receiveDataWithBuffer(&buffer, addressData: addressData, fromCFSocket_Handle)
+
+                if (readResult > 0) {
+                    receivedDataQ = Data(buffer[0..<readResult])
+                }
+            }
+
+            case CF_NetworkProtocols.UDP: do {
+                receivedDataQ = self.WaitForData()
+            } 
+        }
+
+        return receivedDataQ
+    }
+
 
     // For UDP
     func OnServerDataReceived(_ data: Data, from addressData: CFData) {
+        // TODO: A check if from right IP maybe
+
         self.receivedUDPData = data
         semaphore.signal() // Signal
     }
