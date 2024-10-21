@@ -461,9 +461,6 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection cancelled with \(connection.endpoint)")
             self.cancelConnection(connection) // Ensure
 
-            // when we are actively in a voip
-            // TODO: It would be good to stop the stream
-
         case .waiting(let error):
             G_UI_Class_connectionLabel.setStatusConnectionText("Connection waiting: \(error.localizedDescription)")
         case .preparing:
@@ -924,6 +921,19 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                     if let error = error {
                         G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
                             + "\n\n" + G_UI_debugTextBoxOut.text
+                        
+                        // Test
+                        if (connection.state == .cancelled) {
+                            do {
+                                try self.stop_VoIP()
+                            } catch {
+                                G_UI_debugTextBoxOut.text = "Error: \(error)"
+                                    + "\n\n" + G_UI_debugTextBoxOut.text
+                            }
+
+                            G_UI_debugTextBoxOut.text = "Force Stopped Network Voice"
+                                + "\n\n" + G_UI_debugTextBoxOut.text
+                        }
                     }
                 }
 
@@ -1154,7 +1164,6 @@ class AudioManager {
             // some allocated nodes that we need to ensure
             // exist
             self.audioEngineManager.setupInit()
-            self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
