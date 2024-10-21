@@ -338,8 +338,9 @@ protocol NetworkVoiceDelegate: AnyObject {
 
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? = nil // Active Connection
-
+    
     weak var delegate: NetworkVoiceDelegate?
+
 
     override func handleListenerNewConnection(_ newConnection: NWConnection) {
         if (activeConnection != nil) {
