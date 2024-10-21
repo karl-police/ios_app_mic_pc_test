@@ -1153,7 +1153,7 @@ class AudioManager {
             // Call this because .stop() used with .preare() may be removing
             // some allocated nodes that we need to ensure
             // exist
-            audioEngineManager.setupInit()
+            self.audioEngineManager.setupInit()
 
             // Calling this requires setupInit to be called again when stopped
             // Hence why the start function has setupInit again
