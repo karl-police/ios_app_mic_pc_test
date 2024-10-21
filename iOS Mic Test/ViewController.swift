@@ -755,6 +755,12 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: 8125)
 
         self.networkVoice_CF_TCPServer.delegate = self
+
+
+        // Test
+        withExtendedLifetime(networkVoice_CF_TCPServer) {
+            dispatchMain()
+        }
     }
 
 
