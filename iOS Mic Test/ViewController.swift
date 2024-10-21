@@ -922,7 +922,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                         G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
                             + "\n\n" + G_UI_debugTextBoxOut.text
                         
-                        // Test
+                        // Try to disconnect, if that's the case
                         if (connection.state == .cancelled) {
                             do {
                                 try self.stop_VoIP()
