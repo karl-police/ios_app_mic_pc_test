@@ -998,6 +998,8 @@ class AudioEngineManager {
     init(withAudioSettings: AudioSettingsClass) {
         self.audioEngine = AVAudioEngine()
         self.audioSettings = withAudioSettings
+
+        self.audioFormat = self.audioSettings.getForFormat()
     }
 
     // It's important to call this function before starting the Engine
