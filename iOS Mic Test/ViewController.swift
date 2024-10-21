@@ -798,12 +798,16 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         do {
             try audioEngine.start()
             
-            G_UI_Class_connectionLabel.setStatusConnectionText(
-                //"Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true))"
-                "Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFDataAddress(addressData, b_includePort: true))"
-            )
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText(
+                    //"Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFSocket(client_cfSocket, b_includePort: true))"
+                    "Streaming for \(CF_SocketNetworkUtils.GetIP_FromCFDataAddress(addressData, b_includePort: true))"
+                )
+            }
         } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -884,9 +888,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         do {
             try audioEngine.start()
             
-            G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Streaming for \(connection.endpoint)")
+            }
         } catch {
-            G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
+            }
         }
     }
 
@@ -896,8 +904,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         
         // Check if data is available
         guard let dataPointer = audioData.mData else {
-            G_UI_debugTextBoxOut.text = "Problem"
-                + "\n\n" + G_UI_debugTextBoxOut.text
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Problem"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
             return
         }
 
@@ -909,8 +919,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             content: audioBytes,
             completion: .contentProcessed({ error in
                 if let error = error {
-                    G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
-                        + "\n\n" + G_UI_debugTextBoxOut.text
+                    DispatchQueue.main.async {
+                        G_UI_debugTextBoxOut.text = "Error sending audio data: \(error)"
+                            + "\n\n" + G_UI_debugTextBoxOut.text
+                    }
                 }
             })
         )
