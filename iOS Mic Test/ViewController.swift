@@ -1674,7 +1674,9 @@ class ViewController: UIViewController {
         do {
             try self.audioManager.stop_VoIP()
         } catch {
-            self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
+            DispatchQueue.main.async {
+                self.debugTextBoxOut.text = "Error stopping: \(error.localizedDescription)"
+            }
         }
 
         btnMicToggle.setTitle("Start Mic", for: .normal)
