@@ -206,21 +206,24 @@ class TCPServer {
         do {
             self.listener = try NWListener(using: self.cfg_nwParameters, on: self.port)
 
-            self.listener?.newConnectionHandler = { newConnection in 
-                self.handleListenerNewConnection(newConnection)
-            }
+            withExtendedLifetime(self.listener) {
 
-            self.listener?.stateUpdateHandler = { state in
-                guard let listener = self.listener else {
-                    //fatalError("There's no Listener") // if nil
-                    return
+                self.listener?.newConnectionHandler = { newConnection in 
+                    self.handleListenerNewConnection(newConnection)
                 }
 
-                self.OnListenerStateUpdated(listener: listener, state: state)
-            }
+                self.listener?.stateUpdateHandler = { state in
+                    guard let listener = self.listener else {
+                        //fatalError("There's no Listener") // if nil
+                        return
+                    }
 
-            // Start listening
-            self.listener?.start(queue: .main)
+                    self.OnListenerStateUpdated(listener: listener, state: state)
+                }
+
+                // Start listening
+                self.listener?.start(queue: .main)
+            }
         } catch {
             throw error
         }
