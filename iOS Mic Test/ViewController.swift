@@ -337,7 +337,7 @@ protocol NetworkVoiceDelegate: AnyObject {
 }
 
 class NetworkVoiceTCPServer : TCPServer {
-    var activeConnection: NWConnection? // Active Connection
+    var activeConnection: NWConnection? = nil // Active Connection
 
     weak var delegate: NetworkVoiceDelegate?
 
