@@ -397,9 +397,11 @@ class NetworkVoiceTCPServer : TCPServer {
                 // To check that it's the actual app is another question
 
                 guard let response = ("Accepted").data(using: .utf8) else {
-                    G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                        + "\n\n"
-                        + G_UI_debugTextBoxOut.text
+                    DispatchQueue.main.async {
+                        G_UI_debugTextBoxOut.text = "Error, something went wrong"
+                            + "\n\n"
+                            + G_UI_debugTextBoxOut.text
+                    }
                     return
                 }
 
