@@ -840,6 +840,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         if (sendResult != .success) {
             DispatchQueue.main.async {
                 G_UI_debugTextBoxOut.text = "Error sending data"
+                    + "\n\(addressData)"
                     + "\n\n" + G_UI_debugTextBoxOut.text
             }
         }
