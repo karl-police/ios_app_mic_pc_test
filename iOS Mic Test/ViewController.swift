@@ -783,13 +783,14 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
     func getAudioConnectionDebugText(
-        audioFormat: AVAudioFormat,
-        audioSettings: AudioSettingsClass,
-        streamDescription: AudioStreamBasicDescription
+        input_audioFormat: AVAudioFormat,
+        audioSettings: AudioSettingsClass
     ) -> String {
+        let streamDescription = input_audioFormat.streamDescription.pointee
+
         var debugText = ""
-        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
-        debugText += "Channels: \(audioFormat.channelCount)\n"
+        debugText += "Sample Rate: \(input_audioFormat.sampleRate) Hz\n"
+        debugText += "Channels: \(input_audioFormat.channelCount)\n"
         debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         debugText += "\n"
@@ -817,12 +818,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             self.transmitAudioCF(buffer: buffer, client_cfSocket, addressData)
         }
 
-        let streamDescription = input_audioFormat.streamDescription.pointee
 
         var debugText = self.getAudioConnectionDebugText(
-            audioFormat: input_audioFormat,
-            audioSettings: audioSettings,
-            streamDescription: streamDescription
+            input_audioFormat: input_audioFormat,
+            audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
@@ -903,7 +902,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        inputNode.installTap(
+        /*inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
@@ -911,12 +910,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
 
-        let streamDescription = input_audioFormat.streamDescription.pointee
-
         var debugText = self.getAudioConnectionDebugText(
-            audioFormat: input_audioFormat,
-            audioSettings: audioSettings,
-            streamDescription: streamDescription
+            input_audioFormat: input_audioFormat,
+            audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
@@ -934,7 +930,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
             }
-        }
+        }*/
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
