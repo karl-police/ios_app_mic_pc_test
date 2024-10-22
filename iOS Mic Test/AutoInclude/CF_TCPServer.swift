@@ -312,8 +312,14 @@ class CF_NetworkServer {
         semaphore.signal() // Signal
     }
     func WaitForData() -> Data? {
-        semaphore.wait()
-        return self.receivedUDPData
+        if (self.receivedUDPData == nil) {
+            semaphore.wait()
+        }
+
+        var copyData = self.receivedUDPData
+        self.receivedUDPData = nil
+
+        return copyData
     }
 
 

@@ -233,15 +233,17 @@ class TCPServer {
 
         self.connectionsArray.removeAll() // Ensure removal of all
 
-        if let listener = self.listener {
-            listener.cancel()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            if let listener = self.listener {
+                listener.cancel()
 
-            listener.stateUpdateHandler = nil
-            listener.newConnectionHandler = nil
-            self.listener = nil
+                listener.stateUpdateHandler = nil
+                listener.newConnectionHandler = nil
+                self.listener = nil
+            }
+
+            self.OnListenerStopped()
         }
-
-        self.OnListenerStopped()
     }
 
     func stopServerTEST(stopCompleted: @escaping () -> Void) {
