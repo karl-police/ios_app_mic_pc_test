@@ -803,8 +803,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
-        guard let input_audioFormat = self.audioEngineManager.input_audioFormat else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+
+        let input_audioFormat = inputNode.inputFormat(forBus: 0)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
@@ -898,6 +899,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
+
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
@@ -1059,7 +1061,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             G_UI_debugTextBoxOut.text = "\(self)"
                 + "\n\n" + G_UI_debugTextBoxOut.text
                 + "\n\n" + "\(self.audioEngineManager.audioEngine)"
-                + "\n\n" + "\(self.audioEngineManager.input_audioFormat)"
                 + "\n\n" + "\(self.audioEngineManager.audioSettings)"
                 + "\n\n" + "\(self.audioEngineManager.audioEngine.inputNode)"
                 + "\n\n" + "\(self.audioEngineManager.audioEngine.outputNode)"
@@ -1088,7 +1089,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
-    var input_audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
     var audioFile: AVAudioFile?
@@ -1105,7 +1105,6 @@ class AudioEngineManager {
     // Or anything else, e.g. installTap
     func setupInit() {
         self.inputNode = audioEngine.inputNode
-        self.input_audioFormat = inputNode.inputFormat(forBus: 0)
     }
 
 
@@ -1117,7 +1116,9 @@ class AudioEngineManager {
         do {
             // Create the audio file
             self.audioFile = try AVAudioFile(forWriting: audioFilename, settings: audioSettings.getForSettings())
-            
+
+            let input_audioFormat = inputNode.inputFormat(forBus: 0)
+
             // Install a tap on the input node
             inputNode.installTap(
                 onBus: 0, bufferSize: self.audioSettings.bufferSize, format: input_audioFormat
