@@ -677,12 +677,12 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     ) {
         guard let address = addressQ else { return }
 
-        /*if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
+        if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
             if (self.activeClient_CFSocket != nil) {
                 // If not nil, return
                 return
             }
-        }*/
+        }
 
 
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
