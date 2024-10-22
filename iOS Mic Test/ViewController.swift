@@ -894,7 +894,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
-        guard let inputNode = audioEngine.inputNode else { return }
+        guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let input_audioFormat = self.audioEngineManager.input_audioFormat else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
@@ -902,7 +902,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: inputNode.inputFormat(forBus: 0)
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
