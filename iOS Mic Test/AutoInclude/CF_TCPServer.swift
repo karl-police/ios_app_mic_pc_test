@@ -320,7 +320,9 @@ class CF_NetworkServer {
 
         //semaphore.wait()
 
-        let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr!
+        guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
+            return nil
+        }
 
         // Check if from right IP otherwise, wait again
         let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
