@@ -298,6 +298,7 @@ class CF_NetworkServer {
 
             case CF_NetworkProtocols.UDP: do {
                 receivedDataQ = self.WaitForData(from: addressData)
+                self.TemporaryLogging("Yielded?")
             } 
         }
 
@@ -309,6 +310,7 @@ class CF_NetworkServer {
     func OnServerDataReceived(_ data: Data, from addressData: CFData) {
         self.receivedUDPData = data
         self.receivedUDP_lastFromAddr = addressData
+        self.TemporaryLogging("hi: \(addressData)")
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
@@ -333,6 +335,8 @@ class CF_NetworkServer {
         /*if (receivedUDP_lastFromAddr != expectAddr) {
             return self.WaitForData(from: expectAddr)
         }*/
+
+        self.TemporaryLogging("take data!")
 
         var copyData = self.receivedUDPData
 

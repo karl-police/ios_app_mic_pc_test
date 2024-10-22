@@ -712,7 +712,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
     override func TemporaryLogging(_ str: String) {
-        G_UI_Class_connectionLabel.setStatusConnectionText(str)
+        //G_UI_Class_connectionLabel.setStatusConnectionText(str)
+        G_UI_debugTextBoxOut.text = str + "\n" + G_UI_debugTextBoxOut.text
     }
 
     override func startServer() {
