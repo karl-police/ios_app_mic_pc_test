@@ -412,14 +412,7 @@ class NetworkVoiceTCPServer : TCPServer {
                     // Perhaps whatever you try to connect, whether this is a safe way
                     // To check that it's the actual app is another question
 
-                    guard let response = ("Accepted").data(using: .utf8) else {
-                        DispatchQueue.main.async {
-                            G_UI_debugTextBoxOut.text = "Error, something went wrong"
-                                + "\n\n"
-                                + G_UI_debugTextBoxOut.text
-                        }
-                        return
-                    }
+                    guard let response = ("Accepted").data(using: .utf8) else { return }
 
                     incomingConnection.send(
                         content: response,
@@ -632,19 +625,6 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         var buffer = [UInt8](repeating: 0, count: 512)
         var receivedDataQ: Data? = nil
 
-        /*switch self.ServerConfig.networkProtocol {
-            case CF_NetworkProtocols.TCP: do {
-                let readResult = self.receiveDataWithBuffer(&buffer, addressData: addressData, client_NativeCFSocket)
-
-                if (readResult > 0) {
-                    receivedDataQ = Data(buffer[0..<readResult])
-                }
-            }
-
-            case CF_NetworkProtocols.UDP: do {
-                receivedDataQ = self.WaitForData()
-            } 
-        }*/
 
         // Receive data either for TCP or UDP
         receivedDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
@@ -655,9 +635,15 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
             if (receivedData == expectedWord) {
                 timeoutTimer.invalidate() // Erase the timeout
                 
+                let recv_cfgDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
+
+                guard let recv_cfgData = recv_cfgDataQ else { return }
+                self.delegate?.handleReceivedConfiguration(recv_cfgData)
+
 
                 guard let response = ("Accepted").data(using: .utf8) else { return }
                 
+                // Something so it works with TCP and UDP as well
                 //let sendResult = CFSocketSendData(incomingCFSocket, nil, response as CFData, 0)
                 let sendResult = self.SendCFData(response as CFData, addressData: addressData, toCFSocket: incomingCFSocket)
                 
