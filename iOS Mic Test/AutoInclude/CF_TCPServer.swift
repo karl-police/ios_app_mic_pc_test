@@ -146,7 +146,7 @@ class CF_NetworkServer {
     //private var clientSocketCallback: CFSocketCallBack!
     private var serverSocketCallback: CFSocketCallBack?
 
-    private let semaphore = DispatchSemaphore(value: 0) // this is probably stupid
+    private var semaphore = DispatchSemaphore(value: 0) // this is probably stupid
     private var receivedUDPData: Data? = nil
     private var receivedUDP_lastFromAddr: CFData? = nil
 
@@ -298,7 +298,6 @@ class CF_NetworkServer {
 
             case CF_NetworkProtocols.UDP: do {
                 receivedDataQ = self.WaitForData(from: addressData)
-                self.TemporaryLogging("Yielded?")
             } 
         }
 
@@ -332,9 +331,6 @@ class CF_NetworkServer {
             self.TemporaryLogging("did not match")
             return self.WaitForData(from: expectAddr)
         }
-        /*if (receivedUDP_lastFromAddr != expectAddr) {
-            return self.WaitForData(from: expectAddr)
-        }*/
 
         self.TemporaryLogging("take data!")
 
@@ -342,6 +338,11 @@ class CF_NetworkServer {
 
         self.receivedUDPData = nil
         self.receivedUDP_lastFromAddr = nil
+
+        // Reset semaphore
+        // Because .wait apparently decrements if .signal incremented it
+        // so we want it to reset
+        self.semaphore = DispatchSemaphore(value: 0)
 
         return copyData
     }
