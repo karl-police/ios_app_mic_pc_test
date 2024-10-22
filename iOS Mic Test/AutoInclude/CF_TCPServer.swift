@@ -341,12 +341,6 @@ class CF_NetworkServer {
         self.receivedUDPData = nil
         self.receivedUDP_lastFromAddr = nil
 
-        
-        // Reset semaphore
-        // Because .wait apparently decrements if .signal incremented it
-        // so we want it to reset
-        semaphore = DispatchSemaphore(value: 0)
-
         return copyData
     }
 
