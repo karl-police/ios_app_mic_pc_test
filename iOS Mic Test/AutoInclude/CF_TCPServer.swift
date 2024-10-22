@@ -307,8 +307,6 @@ class CF_NetworkServer {
 
     // For UDP
     func OnServerDataReceived(_ data: Data, from addressData: CFData) {
-        // TODO: Check if from right IP maybe
-
         self.receivedUDPData = data
         self.receivedUDP_lastFromAddr = addressData
         semaphore.signal() // Signal
@@ -317,7 +315,6 @@ class CF_NetworkServer {
         if (self.receivedUDPData == nil) {
             semaphore.wait()
         }
-
         //semaphore.wait()
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
@@ -328,14 +325,15 @@ class CF_NetworkServer {
         let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
         let str_expectAddr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(expectAddr, b_includePort: true)
         if (ipStr_lastFrom != str_expectAddr) {
+            self.TemporaryLogging("did not match")
             return self.WaitForData(from: expectAddr)
         }
-
         /*if (receivedUDP_lastFromAddr != expectAddr) {
             return self.WaitForData(from: expectAddr)
         }*/
 
         var copyData = self.receivedUDPData
+
         self.receivedUDPData = nil
         self.receivedUDP_lastFromAddr = nil
 
@@ -385,7 +383,7 @@ class CF_NetworkServer {
         let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address)
 
 
-        // Let through if TCP
+        // Let through if TCP...
         let isTCP = self.ServerConfig.networkProtocol == CF_NetworkProtocols.TCP
         let isUDP = self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP
         let isUDPAndNotAcceptedYet = (isUDP && self.arr_activeAcceptedAddresses.contains(ipStr) == false)
