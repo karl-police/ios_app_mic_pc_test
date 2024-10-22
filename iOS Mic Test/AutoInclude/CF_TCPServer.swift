@@ -421,7 +421,9 @@ class CF_NetworkServer {
 
                     if let dataPointer = dataPointer {
                         let data = Unmanaged<CFData>.fromOpaque(dataPointer).takeUnretainedValue() as Data
-                        referencedSelf.OnServerDataReceived(data, from: address)
+                        DispatchQueue.main.async {
+                            referencedSelf.OnServerDataReceived(data, from: address)
+                        }
                     }
                 }
             }

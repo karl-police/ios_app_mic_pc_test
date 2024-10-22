@@ -640,6 +640,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Received something...")
             
             if (receivedData == expectedWord) {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Received expected string...")
                 timeoutTimer.invalidate() // Erase the timeout
                 
                 var recv_cfgDataQ: Data? = nil
