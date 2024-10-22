@@ -894,7 +894,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
-        guard let inputNode = self.audioEngineManager.inputNode else { return }
+        guard let inputNode = self.audioEngineManager.inputNode else { return } // If there are issues, change this as well
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
