@@ -635,10 +635,10 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
             if (receivedData == expectedWord) {
                 timeoutTimer.invalidate() // Erase the timeout
                 
-                let recv_cfgDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
+                /*let recv_cfgDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
 
                 guard let recv_cfgData = recv_cfgDataQ else { return }
-                self.delegate?.handleReceivedConfiguration(recv_cfgData)
+                self.delegate?.handleReceivedConfiguration(recv_cfgData)*/
 
 
                 guard let response = ("Accepted").data(using: .utf8) else { return }
