@@ -314,6 +314,7 @@ class CF_NetworkServer {
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
         // yep idk
+        // it doesn't work properly
 
         /*if (self.receivedUDPData == nil) {
             self.TemporaryLogging("waiting for data")
