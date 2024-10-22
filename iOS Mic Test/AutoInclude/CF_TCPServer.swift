@@ -313,14 +313,12 @@ class CF_NetworkServer {
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
-        // yep idk
-        // it doesn't work properly
+        // yep
 
-        /*if (self.receivedUDPData == nil) {
+        if (self.receivedUDPData == nil) {
             self.TemporaryLogging("waiting for data")
             semaphore.wait()
-        }*/
-        semaphore.wait(timeout: .now() + 5)
+        }
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
             self.TemporaryLogging("no address")
@@ -341,6 +339,12 @@ class CF_NetworkServer {
 
         self.receivedUDPData = nil
         self.receivedUDP_lastFromAddr = nil
+
+        
+        // Reset semaphore
+        // Because .wait apparently decrements if .signal incremented it
+        // so we want it to reset
+        semaphore = DispatchSemaphore(value: 0)
 
         return copyData
     }
@@ -421,6 +425,8 @@ class CF_NetworkServer {
 
                     if let dataPointer = dataPointer {
                         let data = Unmanaged<CFData>.fromOpaque(dataPointer).takeUnretainedValue() as Data
+                        
+                        // No clue why, but async here fixes the event thing
                         DispatchQueue.main.async {
                             referencedSelf.OnServerDataReceived(data, from: address)
                         }
