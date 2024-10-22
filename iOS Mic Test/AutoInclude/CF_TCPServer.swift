@@ -316,9 +316,10 @@ class CF_NetworkServer {
         // yep
 
         if (self.receivedUDPData == nil) {
-            self.TemporaryLogging("waiting for data")
-            semaphore.wait()
+            self.TemporaryLogging("receivedUDPData is nil")
+            //semaphore.wait()
         }
+        semaphore.wait()
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
             self.TemporaryLogging("no address")
