@@ -677,6 +677,14 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     ) {
         guard let address = addressQ else { return }
 
+        if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
+            if (self.activeClient_CFSocket != nil) {
+                // If not nil, return
+                return
+            }
+        }
+
+
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
         //let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
         let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address, b_includePort: true)
@@ -689,7 +697,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
 
         // Set active connection
-        activeClient_CFSocket = client_cfSocket
+        self.activeClient_CFSocket = client_cfSocket
 
         // Handshake
         DispatchQueue.main.async {
