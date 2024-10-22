@@ -139,6 +139,7 @@ class CF_SocketServerConfig {
 class CF_NetworkServer {
     var serverSocket: CFSocket?
     private var activeCFSocketsArray: [CFSocket] = []
+    private var arr_activeAcceptedAddresses: [String] = []
 
     var ServerConfig = CF_SocketServerConfig() // Config
 
@@ -147,6 +148,7 @@ class CF_NetworkServer {
 
     private let semaphore = DispatchSemaphore(value: 0) // this is probably stupid
     private var receivedUDPData: Data? = nil
+    private var receivedUDP_lastFromAddr: CFData? = nil
 
     var portNumber: Int32 = 0;
 
@@ -205,10 +207,9 @@ class CF_NetworkServer {
     // Whether to let through a connection or not
     private func internal_shouldLetThroughConnection(
         _ client_cfSocket: CFSocket,
-        _ address: CFData?
+        _ addressQ: CFData?
     ) -> Bool {
-
-        guard let address = address else {
+        guard let address = addressQ else {
             return false
         }
 
@@ -221,7 +222,7 @@ class CF_NetworkServer {
             self.TemporaryLogging(ipStr)
 
             if (CF_SocketNetworkUtils.IsPrivateIP(ipStr) == false) {
-                self.close_CFSocket(client_cfSocket)
+                self.close_CFSocket(client_cfSocket, address)
                 return false
             }
         }
@@ -229,7 +230,7 @@ class CF_NetworkServer {
         // Additional checking
         if (self.ShouldAcceptClientCFSocket(client_cfSocket) == false) {
             // If false then close
-            self.close_CFSocket(client_cfSocket)
+            self.close_CFSocket(client_cfSocket, address)
             return false
         }
 
@@ -296,7 +297,7 @@ class CF_NetworkServer {
             }
 
             case CF_NetworkProtocols.UDP: do {
-                receivedDataQ = self.WaitForData()
+                receivedDataQ = self.WaitForData(from: addressData)
             } 
         }
 
@@ -306,18 +307,35 @@ class CF_NetworkServer {
 
     // For UDP
     func OnServerDataReceived(_ data: Data, from addressData: CFData) {
-        // TODO: A check if from right IP maybe
+        // TODO: Check if from right IP maybe
 
         self.receivedUDPData = data
+        self.receivedUDP_lastFromAddr = addressData
         semaphore.signal() // Signal
     }
-    func WaitForData() -> Data? {
-        if (self.receivedUDPData == nil) {
+    func WaitForData(from expectAddr: CFData) -> Data? {
+        /*if (self.receivedUDPData == nil) {
             semaphore.wait()
+        }*/
+
+        semaphore.wait()
+
+        let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr!
+
+        // Check if from right IP otherwise, wait again
+        let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
+        let str_expectAddr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(expectAddr, b_includePort: true)
+        /*if (ipStr_lastFrom != str_expectAddr) {
+            return self.WaitForData(from: expectAddr)
+        }*/
+
+        if (receivedUDP_lastFromAddr != expectAddr) {
+            return self.WaitForData(from: expectAddr)
         }
 
         var copyData = self.receivedUDPData
         self.receivedUDPData = nil
+        self.receivedUDP_lastFromAddr = nil
 
         return copyData
     }
@@ -360,11 +378,30 @@ class CF_NetworkServer {
         // If we allow the connection to get accepted
         referencedSelf.activeCFSocketsArray.append(client_cfSocket)
 
-        // Add run loop for client
-        let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
-        CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
 
-        referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: addressQ)
+        guard let address = addressQ else { return }
+        let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address)
+
+
+        // Let through if TCP
+        let isTCP = self.ServerConfig.networkProtocol == CF_NetworkProtocols.TCP
+        let isUDP = self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP
+        let isUDPAndNotAcceptedYet = (isUDP && self.arr_activeAcceptedAddresses.contains(ipStr) == false)
+
+        // But if not TCP ensure for UDP each is unique
+        if (isTCP || isUDPAndNotAcceptedYet) {
+            // Add run loop for client
+            let clientRunLoopSource = CFSocketCreateRunLoopSource(kCFAllocatorDefault, client_cfSocket, 0)
+            CFRunLoopAddSource(CFRunLoopGetCurrent(), clientRunLoopSource, .defaultMode)
+
+            referencedSelf.OnClientConnectionAccepted(client_cfSocket: client_cfSocket, addressQ: addressQ)
+
+            if (isUDP) {
+                // Put into active Addresses, if UDP
+                self.arr_activeAcceptedAddresses.append(ipStr)
+            }
+        }
+
 
         switch self.ServerConfig.networkProtocol {
             /*case CF_NetworkProtocols.TCP: do {
@@ -475,7 +512,7 @@ class CF_NetworkServer {
         print("Accepted connection on socket \(ipStr)")
 
         // Close
-        self.close_CFSocket(client_cfSocket)
+        self.close_CFSocket(client_cfSocket, addressQ)
     }
 
 
@@ -485,13 +522,23 @@ class CF_NetworkServer {
 
 
     // Use this instead to close connections...
-    func close_CFSocket(_ cfSocket: CFSocket) {
+    func close_CFSocket(_ cfSocket: CFSocket, _ addressQ: CFData?) {
         if let index = self.activeCFSocketsArray.firstIndex(where: { $0 === cfSocket }) {
             self.activeCFSocketsArray.remove(at: index)
         }
 
         // Invalidate
         CFSocketInvalidate(cfSocket)
+
+        if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
+            // Remove address if UDP
+            if let address = addressQ {
+                let ipStr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(address)
+                if let index = self.arr_activeAcceptedAddresses.firstIndex(where: { $0 == ipStr }) {
+                    self.arr_activeAcceptedAddresses.remove(at: index)
+                }
+            }
+        }
         
         // Get native handle
         let nativeHandle = CFSocketGetNative(cfSocket)
@@ -591,8 +638,9 @@ class CF_NetworkServer {
 
             // Close active sockets
             for activeCFSocket in activeCFSocketsArray {
-                self.close_CFSocket(activeCFSocket)
+                self.close_CFSocket(activeCFSocket, nil)
             }
+            self.arr_activeAcceptedAddresses.removeAll()
 
             CFSocketInvalidate(serverSocket)
             

@@ -583,7 +583,9 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
                 G_UI_Class_connectionLabel.setStatusConnectionText("Client Disconnected, \(nativeHandle), \(isOurActive)")
 
-                self.close_CFSocket(client_cfSocket) // Ensure
+                // Ensure
+                // I think might only happen if TCP
+                self.close_CFSocket(client_cfSocket, nil)
             default:
                 break
         }
@@ -605,7 +607,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
         let timeoutTimer = Timer.scheduledTimer(withTimeInterval: handshakeTimeout, repeats: false) { [weak self] _ in
             // Cancel on timeout
-            self?.close_CFSocket(incomingCFSocket)
+            self?.close_CFSocket(incomingCFSocket, addressData)
 
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Handshake Timeout")
@@ -653,7 +655,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
                         + "\n\n"
                         + G_UI_debugTextBoxOut.text
 
-                    self.close_CFSocket(incomingCFSocket)
+                    self.close_CFSocket(incomingCFSocket, addressData)
                 } else {
                     G_UI_Class_connectionLabel.setStatusConnectionText(
                         "Response sent to \(CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true))"
@@ -677,13 +679,6 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     ) {
         guard let address = addressQ else { return }
 
-        if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
-            if (self.activeClient_CFSocket != nil) {
-                // If not nil, return
-                return
-            }
-        }
-
 
         let client_NativeCFSocket = CFSocketGetNative(client_cfSocket) // Int32
         //let ipStr = CF_SocketNetworkUtils.GetIP_FromNativeSocket(client_NativeCFSocket, b_includePort: true)
@@ -694,6 +689,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
         G_UI_debugTextBoxOut.text = "Accepted connection with \(ipStr), \(client_NativeCFSocket)"
             + "\n\n"
             + G_UI_debugTextBoxOut.text
+
 
 
         // Set active connection
@@ -755,7 +751,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
     var networkVoice_CF_TCPServer: NetworkVoice_CF_NetworkServer!
 
-    var DEFAULT_TCP_PORT: UInt16 = 8125
+    var DEFAULT_TCP_PORT = 8125
 
     var audioManager: AudioManager!
     var audioEngineManager: AudioEngineManager!
@@ -765,13 +761,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         self.audioManager = withAudioManager
         self.audioEngineManager = withAudioEngineManager
 
-        self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: DEFAULT_TCP_PORT)
+        self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: UInt16(DEFAULT_TCP_PORT))
 
         // Used for event when we actually got a real connection going
         self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
-        self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: 8125)
+        self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: Int32(DEFAULT_TCP_PORT))
 
         self.networkVoice_CF_TCPServer.delegate = self
     }
