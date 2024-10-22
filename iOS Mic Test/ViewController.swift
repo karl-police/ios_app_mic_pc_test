@@ -593,6 +593,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
 
     override func ShouldAcceptClientCFSocket(_ client_cfSocket: CFSocket) -> Bool {
+        // Do this for now
         if (self.ServerConfig.networkProtocol == CF_NetworkProtocols.UDP) {
             return true
         }

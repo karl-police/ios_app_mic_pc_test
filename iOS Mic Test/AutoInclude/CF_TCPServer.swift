@@ -314,11 +314,11 @@ class CF_NetworkServer {
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
-        if (self.receivedUDPData == nil) {
+        /*if (self.receivedUDPData == nil) {
             semaphore.wait()
-        }
+        }*/
 
-        //semaphore.wait()
+        semaphore.wait()
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
             return nil
@@ -327,13 +327,13 @@ class CF_NetworkServer {
         // Check if from right IP otherwise, wait again
         let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
         let str_expectAddr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(expectAddr, b_includePort: true)
-        if (ipStr_lastFrom != str_expectAddr) {
-            return self.WaitForData(from: expectAddr)
-        }
-
-        /*if (receivedUDP_lastFromAddr != expectAddr) {
+        /*if (ipStr_lastFrom != str_expectAddr) {
             return self.WaitForData(from: expectAddr)
         }*/
+
+        if (receivedUDP_lastFromAddr != expectAddr) {
+            return self.WaitForData(from: expectAddr)
+        }
 
         var copyData = self.receivedUDPData
         self.receivedUDPData = nil
