@@ -325,13 +325,13 @@ class CF_NetworkServer {
         // Check if from right IP otherwise, wait again
         let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
         let str_expectAddr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(expectAddr, b_includePort: true)
-        /*if (ipStr_lastFrom != str_expectAddr) {
-            return self.WaitForData(from: expectAddr)
-        }*/
-
-        if (receivedUDP_lastFromAddr != expectAddr) {
+        if (ipStr_lastFrom != str_expectAddr) {
             return self.WaitForData(from: expectAddr)
         }
+
+        /*if (receivedUDP_lastFromAddr != expectAddr) {
+            return self.WaitForData(from: expectAddr)
+        }*/
 
         var copyData = self.receivedUDPData
         self.receivedUDPData = nil
