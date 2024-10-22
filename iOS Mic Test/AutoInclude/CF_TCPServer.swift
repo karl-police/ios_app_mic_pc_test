@@ -342,7 +342,7 @@ class CF_NetworkServer {
         // Reset semaphore
         // Because .wait apparently decrements if .signal incremented it
         // so we want it to reset
-        self.semaphore = DispatchSemaphore(value: 0)
+        //semaphore = DispatchSemaphore(value: 0)
 
         return copyData
     }
