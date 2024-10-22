@@ -309,7 +309,7 @@ class CF_NetworkServer {
     func OnServerDataReceived(_ data: Data, from addressData: CFData) {
         self.receivedUDPData = data
         self.receivedUDP_lastFromAddr = addressData
-        self.TemporaryLogging("hi: \(addressData)")
+        //self.TemporaryLogging("hi: \(addressData)")
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
@@ -323,7 +323,7 @@ class CF_NetworkServer {
         semaphore.wait(timeout: .now() + 5)
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
-            self.TemporaryLogging("no address")
+            //self.TemporaryLogging("no address")
             return nil
         }
 
@@ -331,11 +331,11 @@ class CF_NetworkServer {
         let ipStr_lastFrom = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(receivedUDP_lastFromAddr, b_includePort: true)
         let str_expectAddr = CF_SocketNetworkUtils.GetIP_FromCFDataAddress(expectAddr, b_includePort: true)
         if (ipStr_lastFrom != str_expectAddr) {
-            self.TemporaryLogging("did not match")
+            //self.TemporaryLogging("did not match")
             return self.WaitForData(from: expectAddr)
         }
 
-        self.TemporaryLogging("take data!")
+        //self.TemporaryLogging("take data!")
 
         var copyData = self.receivedUDPData
 
@@ -421,9 +421,7 @@ class CF_NetworkServer {
 
                     if let dataPointer = dataPointer {
                         let data = Unmanaged<CFData>.fromOpaque(dataPointer).takeUnretainedValue() as Data
-                        DispatchQueue.main.async {
-                            referencedSelf.OnServerDataReceived(data, from: address)
-                        }
+                        referencedSelf.OnServerDataReceived(data, from: address)
                     }
                 }
             }
