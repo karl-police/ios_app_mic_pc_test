@@ -313,6 +313,8 @@ class CF_NetworkServer {
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
+        // yep idk
+
         /*if (self.receivedUDPData == nil) {
             self.TemporaryLogging("waiting for data")
             semaphore.wait()
