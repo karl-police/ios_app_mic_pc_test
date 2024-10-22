@@ -902,7 +902,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        /*inputNode.installTap(
+        inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
@@ -930,7 +930,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             DispatchQueue.main.async {
                 G_UI_Class_connectionLabel.setStatusConnectionText("AudioEngine Error: \(error.localizedDescription)")
             }
-        }*/
+        }
     }
 
     func transmitAudio(buffer: AVAudioPCMBuffer, _ connection: NWConnection) {
@@ -1071,13 +1071,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         // Do this I guess?
         if (G_cfg_b_useNW == true) {
             // NWListener
-            //self.networkVoice_TCPServer.stopServer()
-
-            G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
-            self.networkVoice_TCPServer.stopServerTEST() {
-                self.networkVoice_TCPServer.m_cleanUp()
-            }
-            
+            self.networkVoice_TCPServer.stopServer()
         } else {
             // CFSocket
             self.networkVoice_CF_TCPServer.stopServer()
