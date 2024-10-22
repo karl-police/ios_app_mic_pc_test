@@ -1075,7 +1075,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         // Do this I guess?
         if (G_cfg_b_useNW == true) {
             // NWListener
-            self.networkVoice_TCPServer.stopServer()
+            //self.networkVoice_TCPServer.stopServer()
+
+            G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
+            self.networkVoice_TCPServer.stopServerTEST() {
+                self.networkVoice_TCPServer.m_cleanUp()
+            }
+            
         } else {
             // CFSocket
             self.networkVoice_CF_TCPServer.stopServer()
