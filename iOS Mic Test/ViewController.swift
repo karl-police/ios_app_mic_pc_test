@@ -314,11 +314,12 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 
+
 struct struct_NetworkVoice_ConfigurationData {
+    // Order needs to stay the same
     let sampleRate: Double
     let bufferSize: UInt32
 }
-
 
 
 var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
@@ -802,23 +803,23 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
-        guard let audioFormat = self.audioEngineManager.audioFormat else { return }
+        guard let input_audioFormat = self.audioEngineManager.input_audioFormat else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioSettings.getForFormat()
         ) { (buffer, time) in
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket, addressData)
         }
 
-        let streamDescription = audioFormat.streamDescription.pointee
+        let streamDescription = input_audioFormat.streamDescription.pointee
 
         var debugText = self.getAudioConnectionDebugText(
-            audioFormat: audioFormat,
+            audioFormat: input_audioFormat,
             audioSettings: audioSettings,
             streamDescription: streamDescription
         )
@@ -894,24 +895,24 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     func handleAcceptedConnection(_ connection: NWConnection) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
         guard let inputNode = self.audioEngineManager.inputNode else { return }
-        guard let audioFormat = self.audioEngineManager.audioFormat else { return }
+        guard let input_audioFormat = self.audioEngineManager.input_audioFormat else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioSettings.getForFormat()
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
         }
 
 
-        let streamDescription = audioFormat.streamDescription.pointee
+        let streamDescription = input_audioFormat.streamDescription.pointee
 
         var debugText = self.getAudioConnectionDebugText(
-            audioFormat: audioFormat,
+            audioFormat: input_audioFormat,
             audioSettings: audioSettings,
             streamDescription: streamDescription
         )
@@ -999,7 +1000,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
 
-        guard var receivedConfigData = receivedConfigDataQ else {
+        guard let receivedConfigData = receivedConfigDataQ else {
             DispatchQueue.main.async {
                 G_UI_debugTextBoxOut.text = "Error with config: \(receivedConfigDataQ)"
                     + "\n\n" + G_UI_debugTextBoxOut.text
@@ -1016,7 +1017,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
         
-        // Configure Audio things
+        /***
+            Configure Audio things
+        ***/
         let session = AVAudioSession.sharedInstance()
 
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
@@ -1025,7 +1028,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         audioSettings.sampleRate = receivedConfigData.sampleRate
         audioSettings.bufferSize = receivedConfigData.bufferSize
 
-        
+        // The inputNode needs to have its format changed in some other way
     }
 
 
@@ -1056,7 +1059,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             G_UI_debugTextBoxOut.text = "\(self)"
                 + "\n\n" + G_UI_debugTextBoxOut.text
                 + "\n\n" + "\(self.audioEngineManager.audioEngine)"
-                + "\n\n" + "\(self.audioEngineManager.audioFormat)"
+                + "\n\n" + "\(self.audioEngineManager.input_audioFormat)"
                 + "\n\n" + "\(self.audioEngineManager.audioSettings)"
                 + "\n\n" + "\(self.audioEngineManager.audioEngine.inputNode)"
                 + "\n\n" + "\(self.audioEngineManager.audioEngine.outputNode)"
@@ -1085,7 +1088,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 class AudioEngineManager {
     var audioEngine: AVAudioEngine!
     var inputNode: AVAudioInputNode!
-    var audioFormat: AVAudioFormat!
+    var input_audioFormat: AVAudioFormat!
 
     var tempError: Error? // Property to hold temporary error
     var audioFile: AVAudioFile?
@@ -1102,7 +1105,7 @@ class AudioEngineManager {
     // Or anything else, e.g. installTap
     func setupInit() {
         self.inputNode = audioEngine.inputNode
-        self.audioFormat = inputNode.inputFormat(forBus: 0)
+        self.input_audioFormat = inputNode.inputFormat(forBus: 0)
     }
 
 
@@ -1117,7 +1120,7 @@ class AudioEngineManager {
             
             // Install a tap on the input node
             inputNode.installTap(
-                onBus: 0, bufferSize: self.audioSettings.bufferSize, format: audioFormat
+                onBus: 0, bufferSize: self.audioSettings.bufferSize, format: input_audioFormat
             ) { (buffer, time) in
                 do {
                     // Write the buffer to the audio file
