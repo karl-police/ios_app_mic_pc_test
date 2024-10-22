@@ -314,11 +314,11 @@ class CF_NetworkServer {
         semaphore.signal() // Signal
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
-        /*if (self.receivedUDPData == nil) {
+        if (self.receivedUDPData == nil) {
             semaphore.wait()
-        }*/
+        }
 
-        semaphore.wait()
+        //semaphore.wait()
 
         let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr!
 
