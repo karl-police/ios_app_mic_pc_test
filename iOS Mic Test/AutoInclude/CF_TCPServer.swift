@@ -313,11 +313,13 @@ class CF_NetworkServer {
     }
     func WaitForData(from expectAddr: CFData) -> Data? {
         if (self.receivedUDPData == nil) {
+            self.TemporaryLogging("waiting for data")
             semaphore.wait()
         }
         //semaphore.wait()
 
         guard let receivedUDP_lastFromAddr = self.receivedUDP_lastFromAddr else {
+            self.TemporaryLogging("no address")
             return nil
         }
 
