@@ -765,6 +765,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var audioManager: AudioManager!
     var audioEngineManager: AudioEngineManager!
 
+    let networkVoiceQueue = DispatchQueue(label: "networkVoiceQueue")
+
 
     init(withAudioEngineManager: AudioEngineManager, withAudioManager: AudioManager) {
         self.audioManager = withAudioManager
@@ -803,9 +805,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     // For CF
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
-        guard let inputNode = self.audioEngineManager.inputNode else { return }
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
+        guard let inputNode = self.audioEngineManager.inputNode else { return }
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
@@ -894,9 +896,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     // This will make us start streaming
     func handleAcceptedConnection(_ connection: NWConnection) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
-        guard let inputNode = self.audioEngineManager.inputNode else { return } // If there are issues, change this as well
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
+        guard let inputNode = self.audioEngineManager.inputNode else { return } // If there are issues, change this as well
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
@@ -906,7 +908,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
-            self.transmitAudio(buffer: buffer, connection)
+            self.networkVoiceQueue.async {
+                self.transmitAudio(buffer: buffer, connection)
+            }
         }
 
 
