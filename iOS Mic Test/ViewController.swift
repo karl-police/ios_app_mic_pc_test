@@ -126,6 +126,7 @@ class AudioSettingsClass {
     var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
 
     var bufferSize: AVAudioFrameCount = 1024
+    var bUseCustomFormat: Bool = false // Whether to use a custom format for network voice
 
     func getForSettings() -> [String: Any] {
         return [
@@ -136,7 +137,10 @@ class AudioSettingsClass {
         ]
     }
     func getForFormat() -> AVAudioFormat? {
-        return AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: channelCount)
+        return AVAudioFormat(
+            standardFormatWithSampleRate: self.sampleRate,
+            channels: self.channelCount
+        )
     }
 }
 
@@ -317,6 +321,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 struct struct_NetworkVoice_ConfigurationData {
     // Order needs to stay the same
+    let bUseCustomFormat: Bool
     let sampleRate: Double
     let bufferSize: UInt32
 }
@@ -491,7 +496,6 @@ class NetworkVoiceTCPServer : TCPServer {
             G_UI_Class_connectionLabel.setStatusConnectionText("Listener failed: \(nwError)")
         case .cancelled:
             G_UI_debugTextBoxOut.text = "!! Listener cancelled !!\n\n" + G_UI_debugTextBoxOut.text
-            //G_UI_Class_connectionLabel.setStatusConnectionText("Listener cancelled")
         case .waiting:
             G_UI_Class_connectionLabel.setStatusConnectionText("Listener waiting state")
         case .setup:
@@ -643,6 +647,8 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
                 G_UI_Class_connectionLabel.setStatusConnectionText("Received expected string...")
                 timeoutTimer.invalidate() // Erase the timeout
                 
+
+                buffer = [UInt8](repeating: 0, count: 1024)
                 var recv_cfgDataQ: Data? = nil
                 recv_cfgDataQ = self.receiveData(&buffer, addressData: addressData, client_NativeCFSocket)
 
@@ -713,10 +719,10 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
     }
 
     override func TemporaryLogging(_ str: String) {
-        //G_UI_Class_connectionLabel.setStatusConnectionText(str)
-        DispatchQueue.main.async {
+        G_UI_Class_connectionLabel.setStatusConnectionText(str)
+        /*DispatchQueue.main.async {
             G_UI_debugTextBoxOut.text = str + "\n" + G_UI_debugTextBoxOut.text
-        }
+        }*/
     }
 
     override func startServer() {
@@ -802,6 +808,22 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
+    func m_getAudioFormatForInputNode(
+        _ inputNode: AVAudioInputNode,
+        audioSettings: AudioSettingsClass
+    ) -> AVAudioFormat {
+        let input_audioFormat = inputNode.inputFormat(forBus: 0)
+        var audioFormat = input_audioFormat
+         if (audioSettings.bUseCustomFormat == true) {
+            if let retrievedFormat = audioSettings.getForFormat() {
+                audioFormat = retrievedFormat
+            }
+        }
+
+        return audioFormat
+    }
+
+
     // For CF
     func handleAcceptedCFSocket(_ client_cfSocket: CFSocket, _ addressData: CFData) {
         guard let audioEngine = self.audioEngineManager.audioEngine else { return }
@@ -813,8 +835,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
+        var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioSettings.getForFormat()
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudioCF(buffer: buffer, client_cfSocket, addressData)
@@ -822,7 +845,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
         var debugText = self.getAudioConnectionDebugText(
-            input_audioFormat: input_audioFormat,
+            input_audioFormat: audioFormat,
             audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
@@ -899,23 +922,26 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         guard let inputNode = self.audioEngineManager.inputNode else { return } // If there are issues, change this as well
-        let input_audioFormat = inputNode.inputFormat(forBus: 0)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
+        G_UI_debugTextBoxOut.text = "Test: \(audioSettings.sampleRate)"
+            + "\n\n" + G_UI_debugTextBoxOut.text
+
+        var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
-            self.networkVoiceQueue.async {
+            //self.networkVoiceQueue.async {
                 self.transmitAudio(buffer: buffer, connection)
-            }
+            //}
         }
 
 
         var debugText = self.getAudioConnectionDebugText(
-            input_audioFormat: input_audioFormat,
+            input_audioFormat: audioFormat,
             audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
@@ -1019,18 +1045,41 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
         
+
+        // Don't modify anything if not true
+        if (receivedConfigData.bUseCustomFormat == false) {
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Use pre-defined audio config"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
+            return
+        }
+
+
         /***
             Configure Audio things
         ***/
         let session = AVAudioSession.sharedInstance()
 
-        guard let audioSettings = self.audioEngineManager.audioSettings else { return }
+        guard var audioSettings = self.audioEngineManager.audioSettings else { return }
 
         // Change Values
+        audioSettings.bUseCustomFormat = receivedConfigData.bUseCustomFormat // Set this
+
         audioSettings.sampleRate = receivedConfigData.sampleRate
         audioSettings.bufferSize = receivedConfigData.bufferSize
 
         // The inputNode needs to have its format changed in some other way
+    
+        // Change Hz
+        do {
+            try session.setPreferredSampleRate(audioSettings.sampleRate)
+        } catch {
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
+        }
     }
 
 
@@ -1167,7 +1216,7 @@ class AudioManager {
     }
 
 
-    func setupAudioSession() throws {
+    func setupRecordingAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
         
         do {
@@ -1199,7 +1248,7 @@ class AudioManager {
     func startRecording() throws {
         do {
             // self. would also work
-            try setupAudioSession()
+            try setupRecordingAudioSession()
         } catch {
             throw error
         }
@@ -1246,7 +1295,11 @@ class AudioManager {
         }
     }
 
-    func setup_VoIP() {
+
+    func start_VoIP_Server() throws {
+
+    }
+    func stop_VoIP_Server() throws {
 
     }
 
@@ -1277,12 +1330,15 @@ class AudioManager {
         do {
             //audioEngineManager.stopRecordingEngine()
 
-            self.networkVoiceManager.stop()
+            //self.networkVoiceManager.stop()
 
             self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
             if (self.audioEngineManager.audioEngine.isRunning) {
                 self.audioEngineManager.audioEngine.stop()
             }
+
+            // Stop after stopping audioEngine
+            self.networkVoiceManager.stop()
             
             // The order on when this gets called seems to be important
             try AVAudioSession.sharedInstance().setActive(false)
