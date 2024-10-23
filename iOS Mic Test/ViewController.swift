@@ -121,6 +121,7 @@ class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 48000.0 //44100.0
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
+    //var audioCommonFormat: AVAudioCommonFormat = AVAudioCommonFormat.pcmFormatFloat32
     var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
     var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
@@ -161,7 +162,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
     // Input data sources for selection
     var dataSourceSelections: [AVAudioSessionDataSourceDescription] = []
-    // inputDataSources
+    
 
     enum TableSection: Int, CaseIterable {
         case SectionDataSource = 0
@@ -926,9 +927,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
 
-        G_UI_debugTextBoxOut.text = "Test: \(audioSettings.sampleRate)"
-            + "\n\n" + G_UI_debugTextBoxOut.text
-
         var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
@@ -1359,6 +1357,9 @@ struct STR_TBL {
 
     static let BTN_USE_NW = "Using NW"
     static let BTN_USE_CFSOCKET = "Using CFSocket"
+
+    static let NOT_AVAILABLE_ABBR = "N/A"
+    static let STATUS = "Status"
 }
 
 
@@ -1388,7 +1389,7 @@ class UI_NetworkStatus_SingletonClass {
     // Private initializer to prevent instantiation from outside
     private init() {
         ui_connectionLabel = UILabel()
-        ui_connectionLabel.text = "Status"
+        ui_connectionLabel.text = STR_TBL.STATUS // Status
         ui_connectionLabel.font = UIFont.systemFont(ofSize: 18)
         ui_connectionLabel.textAlignment = .center
         ui_connectionLabel.numberOfLines = 0  // Allow multiple lines
@@ -1397,7 +1398,7 @@ class UI_NetworkStatus_SingletonClass {
 
     // Update Connection Label
     func updateStatusConnectionLabel() {
-        ui_connectionLabel.text = "Status: \(self.statusInfoStruct.connectionStatusText)" + "\n" +
+        ui_connectionLabel.text = "\(STR_TBL.STATUS): \(self.statusInfoStruct.connectionStatusText)" + "\n" +
             "Local IP: \(self.statusInfoStruct.localIP)" + "\n"
 
         // Change Label size to fit content.
@@ -1408,7 +1409,7 @@ class UI_NetworkStatus_SingletonClass {
         if let localIP = GetLocalIPAddress() {
             self.statusInfoStruct.localIP = localIP
         } else {
-            self.statusInfoStruct.localIP = "N/A"
+            self.statusInfoStruct.localIP = STR_TBL.NOT_AVAILABLE_ABBR // N/A
         }
 
         self.updateStatusConnectionLabel()
@@ -1423,6 +1424,8 @@ class UI_NetworkStatus_SingletonClass {
 
 // not global but I want to access this from anywhere
 var G_UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
+
+//var G_UI_Class_debugLogging = nil
 var G_UI_debugTextBoxOut = UITextView()
 
 
