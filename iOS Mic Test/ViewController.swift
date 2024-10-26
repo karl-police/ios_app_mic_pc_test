@@ -949,28 +949,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         var custom_audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
 
         let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat)
-        /*let testMixer = AVAudioMixerNode()
 
-
-        audioEngine.attach(testMixer) // Attach
-
-        // Test
-        audioEngine.connect(inputNode, to: testMixer, format: input_audioFormat)
-
-        testMixer.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: custom_audioFormat
-        ) { (buffer, time) in
-            // Transmit
-            self.transmitAudio(buffer: buffer, connection)
-        }*/
 
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: AVAudioFormat(
-                commonFormat: audioSettings.audioCommonFormat,
-                sampleRate: audioSettings.sampleRate,
-                channels: audioSettings.channelCount,
-                interleaved: audioSettings.bInterleaved
-            )
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
