@@ -121,7 +121,9 @@ class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 48000.0 //44100.0
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
+    
     var audioCommonFormat: AVAudioCommonFormat = AVAudioCommonFormat.pcmFormatFloat32
+    var bInterleaved: Bool = false
     var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
     var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
@@ -139,8 +141,10 @@ class AudioSettingsClass {
     }
     func getForFormat() -> AVAudioFormat? {
         return AVAudioFormat(
-            standardFormatWithSampleRate: self.sampleRate,
-            channels: self.channelCount
+            commonFormat: self.audioCommonFormat,
+            sampleRate: self.sampleRate,
+            channels: self.channelCount,
+            interleaved: self.bInterleaved
         )
     }
 }
@@ -799,18 +803,24 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
     func getAudioConnectionDebugText(
-        input_audioFormat: AVAudioFormat,
+        audioFormat: AVAudioFormat,
         audioSettings: AudioSettingsClass
     ) -> String {
-        let streamDescription = input_audioFormat.streamDescription.pointee
+        let streamDescription = audioFormat.streamDescription.pointee
 
         var debugText = ""
-        debugText += "Sample Rate: \(input_audioFormat.sampleRate) Hz\n"
-        debugText += "Channels: \(input_audioFormat.channelCount)\n"
+        debugText += "Sample Rate: \(audioFormat.sampleRate) Hz\n"
+        debugText += "Channels: \(audioFormat.channelCount)\n"
+        debugText += "isInterleaved: \(audioFormat.isInterleaved)\n"
+        debugText += "isStandard: \(audioFormat.isStandard)\n"
+        debugText += "commonFormat: \(audioFormat.commonFormat)\n"
+
         debugText += "Bit Depth: \(streamDescription.mBitsPerChannel)\n"
         debugText += "Format ID: \(streamDescription.mFormatID)\n"
         debugText += "\n"
         debugText += "Buffer Size: \(audioSettings.bufferSize)\n"
+
+        debugText += "\n\n\(audioFormat)"
 
         return debugText
     }
@@ -854,7 +864,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
 
         var debugText = self.getAudioConnectionDebugText(
-            input_audioFormat: audioFormat,
+            audioFormat: audioFormat,
             audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
@@ -937,10 +947,22 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         
-        var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
-        let audioConverter = AVAudioConverter(from: input_audioFormat, to: audioFormat)
+        var custom_audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
 
-        inputNode.installTap(
+        let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat)
+        let testMixer = AVAudioMixerNode()
+
+
+        audioEngine.attach(testMixer) // Attach
+
+        testMixer.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+        ) { (buffer, time) in
+            // Transmit
+            self.transmitAudio(buffer: buffer, connection)
+        }
+
+        /*inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
@@ -949,15 +971,20 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             /*self.networkVoiceQueue.async {
                 self.transmitAudio(buffer: buffer, connection)
             }*/
-        }
+        }*/
 
 
         var debugText = self.getAudioConnectionDebugText(
-            input_audioFormat: audioFormat,
+            audioFormat: input_audioFormat,
             audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
+
+        // Use default input format
+        //audioEngine.connect(inputNode, to: testMixer, format: input_audioFormat)
+        // Use new format
+        //audioEngine.connect(testMixer, to: audioEngine.outputNode, format: custom_audioFormat)
 
 
         audioEngine.prepare()
