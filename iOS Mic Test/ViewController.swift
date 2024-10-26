@@ -934,16 +934,21 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
+
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
-        //var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
-        var audioFormat = input_audioFormat
+        
+        var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
+        let audioConverter = AVAudioConverter(from: input_audioFormat, to: audioFormat)
+
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
             // Transmit
-            //self.networkVoiceQueue.async {
+            self.transmitAudio(buffer: buffer, connection)
+
+            /*self.networkVoiceQueue.async {
                 self.transmitAudio(buffer: buffer, connection)
-            //}
+            }*/
         }
 
 
