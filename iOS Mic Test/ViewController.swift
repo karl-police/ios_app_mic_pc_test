@@ -551,9 +551,11 @@ class NetworkVoiceTCPServer : TCPServer {
             self.cancelConnection(connection) // This closes the connection
         }
 
-        super.stopServer() // should remove all connections as well
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            super.stopServer() // should remove all connections as well
 
-        m_cleanUp()
+            self.m_cleanUp()
+        }
     }
 }
 
