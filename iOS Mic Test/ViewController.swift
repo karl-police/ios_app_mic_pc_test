@@ -949,7 +949,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         var custom_audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
 
         let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat)
-        let testMixer = AVAudioMixerNode()
+        /*let testMixer = AVAudioMixerNode()
 
 
         audioEngine.attach(testMixer) // Attach
@@ -962,10 +962,15 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
-        }
+        }*/
 
-        /*inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+        inputNode.installTap(
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: AVAudioFormat(
+                commonFormat: audioSettings.audioCommonFormat,
+                sampleRate: audioSettings.sampleRate,
+                channels: audioSettings.channelCount,
+                interleaved: audioSettings.bInterleaved
+            )
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
@@ -973,7 +978,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             /*self.networkVoiceQueue.async {
                 self.transmitAudio(buffer: buffer, connection)
             }*/
-        }*/
+        }
 
 
         var debugText = self.getAudioConnectionDebugText(
