@@ -1352,7 +1352,7 @@ class AudioManager {
             }
 
             // Stop after stopping audioEngine
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                 self.networkVoiceManager.stop()
             
                 do {
@@ -1363,6 +1363,10 @@ class AudioManager {
                         + "\n\n" + G_UI_debugTextBoxOut.text
                 }
             }
+
+            /*self.networkVoiceManager.stop()
+    
+            try AVAudioSession.sharedInstance().setActive(false)*/
         } catch {
             throw error
         }
