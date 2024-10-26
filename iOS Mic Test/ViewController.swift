@@ -1073,14 +1073,14 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         // The inputNode needs to have its format changed in some other way
     
         // Change Hz
-        do {
+        /*do {
             try session.setPreferredSampleRate(audioSettings.sampleRate)
         } catch {
             DispatchQueue.main.async {
                 G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
                     + "\n\n" + G_UI_debugTextBoxOut.text
             }
-        }
+        }*/
     }
 
 
