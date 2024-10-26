@@ -107,7 +107,8 @@ class TCPServer {
         }
 
         connection.stateUpdateHandler = nil // remove stateUpdateHandler
-        connection.cancel()
+        //connection.cancel()
+        connection.forceCancel()
     }
 
 
