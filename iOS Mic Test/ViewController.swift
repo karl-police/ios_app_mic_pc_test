@@ -816,11 +816,12 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         var audioFormat = input_audioFormat
 
-        if (audioSettings.bUseCustomFormat == true) {
+        // TODO: Test
+        /*if (audioSettings.bUseCustomFormat == true) {
             if var retrievedFormat = audioSettings.getForFormat() {
                 audioFormat = retrievedFormat
             }
-        }
+        }*/
 
         return audioFormat
     }
@@ -1070,14 +1071,19 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         // The inputNode needs to have its format changed in some other way
     
         // Change Hz
-        /*do {
+        do {
             try session.setPreferredSampleRate(audioSettings.sampleRate)
         } catch {
-            DispatchQueue.main.async {
-                G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
-                    + "\n\n" + G_UI_debugTextBoxOut.text
-            }
-        }*/
+            G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+        }
+
+        do {
+            try session.setActive(true)
+        } catch {
+            G_UI_debugTextBoxOut.text = "Error Starting: \(error)"
+                + "\n\n" + G_UI_debugTextBoxOut.text
+        }
     }
 
 
@@ -1287,7 +1293,7 @@ class AudioManager {
             // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             
-            try session.setActive(true)
+            //try session.setActive(true)
         } catch {
             throw error
         }
@@ -1303,7 +1309,7 @@ class AudioManager {
 
     func start_VoIP() throws {
         do {
-            // Call this because .stop() used with .preare() may be removing
+            // Call this because .stop() used with .prepare() may be removing
             // some allocated nodes that we need to ensure
             // exist
             self.audioEngineManager.setupInit()
@@ -1333,6 +1339,8 @@ class AudioManager {
             self.audioEngineManager.audioEngine.inputNode.removeTap(onBus: 0)
             if (self.audioEngineManager.audioEngine.isRunning) {
                 self.audioEngineManager.audioEngine.stop()
+
+                self.audioEngineManager.audioEngine.reset()
             }
 
             // Stop after stopping audioEngine
