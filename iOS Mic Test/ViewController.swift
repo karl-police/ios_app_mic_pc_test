@@ -820,7 +820,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             guard var retrievedFormat = audioSettings.getForFormat() else {
                 return audioFormat
             }
-            
+
             audioFormat = retrievedFormat
         }
 
@@ -834,7 +834,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         guard let audioSettings = self.audioEngineManager.audioSettings else { return }
 
         guard let inputNode = self.audioEngineManager.inputNode else { return }
-        let input_audioFormat = inputNode.inputFormat(forBus: 0)
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
