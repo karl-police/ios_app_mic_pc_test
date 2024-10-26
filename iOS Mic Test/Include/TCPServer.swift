@@ -107,6 +107,7 @@ class TCPServer {
         }
 
         connection.stateUpdateHandler = nil // remove stateUpdateHandler
+        
         //connection.cancel()
         connection.forceCancel()
     }
@@ -245,7 +246,7 @@ class TCPServer {
         self.OnListenerStopped()
     }
 
-    func stopServerTEST(stopCompleted: @escaping () -> Void) {
+    /*func stopServerTEST(stopCompleted: @escaping () -> Void) {
         for connection in self.connectionsArray {
             self.cancelConnection(connection) // This closes the connection
         }
@@ -269,5 +270,5 @@ class TCPServer {
 
         self.OnListenerStopped()
         stopCompleted()
-    }
+    }*/
 }
