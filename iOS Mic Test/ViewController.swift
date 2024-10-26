@@ -547,6 +547,10 @@ class NetworkVoiceTCPServer : TCPServer {
     override func stopServer() {
         G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
 
+        for connection in self.connectionsArray {
+            self.cancelConnection(connection) // This closes the connection
+        }
+
         super.stopServer() // should remove all connections as well
 
         m_cleanUp()
@@ -927,10 +931,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         G_UI_Class_connectionLabel.setStatusConnectionText("Prepare streaming...")
 
-
-        var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
+        let input_audioFormat = inputNode.inputFormat(forBus: 0)
+        //var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
+        var audioFormat = input_audioFormat
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: nil
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
         ) { (buffer, time) in
             // Transmit
             //self.networkVoiceQueue.async {
