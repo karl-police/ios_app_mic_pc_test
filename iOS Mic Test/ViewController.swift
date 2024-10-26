@@ -121,7 +121,7 @@ class AudioSettingsClass {
     var formatIDKey = Int(kAudioFormatAppleLossless)
     var sampleRate: Double = 48000.0 //44100.0
     var channelCount: AVAudioChannelCount = 1 // This probably means it's Mono
-    //var audioCommonFormat: AVAudioCommonFormat = AVAudioCommonFormat.pcmFormatFloat32
+    var audioCommonFormat: AVAudioCommonFormat = AVAudioCommonFormat.pcmFormatFloat32
     var qualityEnconder: AVAudioQuality = AVAudioQuality.high
 
     var polarPatternCfg: AVAudioSession.PolarPattern = AVAudioSession.PolarPattern.cardioid
@@ -329,7 +329,7 @@ struct struct_NetworkVoice_ConfigurationData {
 
 
 var G_cfg_b_NetworkMode = CF_NetworkProtocols.TCP // TCP by default
-var G_cfg_b_useNW = false // CFSocket by default
+var G_cfg_b_useNW = true // NW by default
 
 
 /***
@@ -441,6 +441,8 @@ class NetworkVoiceTCPServer : TCPServer {
                         })
                     )
                 }
+            } else {
+                G_UI_Class_connectionLabel.setStatusConnectionText("Received not expected word")
             }
         }
     }
@@ -767,25 +769,30 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
     var networkVoice_CF_TCPServer: NetworkVoice_CF_NetworkServer!
 
-    var DEFAULT_TCP_PORT = 8125
+    //var networkVoice_StreamServerQ: NetworkVoiceTCPServer?
+    
+    var DEFAULT_SERVER_PORT = 8125
+    var DEFAULT_STREAMING_PORT = 30_001
+
 
     var audioManager: AudioManager!
     var audioEngineManager: AudioEngineManager!
 
     let networkVoiceQueue = DispatchQueue(label: "networkVoiceQueue")
+    //let networkVoiceStreamQueue = DispatchQueue(label: "networkVoiceStreamQueue")
 
 
     init(withAudioEngineManager: AudioEngineManager, withAudioManager: AudioManager) {
         self.audioManager = withAudioManager
         self.audioEngineManager = withAudioEngineManager
 
-        self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: UInt16(DEFAULT_TCP_PORT))
+        self.networkVoice_TCPServer = NetworkVoiceTCPServer(inputPort: UInt16(DEFAULT_SERVER_PORT))
 
         // Used for event when we actually got a real connection going
         self.networkVoice_TCPServer.delegate = self
 
         // Testing CF Network
-        self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: Int32(DEFAULT_TCP_PORT))
+        self.networkVoice_CF_TCPServer = NetworkVoice_CF_NetworkServer(inputPort: Int32(DEFAULT_SERVER_PORT))
 
         self.networkVoice_CF_TCPServer.delegate = self
     }
@@ -1473,7 +1480,7 @@ class ViewController: UIViewController {
 
         // Create the button
         btnRecordTestToggle = UIButton(type: .system)
-        btnRecordTestToggle.setTitle("Record Test", for: .normal)
+        btnRecordTestToggle.setTitle( STR_TBL.BTN_START_TEST_RECORD, for: .normal )
         // Disable automatic translation of autoresizing masks into constraints
         btnRecordTestToggle.translatesAutoresizingMaskIntoConstraints = false
         // Add the button to the view
@@ -1488,7 +1495,7 @@ class ViewController: UIViewController {
 
         // Network Toggle
         btnNetworkFrameworkToggle = UIButton(type: .system)
-        self.updateNetworkFrameworkToggleButton()
+        self.updateNetworkFrameworkToggleButton() // Update for first time
         btnNetworkFrameworkToggle.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(btnNetworkFrameworkToggle)
 
@@ -1767,7 +1774,7 @@ class ViewController: UIViewController {
     func startRecording() {
         do {
             try self.audioManager.startRecording()
-            btnRecordTestToggle.setTitle("Stop Recording", for: .normal)
+            btnRecordTestToggle.setTitle( STR_TBL.BTN_STOP_RECORDING, for: .normal )
         } catch {
             // Handle Error
             self.debugTextBoxOut.text = "Error starting recording: \(error.localizedDescription)"
@@ -1820,6 +1827,7 @@ class ViewController: UIViewController {
         }
     }
 
+    // To Toggle between TCP and UDP
     func m_toggle_NetworkProtocol() {
         self.audioManager.networkVoiceManager.changeNetworkProtocol()
 
