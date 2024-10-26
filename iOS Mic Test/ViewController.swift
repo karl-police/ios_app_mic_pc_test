@@ -943,10 +943,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             input_audioFormat: audioFormat,
             audioSettings: audioSettings
         )
-        DispatchQueue.main.async {
-            G_UI_debugTextBoxOut.text = debugText
-                + "\n\n" + G_UI_debugTextBoxOut.text
-        }
+        G_UI_debugTextBoxOut.text = debugText
+            + "\n\n" + G_UI_debugTextBoxOut.text
 
 
         audioEngine.prepare()
