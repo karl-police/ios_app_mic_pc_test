@@ -815,8 +815,9 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     ) -> AVAudioFormat {
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         var audioFormat = input_audioFormat
-         if (audioSettings.bUseCustomFormat == true) {
-            if let retrievedFormat = audioSettings.getForFormat() {
+
+        if (audioSettings.bUseCustomFormat == true) {
+            if var retrievedFormat = audioSettings.getForFormat() {
                 audioFormat = retrievedFormat
             }
         }
@@ -942,8 +943,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             input_audioFormat: audioFormat,
             audioSettings: audioSettings
         )
-        G_UI_debugTextBoxOut.text = debugText
-            + "\n\n" + G_UI_debugTextBoxOut.text
+        DispatchQueue.main.async {
+            G_UI_debugTextBoxOut.text = debugText
+                + "\n\n" + G_UI_debugTextBoxOut.text
+        }
 
 
         audioEngine.prepare()
