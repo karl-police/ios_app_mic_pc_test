@@ -245,30 +245,4 @@ class TCPServer {
 
         self.OnListenerStopped()
     }
-
-    /*func stopServerTEST(stopCompleted: @escaping () -> Void) {
-        for connection in self.connectionsArray {
-            self.cancelConnection(connection) // This closes the connection
-        }
-
-        self.connectionsArray.removeAll() // Ensure removal of all
-
-        if let listener = self.listener {
-            listener.stateUpdateHandler = { s in
-                if case .cancelled = s {
-                    self.OnListenerStopped()
-                    stopCompleted()
-                }
-            }
-
-            listener.newConnectionHandler = nil
-            //listener.stateUpdateHandler = nil
-
-            listener.cancel()
-            self.listener = nil
-        }
-
-        self.OnListenerStopped()
-        stopCompleted()
-    }*/
 }

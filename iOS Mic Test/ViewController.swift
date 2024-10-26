@@ -1359,21 +1359,9 @@ class AudioManager {
             }
 
             // Stop after stopping audioEngine
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                self.networkVoiceManager.stop()
-            
-                do {
-                    // The order on when this gets called seems to be important
-                    try AVAudioSession.sharedInstance().setActive(false)
-                } catch {
-                    G_UI_debugTextBoxOut.text = "setActive Error: \(error)"
-                        + "\n\n" + G_UI_debugTextBoxOut.text
-                }
-            }
-
-            /*self.networkVoiceManager.stop()
+            self.networkVoiceManager.stop()
     
-            try AVAudioSession.sharedInstance().setActive(false)*/
+            try AVAudioSession.sharedInstance().setActive(false)
         } catch {
             throw error
         }
