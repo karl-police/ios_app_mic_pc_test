@@ -954,8 +954,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         audioEngine.attach(testMixer) // Attach
 
+        // Test
+        audioEngine.connect(inputNode, to: testMixer, format: input_audioFormat)
+
         testMixer.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: custom_audioFormat
         ) { (buffer, time) in
             // Transmit
             self.transmitAudio(buffer: buffer, connection)
@@ -979,12 +982,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         )
         G_UI_debugTextBoxOut.text = debugText
             + "\n\n" + G_UI_debugTextBoxOut.text
-
-
-        // Use default input format
-        audioEngine.connect(inputNode, to: testMixer, format: input_audioFormat)
-        // Use new format
-        audioEngine.connect(testMixer, to: audioEngine.outputNode, format: custom_audioFormat)
 
 
         // Prepare
