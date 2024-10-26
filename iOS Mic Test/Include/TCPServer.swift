@@ -101,14 +101,14 @@ class TCPServer {
 
 
     // Use this instead to close connections...
-    func cancelConnection(_ connection: NWConnection) {
+    func cancelConnection(_ connection: NWConnection, bForce: Bool = false) {
         if let index = self.connectionsArray.firstIndex(where: { $0 === connection }) {
             self.connectionsArray.remove(at: index)
         }
 
         connection.stateUpdateHandler = nil // remove stateUpdateHandler
         
-        //connection.cancel()
+        connection.cancel()
         connection.forceCancel()
     }
 

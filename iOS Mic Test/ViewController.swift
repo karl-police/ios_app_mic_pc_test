@@ -547,15 +547,9 @@ class NetworkVoiceTCPServer : TCPServer {
     override func stopServer() {
         G_UI_Class_connectionLabel.setStatusConnectionText("Stopping server...")
 
-        for connection in self.connectionsArray {
-            self.cancelConnection(connection) // This closes the connection
-        }
+        super.stopServer() // should remove all connections as well
 
-        //DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            super.stopServer() // should remove all connections as well
-
-            self.m_cleanUp()
-        //}
+        m_cleanUp()
     }
 }
 
@@ -1355,7 +1349,7 @@ class AudioManager {
             if (self.audioEngineManager.audioEngine.isRunning) {
                 self.audioEngineManager.audioEngine.stop()
 
-                self.audioEngineManager.audioEngine.reset()
+                //self.audioEngineManager.audioEngine.reset()
             }
 
             // Stop after stopping audioEngine
