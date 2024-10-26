@@ -817,9 +817,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         var audioFormat = input_audioFormat
 
         if (audioSettings.bUseCustomFormat == true) {
-            if var retrievedFormat = audioSettings.getForFormat() {
-                audioFormat = retrievedFormat
+            guard var retrievedFormat = audioSettings.getForFormat() else {
+                return audioFormat
             }
+            
+            audioFormat = retrievedFormat
         }
 
         return audioFormat
