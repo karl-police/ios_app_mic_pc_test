@@ -817,11 +817,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         var audioFormat = input_audioFormat
 
         // TODO: Test
-        /*if (audioSettings.bUseCustomFormat == true) {
+        if (audioSettings.bUseCustomFormat == true) {
             if var retrievedFormat = audioSettings.getForFormat() {
                 audioFormat = retrievedFormat
             }
-        }*/
+        }
 
         return audioFormat
     }
@@ -930,7 +930,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         var audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: nil
         ) { (buffer, time) in
             // Transmit
             //self.networkVoiceQueue.async {
@@ -1008,6 +1008,19 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
+    func tryToStartAudioSession() {
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setActive(true)
+        } catch {
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Error Starting: \(error)"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
+        }
+    }
+
+
     // For Voice Config
     func handleReceivedConfiguration(_ data: Data) {
         var receivedConfigDataQ: struct_NetworkVoice_ConfigurationData? = nil
@@ -1074,15 +1087,10 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         do {
             try session.setPreferredSampleRate(audioSettings.sampleRate)
         } catch {
-            G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
-                + "\n\n" + G_UI_debugTextBoxOut.text
-        }
-
-        do {
-            try session.setActive(true)
-        } catch {
-            G_UI_debugTextBoxOut.text = "Error Starting: \(error)"
-                + "\n\n" + G_UI_debugTextBoxOut.text
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "Error Configuring: \(error)"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
         }
     }
 
@@ -1293,7 +1301,7 @@ class AudioManager {
             // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             
-            //try session.setActive(true)
+            try session.setActive(true)
         } catch {
             throw error
         }
@@ -1344,10 +1352,17 @@ class AudioManager {
             }
 
             // Stop after stopping audioEngine
-            self.networkVoiceManager.stop()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.networkVoiceManager.stop()
             
-            // The order on when this gets called seems to be important
-            try AVAudioSession.sharedInstance().setActive(false)
+                do {
+                    // The order on when this gets called seems to be important
+                    try AVAudioSession.sharedInstance().setActive(false)
+                } catch {
+                    G_UI_debugTextBoxOut.text = "setActive Error: \(error)"
+                        + "\n\n" + G_UI_debugTextBoxOut.text
+                }
+            }
         } catch {
             throw error
         }
@@ -1834,6 +1849,7 @@ class ViewController: UIViewController {
             // Handle Error
             DispatchQueue.main.async {
                 self.debugTextBoxOut.text = "Error starting: \(error.localizedDescription)"
+                    + "\n\n" + self.debugTextBoxOut.text
             }
         }
 
