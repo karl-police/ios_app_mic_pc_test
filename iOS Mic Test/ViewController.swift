@@ -1533,6 +1533,16 @@ class UI_VoIPControlClass_Singleton {
             self.btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
+
+
+    func btn_updateMicToggleState() {
+        if (self.is_VoIP_active == true) {
+            self.btnMicToggle.setTitle( STR_TBL.BTN_STOP_VOIP, for: .normal )
+        } else {
+            // If stopped, say start
+            self.btnMicToggle.setTitle( STR_TBL.BTN_START_VOIP, for: .normal )
+        }
+    }
 }
 
 
@@ -1582,11 +1592,7 @@ class ViewController: UIViewController {
         view.addSubview(btnRecordTestToggle)
 
 
-        /*btnMicToggle = UIButton(type: .system)
-        btnMicToggle.setTitle("Start Mic", for: .normal)
-        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false*/
-        //view.addSubview(btnMicToggle)
-
+        // for VoIP Button
         G_UI_Class_VoIPControl.initMountForViewController(refViewController: self)
 
 
@@ -1619,11 +1625,7 @@ class ViewController: UIViewController {
 
             
             // VoIP Button
-            /*btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
-            btnMicToggle.heightAnchor.constraint(equalToConstant: 50),*/
-
+            // is done through class
 
             // Protocol Button
             btnProtocolToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -1952,7 +1954,8 @@ class ViewController: UIViewController {
             }
         }
 
-        btnMicToggle.setTitle("Stop Mic", for: .normal)
+        // Update Button UI
+        G_UI_Class_VoIPControl.btn_updateMicToggleState()
     }
     func stop_VoIPMic() {
         do {
@@ -1963,7 +1966,7 @@ class ViewController: UIViewController {
             }
         }
 
-        btnMicToggle.setTitle("Start Mic", for: .normal)
+        G_UI_Class_VoIPControl.btn_updateMicToggleState()
         //shareRecordedAudio() // temp test
     }
 
