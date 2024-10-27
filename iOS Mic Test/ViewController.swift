@@ -833,11 +833,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         var audioFormat = input_audioFormat
 
-        /*if (audioSettings.bUseCustomFormat == true) {
+        if (audioSettings.bUseCustomFormat == true) {
             if var retrievedFormat = audioSettings.getForFormat() {
                 audioFormat = retrievedFormat
             }
-        }*/
+        }
 
         return audioFormat
     }
