@@ -990,7 +990,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 // Transmit
                 //self.networkVoiceQueue.async {
                     self.transmitAudio(buffer: convertedBuffer, connection)
-                    //self.transmitAudio(buffer: buffer, connection)
                 //}
             }
         } else {
@@ -1001,7 +1000,6 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 // Transmit
                 //self.networkVoiceQueue.async {
                     self.transmitAudio(buffer: buffer, connection)
-                    //self.transmitAudio(buffer: buffer, connection)
                 //}
             }
         }
