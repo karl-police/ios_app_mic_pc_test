@@ -946,49 +946,70 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         
-        var custom_audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
+        var audioFormatToUse = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
 
-        guard let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat) else {
+        guard let audioConverter = AVAudioConverter(from: input_audioFormat, to: audioFormatToUse) else {
+            DispatchQueue.main.async {
+                G_UI_debugTextBoxOut.text = "AVAudioConverter creation failed"
+                    + "\n\n" + G_UI_debugTextBoxOut.text
+            }
             return
         }
 
 
-        inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
-        ) { (buffer, time) in
-            var newBufferAvailable = true
+        if (audioSettings.bUseCustomFormat == true) {
+            // If Custom Format
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+            ) { (buffer, time) in
+                // Conversion
+                var newBufferAvailable = true
 
-            let inputCallback: AVAudioConverterInputBlock = { inNumPackets, outStatus in
-                if newBufferAvailable {
-                    outStatus.pointee = .haveData
-                    newBufferAvailable = false
-                    return buffer
-                } else {
-                    outStatus.pointee = .noDataNow
-                    return nil
+                let inputCallback: AVAudioConverterInputBlock = { inNumPackets, outStatus in
+                    if newBufferAvailable {
+                        outStatus.pointee = .haveData
+                        newBufferAvailable = false
+                        return buffer
+                    } else {
+                        outStatus.pointee = .noDataNow
+                        return nil
+                    }
                 }
+
+                let convertedBuffer = AVAudioPCMBuffer(
+                    pcmFormat: audioFormatToUse,
+                    frameCapacity: AVAudioFrameCount(audioFormatToUse.sampleRate)
+                        * buffer.frameLength / AVAudioFrameCount(buffer.format.sampleRate)
+                )!
+
+                var error: NSError?
+                let status = audioConverter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)
+                // check if status is error maybe?
+
+
+                // Transmit
+                //self.networkVoiceQueue.async {
+                    self.transmitAudio(buffer: convertedBuffer, connection)
+                    //self.transmitAudio(buffer: buffer, connection)
+                //}
             }
-
-            let convertedBuffer = AVAudioPCMBuffer(
-                pcmFormat: custom_audioFormat,
-                frameCapacity: AVAudioFrameCount(custom_audioFormat.sampleRate)
-                    * buffer.frameLength / AVAudioFrameCount(buffer.format.sampleRate)
-            )!
-
-            var error: NSError?
-            let status = audioConverter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)
-
-
-            // Transmit
-            //self.networkVoiceQueue.async {
-                self.transmitAudio(buffer: convertedBuffer, connection)
-                //self.transmitAudio(buffer: buffer, connection)
-            //}
+        } else {
+            // If no custom
+            inputNode.installTap(
+                onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
+            ) { (buffer, time) in
+                // Transmit
+                //self.networkVoiceQueue.async {
+                    self.transmitAudio(buffer: buffer, connection)
+                    //self.transmitAudio(buffer: buffer, connection)
+                //}
+            }
         }
 
 
-        var debugText = self.getAudioConnectionDebugText(
-            audioFormat: input_audioFormat,
+        // Show info about format
+        let debugText = self.getAudioConnectionDebugText(
+            audioFormat: audioFormatToUse,
             audioSettings: audioSettings
         )
         G_UI_debugTextBoxOut.text = debugText
@@ -1689,6 +1710,7 @@ class ViewController: UIViewController {
             }
         } catch {
             self.debugTextBoxOut.text = "Error setting polar pattern: \(error.localizedDescription)"
+                + "\n\n" + self.debugTextBoxOut.text
         }
     }
 
@@ -1828,7 +1850,7 @@ class ViewController: UIViewController {
             self.debugTextBoxOut.text = "Error stopping recording: \(error.localizedDescription)"
         }
 
-        btnRecordTestToggle.setTitle("Start Recording", for: .normal)
+        btnRecordTestToggle.setTitle( STR_TBL.BTN_START_TEST_RECORD, for: .normal )
         shareRecordedAudio()
     }
 
