@@ -954,12 +954,34 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         inputNode.installTap(
             onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
-            // Transmit
-            self.transmitAudio(buffer: buffer, connection)
+            var newBufferAvailable = true
 
-            /*self.networkVoiceQueue.async {
-                self.transmitAudio(buffer: buffer, connection)
-            }*/
+            let inputCallback: AVAudioConverterInputBlock = { inNumPackets, outStatus in
+                if newBufferAvailable {
+                    outStatus.pointee = .haveData
+                    newBufferAvailable = false
+                    return buffer
+                } else {
+                    outStatus.pointee = .noDataNow
+                    return nil
+                }
+            }
+
+            let convertedBuffer = AVAudioPCMBuffer(
+                pcmFormat: custom_audioFormat,
+                frameCapacity: AVAudioFrameCount(custom_audioFormat.sampleRate)
+                    * buffer.frameLength / AVAudioFrameCount(buffer.format.sampleRate)
+            )!
+
+            var error: NSError?
+            let status = audioConverter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)
+
+
+            // Transmit
+            //self.networkVoiceQueue.async {
+                self.transmitAudio(buffer: convertedBuffer, connection)
+                //self.transmitAudio(buffer: buffer, connection)
+            //}
         }
 
 
