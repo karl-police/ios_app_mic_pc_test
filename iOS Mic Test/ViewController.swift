@@ -957,7 +957,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
 
-        if (audioSettings.bUseCustomFormat == true) {
+        /*if (audioSettings.bUseCustomFormat == true) {
             // If Custom Format
             inputNode.installTap(
                 onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
@@ -993,7 +993,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                     //self.transmitAudio(buffer: buffer, connection)
                 //}
             }
-        } else {
+        } else {*/
             // If no custom
             inputNode.installTap(
                 onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
@@ -1004,7 +1004,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                     //self.transmitAudio(buffer: buffer, connection)
                 //}
             }
-        }
+        //}
 
 
         // Show info about format
