@@ -1508,12 +1508,21 @@ class UI_NetworkStatus_SingletonClass {
     }
 }
 
+class UI_VoIPControlClass_Singleton {
+
+}
+
 
 // not global but I want to access this from anywhere
 var G_UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
 
 //var G_UI_Class_debugLogging = nil
 var G_UI_debugTextBoxOut = UITextView()
+
+
+var G_UI_Class_VoIPControl = UI_VoIPControlClass_Singleton()
+
+
 
 
 class ViewController: UIViewController {
