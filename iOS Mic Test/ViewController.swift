@@ -1128,8 +1128,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
         
 
+        guard var audioSettings = self.audioEngineManager.audioSettings else { return }
+
+        // Update "control" based settings
+        audioSettings.bUseCustomFormat = receivedConfigData.bUseCustomFormat // Set this
+
         // Don't modify anything if not true
-        if (receivedConfigData.bUseCustomFormat == false) {
+        if (audioSettings.bUseCustomFormat == false) {
             DispatchQueue.main.async {
                 G_UI_debugTextBoxOut.text = "Use pre-defined audio config"
                     + "\n\n" + G_UI_debugTextBoxOut.text
@@ -1143,11 +1148,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         ***/
         let session = AVAudioSession.sharedInstance()
 
-        guard var audioSettings = self.audioEngineManager.audioSettings else { return }
-
         // Change Values
-        audioSettings.bUseCustomFormat = receivedConfigData.bUseCustomFormat // Set this
-
         audioSettings.sampleRate = receivedConfigData.sampleRate
         audioSettings.bufferSize = receivedConfigData.bufferSize
 
