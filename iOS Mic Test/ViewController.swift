@@ -833,11 +833,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         let input_audioFormat = inputNode.inputFormat(forBus: 0)
         var audioFormat = input_audioFormat
 
-        if (audioSettings.bUseCustomFormat == true) {
+        /*if (audioSettings.bUseCustomFormat == true) {
             if var retrievedFormat = audioSettings.getForFormat() {
                 audioFormat = retrievedFormat
             }
-        }
+        }*/
 
         return audioFormat
     }
@@ -1078,7 +1078,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
     }
 
 
-    func tryToStartAudioSession() {
+    func trySetAudioSessionActive() {
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setActive(true)
@@ -1162,6 +1162,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                     + "\n\n" + G_UI_debugTextBoxOut.text
             }
         }
+        
+        self.trySetAudioSessionActive()
     }
 
 
@@ -1371,7 +1373,7 @@ class AudioManager {
             // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             
-            try session.setActive(true)
+            //try session.setActive(true)
         } catch {
             throw error
         }
