@@ -948,13 +948,15 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         
         var custom_audioFormat = m_getAudioFormatForInputNode(inputNode, audioSettings: audioSettings)
 
-        //let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat)
+        guard let audioConverter = AVAudioConverter(from: input_audioFormat, to: custom_audioFormat) else {
+            return
+        }
 
 
         inputNode.installTap(
-            onBus: 0, bufferSize: audioSettings.bufferSize, format: custom_audioFormat
+            onBus: 0, bufferSize: audioSettings.bufferSize, format: input_audioFormat
         ) { (buffer, time) in
-            /*var newBufferAvailable = true
+            var newBufferAvailable = true
 
             let inputCallback: AVAudioConverterInputBlock = { inNumPackets, outStatus in
                 if newBufferAvailable {
@@ -974,13 +976,13 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             )!
 
             var error: NSError?
-            let status = audioConverter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)*/
+            let status = audioConverter.convert(to: convertedBuffer, error: &error, withInputFrom: inputCallback)
 
 
             // Transmit
             //self.networkVoiceQueue.async {
-                //self.transmitAudio(buffer: convertedBuffer, connection)
-                self.transmitAudio(buffer: buffer, connection)
+                self.transmitAudio(buffer: convertedBuffer, connection)
+                //self.transmitAudio(buffer: buffer, connection)
             //}
         }
 
@@ -1348,7 +1350,7 @@ class AudioManager {
             // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             
-            //try session.setActive(true)
+            try session.setActive(true)
         } catch {
             throw error
         }
