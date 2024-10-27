@@ -1163,7 +1163,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
             }
         }
         
-        self.trySetAudioSessionActive()
+        
+        //self.trySetAudioSessionActive()
     }
 
 
@@ -1373,7 +1374,7 @@ class AudioManager {
             // But it wouldn't allow mixing
             try session.setCategory(.multiRoute, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
             
-            //try session.setActive(true)
+            try session.setActive(true)
         } catch {
             throw error
         }
