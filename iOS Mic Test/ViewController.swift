@@ -1439,6 +1439,9 @@ struct STR_TBL {
     static let BTN_START_TEST_RECORD = "Record Test"
     static let BTN_STOP_RECORDING = "Stop Recording"
 
+    static let BTN_START_VOIP = "Start Mic"
+    static let BTN_STOP_VOIP = "Stop Mic"
+
     static let BTN_TCP_MODE = "Using TCP"
     static let BTN_UDP_MODE = "Using UDP"
 
@@ -1509,7 +1512,15 @@ class UI_NetworkStatus_SingletonClass {
 }
 
 class UI_VoIPControlClass_Singleton {
+    var is_VoIP_active: Bool = false
 
+    var btnMicToggle: UIButton!
+
+    init() {
+        btnMicToggle = UIButton(type: .system)
+        btnMicToggle.setTitle( STR_TBL.BTN_START_VOIP, for: .normal )
+        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
+    }
 }
 
 
@@ -1532,7 +1543,7 @@ class ViewController: UIViewController {
     var btnNetworkFrameworkToggle: UIButton!
     var btnProtocolToggle: UIButton!
     var btnRecordTestToggle: UIButton!
-    var btnMicToggle: UIButton!
+    var btnMicToggle: UIButton = G_UI_Class_VoIPControl.btnMicToggle
     
 
     var UI_Class_connectionLabel = UI_NetworkStatus_SingletonClass.shared()
@@ -1542,7 +1553,6 @@ class ViewController: UIViewController {
 
     let audioManager = AudioManager() // Handles everything related to Audio Operations
     var is_RecordingTest = false
-    var is_VoIP_active = false
 
 
     func initUI() {
@@ -1560,9 +1570,9 @@ class ViewController: UIViewController {
         view.addSubview(btnRecordTestToggle)
 
 
-        btnMicToggle = UIButton(type: .system)
+        /*btnMicToggle = UIButton(type: .system)
         btnMicToggle.setTitle("Start Mic", for: .normal)
-        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
+        btnMicToggle.translatesAutoresizingMaskIntoConstraints = false*/
         view.addSubview(btnMicToggle)
 
 
@@ -1948,13 +1958,13 @@ class ViewController: UIViewController {
 
             DispatchQueue.main.async {
                 if granted {
-                    if (self.is_VoIP_active == false) {
-                        self.is_VoIP_active = true
+                    if (G_UI_Class_VoIPControl.is_VoIP_active == false) {
+                        G_UI_Class_VoIPControl.is_VoIP_active = true
 
                         self.start_VoIPMic()
                     } else {
                         self.stop_VoIPMic()
-                        self.is_VoIP_active = false
+                        G_UI_Class_VoIPControl.is_VoIP_active = false
                     }
                 } else {
                     self.showAlert("Microphone access denied!")
