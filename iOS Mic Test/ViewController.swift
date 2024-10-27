@@ -1521,6 +1521,18 @@ class UI_VoIPControlClass_Singleton {
         btnMicToggle.setTitle( STR_TBL.BTN_START_VOIP, for: .normal )
         btnMicToggle.translatesAutoresizingMaskIntoConstraints = false
     }
+
+    func initMountForViewController(refViewController: ViewController) {
+        refViewController.view.addSubview(self.btnMicToggle)
+
+        NSLayoutConstraint.activate([
+            // VoIP Button
+            self.btnMicToggle.centerXAnchor.constraint(equalTo: refViewController.view.centerXAnchor),
+            self.btnMicToggle.centerYAnchor.constraint(equalTo: refViewController.view.centerYAnchor),
+            self.btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
+            self.btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
 }
 
 
@@ -1573,7 +1585,9 @@ class ViewController: UIViewController {
         /*btnMicToggle = UIButton(type: .system)
         btnMicToggle.setTitle("Start Mic", for: .normal)
         btnMicToggle.translatesAutoresizingMaskIntoConstraints = false*/
-        view.addSubview(btnMicToggle)
+        //view.addSubview(btnMicToggle)
+
+        G_UI_Class_VoIPControl.initMountForViewController(refViewController: self)
 
 
         // Network Toggle
@@ -1605,10 +1619,10 @@ class ViewController: UIViewController {
 
             
             // VoIP Button
-            btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            /*btnMicToggle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             btnMicToggle.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             btnMicToggle.widthAnchor.constraint(equalToConstant: 150),
-            btnMicToggle.heightAnchor.constraint(equalToConstant: 50),
+            btnMicToggle.heightAnchor.constraint(equalToConstant: 50),*/
 
 
             // Protocol Button
