@@ -355,6 +355,11 @@ protocol NetworkVoiceDelegate: AnyObject {
     func handleReceivedConfiguration(_ data: Data)
 }
 
+
+/*class NetworkVoice_ControlPort_TCPServer : TCPServer {
+
+}*/
+
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? = nil // Active Connection
     
@@ -1130,11 +1135,12 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
         }
 
         
-
         guard var audioSettings = self.audioEngineManager.audioSettings else { return }
 
         // Update "control" based settings
+        // Important
         audioSettings.bUseCustomFormat = receivedConfigData.bUseCustomFormat // Set this
+
 
         // Don't modify anything if not true
         if (audioSettings.bUseCustomFormat == false) {
@@ -1142,6 +1148,8 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                 G_UI_debugTextBoxOut.text = "Use pre-defined audio config"
                     + "\n\n" + G_UI_debugTextBoxOut.text
             }
+
+            // If we don't change anything return
             return
         }
 
