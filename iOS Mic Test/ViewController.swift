@@ -775,7 +775,7 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
 
     //var networkVoice_StreamServerQ: NetworkVoiceTCPServer?
     
-    var DEFAULT_SERVER_PORT = 8125
+    var DEFAULT_SERVER_PORT = 8125 // If we change it, then it's Control Port
     var DEFAULT_STREAMING_PORT = 30_001
 
 
@@ -1060,6 +1060,11 @@ class NetworkVoiceManager: NetworkVoiceDelegate {
                         if (connection.state == .cancelled) {
                             do {
                                 try self.audioManager.stop_VoIP()
+                                
+                                // Manually set this FOR NOW
+                                // TODO: Change?
+                                G_UI_Class_VoIPControl.is_VoIP_active = false
+                                G_UI_Class_VoIPControl.btn_updateMicToggleState()
                             } catch {
                                 G_UI_debugTextBoxOut.text = "Error: \(error)"
                                     + "\n\n" + G_UI_debugTextBoxOut.text
@@ -1535,6 +1540,7 @@ class UI_VoIPControlClass_Singleton {
     }
 
 
+    // Update text and stuff
     func btn_updateMicToggleState() {
         if (self.is_VoIP_active == true) {
             self.btnMicToggle.setTitle( STR_TBL.BTN_STOP_VOIP, for: .normal )
@@ -1642,9 +1648,10 @@ class ViewController: UIViewController {
 
         // Add action to the button
         btnRecordTestToggle.addTarget(self, action: #selector(action_recordTestToggleClicked), for: .touchUpInside)
-        btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
         btnProtocolToggle.addTarget(self, action: #selector(action_protocolToggleClicked), for: .touchUpInside)
         btnNetworkFrameworkToggle.addTarget(self, action: #selector(action_networkFrameworkToggleClicked), for: .touchUpInside)
+
+        btnMicToggle.addTarget(self, action: #selector(action_micToggleClicked), for: .touchUpInside)
 
 
         // Create UITextView without setting a frame
