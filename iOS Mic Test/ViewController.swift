@@ -325,7 +325,7 @@ class CombinedSettingsTableView: NSObject, UITableViewDelegate, UITableViewDataS
 
 
 struct struct_NetworkVoice_ConfigurationData {
-    // Order needs to stay the same
+    // NOTE: Order needs to stay the same
     let bUseCustomFormat: Bool
     let sampleRate: Double
     let bufferSize: UInt32
