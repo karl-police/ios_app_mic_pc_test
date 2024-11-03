@@ -1298,12 +1298,13 @@ class AudioManager {
     var audioEngineManager: AudioEngineManager!
     var networkVoiceManager: NetworkVoiceManager!
 
+
     // Init function
     init() {
         self.audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
         self.networkVoiceManager = NetworkVoiceManager(withAudioEngineManager: self.audioEngineManager, withAudioManager: self)
     }
-
+    
 
     func setupRecordingAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
