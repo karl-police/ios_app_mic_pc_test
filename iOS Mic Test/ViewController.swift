@@ -1516,6 +1516,19 @@ class UI_NetworkStatus_SingletonClass {
     }
 }
 
+
+
+
+
+
+// Designed for Singleton use
+/*class VoiceManagerClass {
+    var is_VoIP_active: Bool = false
+
+    var ui_btnMicToggle: UIButton!
+}*/
+
+
 class UI_VoIPControlClass_Singleton {
     var is_VoIP_active: Bool = false
 
