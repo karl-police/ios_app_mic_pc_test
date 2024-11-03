@@ -355,11 +355,6 @@ protocol NetworkVoiceDelegate: AnyObject {
     func handleReceivedConfiguration(_ data: Data)
 }
 
-protocol TestDelegate: AnyObject {
-
-}
-
-
 class NetworkVoiceTCPServer : TCPServer {
     var activeConnection: NWConnection? = nil // Active Connection
     
@@ -774,7 +769,7 @@ class NetworkVoice_CF_NetworkServer : CF_NetworkServer {
 
 
 // Network Voice Manager
-class NetworkVoiceManager: NetworkVoiceDelegate, TestDelegate {
+class NetworkVoiceManager: NetworkVoiceDelegate {
     var networkVoice_TCPServer: NetworkVoiceTCPServer!
     var networkVoice_CF_TCPServer: NetworkVoice_CF_NetworkServer!
 
@@ -1309,7 +1304,7 @@ class AudioManager {
         self.audioEngineManager = AudioEngineManager(withAudioSettings: audioSettings)
         self.networkVoiceManager = NetworkVoiceManager(withAudioEngineManager: self.audioEngineManager, withAudioManager: self)
     }
-
+    
 
     func setupRecordingAudioSession() throws {
         let session = AVAudioSession.sharedInstance()
